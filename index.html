@@ -6,130 +6,105 @@
     <title>Min Streamingsida</title>
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
     <style>
-        body {
-            margin: 0;
-            background: #1a1a1a;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            overflow: hidden;
+        body { 
+            margin: 0; 
+            background: #1a1a1a; 
+            color: #fff; 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            display: flex; 
+            height: 100vh; 
         }
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+        .container { 
+            display: flex; 
+            width: 100%; 
+            max-width: 1200px; 
+            margin: 0 auto; 
         }
-        .header {
-            padding: 10px 0;
-            background: #333;
-            text-align: center;
+        .sidebar { 
+            width: 200px; 
+            overflow-y: auto; 
+            padding-right: 20px; 
         }
-        h1 {
-            margin: 0;
-            font-size: 2em;
-            color: #e50914;
+        h1 { 
+            text-align: center; 
+            font-size: 2em; 
+            margin-bottom: 20px; 
+            color: #e50914; 
         }
-        .categories {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 10px 0;
-            background: #222;
+        .category { 
+            margin-bottom: 20px; 
         }
-        .category-tab {
-            padding: 10px 20px;
-            background: #444;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.3s;
+        .category h2 { 
+            font-size: 1.5em; 
+            margin-bottom: 10px; 
+            border-bottom: 2px solid #e50914; 
+            display: inline-block; 
         }
-        .category-tab:hover, .category-tab.active {
-            background: #e50914;
+        .channel-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
         }
-        .channel-list {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 0;
-            background: #333;
-            white-space: nowrap;
-            width: 100%;
-            min-height: 100px;
-            border: 1px solid #fff;
+        .channel { 
+            background: #333; 
+            padding: 10px; 
+            text-align: center; 
+            cursor: pointer; 
+            border-radius: 5px; 
+            transition: background 0.3s; 
         }
-        .channel {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 120px;
-            height: 80px;
-            background: #555;
-            margin: 0 5px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.3s;
-            flex-shrink: 0;
+        .channel:hover { 
+            background: #e50914; 
         }
-        .channel:hover {
-            background: #e50914;
+        .content { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
         }
-        .video-container {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            display: none;
-            position: relative;
-            background: #000;
-        }
-        #main-video {
-            width: 100%;
-            height: 100%;
-        }
-        .fullscreen .video-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1000;
-            display: block;
-        }
-        .fullscreen .header, .fullscreen .categories, .fullscreen .channel-list {
-            display: none;
-        }
-        .channel-overlay {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 1.5em;
-            z-index: 1010;
-            display: none;
+        .video-container { 
+            width: 100%; 
+            max-width: 800px; 
+            margin: 20px 0; 
+            display: none; /* Dold som standard */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <div class="sidebar">
             <h1>Min Streamingsida</h1>
+            <div id="categories">
+                <div class="category">
+                    <h2>Nyheter</h2>
+                    <div class="channel-list" id="newsChannels"></div>
+                </div>
+                <div class="category">
+                    <h2>Musik</h2>
+                    <div class="channel-list" id="musicChannels"></div>
+                </div>
+                <div class="category">
+                    <h2>Underhållning</h2>
+                    <div class="channel-list" id="entertainmentChannels"></div>
+                </div>
+                <div class="category">
+                    <h2>Barn</h2>
+                    <div class="channel-list" id="kidsChannels"></div>
+                </div>
+            </div>
         </div>
-        <div class="categories" id="categories"></div>
-        <div class="channel-list" id="channelList"></div>
-        <div class="video-container">
-            <video id="main-video" class="video-js vjs-default-skin" controls>
-                <source src="" type="application/x-mpegURL">
-            </video>
-            <div class="channel-overlay" id="channelOverlay"></div>
+        <div class="content">
+            <div class="video-container">
+                <video id="main-video" class="video-js vjs-default-skin" controls width="100%" height="450">
+                    <source src="" type="application/x-mpegURL">
+                </video>
+            </div>
         </div>
     </div>
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            console.log("DOM laddad, initierar...");
-
             const mainPlayer = videojs('main-video', {
                 fluid: true,
                 responsive: true,
@@ -139,17 +114,8 @@
                     }
                 }
             });
-            const container = document.querySelector('.container');
-            const videoContainer = document.querySelector('.video-container');
-            const channelList = document.getElementById('channelList');
-            const categoriesDiv = document.getElementById('categories');
-            const channelOverlay = document.getElementById('channelOverlay');
-            let overlayTimeout;
 
-            if (!channelList || !categoriesDiv) {
-                console.error("Kanallista eller kategorier saknas i DOM");
-                return;
-            }
+            const videoContainer = document.querySelector('.video-container');
 
             function formatChannelName(url) {
                 const namePart = url.split('/').pop().replace('.html', '').replace(/-/g, ' ');
@@ -184,7 +150,7 @@
                     { name: "Cira", url: "https://cira-tv.akamaized.net/hls/stream_0.m3u8" },
                     { name: "Waar", url: "https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_source/chunks.m3u8" },
                     { name: "Rojava", url: "https://rojava-tv.akamaized.net/hls/rojava-tv.m3u8" },
-                    { name: "Kurdsat HD", url: "https://kurdsat.akamaized.net/hls/kurdsat‬‬m3u8" },
+                    { name: "Kurdsat HD", url: "https://kurdsat.akamaized.net/hls/kurdsat.m3u8" },
                     { name: "Kurdistan TV", url: "https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8" },
                     { name: "PDKI", url: "https://iko-live.akamaized.net/kurdhd/master.m3u8" },
                     { name: "Komala", url: "https://live.tvkomala.com/live/komala/playlist.m3u8" },
@@ -209,112 +175,111 @@
                     { name: "Ronahi", url: "https://ronahi-tv.akamaized.net/hls/stream_0.m3u8" },
                     { name: "Amozhgary", url: "https://app-live.org/live/3268334b/index.m3u8" },
                     { name: "Barin Quran", url: "https://karwan.tv/barin-quran.html", redirect: true, newTab: true },
-                    { name: "NRT 2", url: "https://media2.streambrothers.com:1936/8216/8216/playlist.m3u8" },
-                    { name: "NRT Arabic", url: "https://media2.streambrothers.com:1936/8214/8214/playlist.m3u8" },
-                    { name: "Vin TV", url: "https://live.vintv.live/hls/vintv.m3u8" },
-                    { name: "Kurdmax", url: "https://live.kurdmax.tv/kurdmax/kurdmax/playlist.m3u8" },
-                    { name: "Kurdmax Sorani", url: "https://live.kurdmax.tv/kurdmaxsorani/kurdmaxsorani/playlist.m3u8" },
-                    { name: "Kurdmax Pepule", url: "https://live.kurdmax.tv/kurdmaxpepule/kurdmaxpepule/playlist.m3u8" },
-                    { name: "GEM Kurd", url: "https://live.gemkurd.tv/gemkurd/gemkurd/playlist.m3u8" }
+                    { name: "Bangewaz", url: "https://karwan.tv/bangawaz-tv.html", redirect: true, newTab: true },
+                    { name: "Bangxwazen-badinan", url: "https://karwan.tv/bangxwazen-badinan-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/mmn-quran-tv.html"), url: "https://karwan.tv/mmn-quran-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/eman-tv.html"), url: "https://karwan.tv/eman-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/shna-tv.html"), url: "https://karwan.tv/shna-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/nr1-kurd.html"), url: "https://karwan.tv/nr1-kurd.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/mihrab-tv.html"), url: "https://karwan.tv/mihrab-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/esra-tv.html"), url: "https://karwan.tv/esra-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/znar-tv.html"), url: "https://karwan.tv/znar-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/befrin-tv.html"), url: "https://karwan.tv/befrin-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/derin-tv.html"), url: "https://karwan.tv/derin-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/euro-kurd-tv.html"), url: "https://karwan.tv/euro-kurd-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/halabja-tv.html"), url: "https://karwan.tv/halabja-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/khak-tv.html"), url: "https://karwan.tv/khak-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/knn-tv.html"), url: "https://karwan.tv/knn-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/kurdmax-show-tv.html"), url: "https://karwan.tv/kurdmax-show-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/kurdmax-tv.html"), url: "https://karwan.tv/kurdmax-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/mix-tv.html"), url: "https://karwan.tv/mix-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/mmn-drama.html"), url: "https://karwan.tv/mmn-drama.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/mmn-show.html"), url: "https://karwan.tv/mmn-show.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/mmn-movies.html"), url: "https://karwan.tv/mmn-movies.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/soran-entertainment-tv.html"), url: "https://karwan.tv/soran-entertainment-tv.html", redirect: true, newTab: true }
                 ],
                 kids: [
                     { name: "Baxche", url: "https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8" },
                     { name: "Afarin Kids", url: "https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8" },
                     { name: "Zarok Kurmanci", url: "https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8" },
                     { name: "Zarok Sorani", url: "https://zindisorani.zaroktv.com.tr/hls/stream.m3u8" },
-                    { name: "Barin Kids", url: "https://karwan.tv/barin-kids.html", redirect: true, newTab: true }
+                    { name: formatChannelName("https://karwan.tv/kidco-tv.html"), url: "https://karwan.tv/kidco-tv.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/mmn-kids.html"), url: "https://karwan.tv/mmn-kids.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/nrt-3-kids.html"), url: "https://karwan.tv/nrt-3-kids.html", redirect: true, newTab: true },
+                    { name: formatChannelName("https://karwan.tv/afarin-baxcha.html"), url: "https://karwan.tv/afarin-baxcha.html", redirect: true, newTab: true }
                 ]
             };
 
-            function generateCategories() {
-                console.log("Genererar kategorier...");
-                categoriesDiv.innerHTML = '';
-                Object.keys(channels).forEach((category, index) => {
-                    const tab = document.createElement('div');
-                    tab.className = 'category-tab';
-                    tab.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-                    tab.addEventListener('click', () => {
-                        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                        tab.classList.add('active');
-                        generateChannels(category);
-                    });
-                    categoriesDiv.appendChild(tab);
-                    if (index === 0) {
-                        tab.classList.add('active');
-                        generateChannels(category);
-                    }
-                });
-                console.log("Kategorier genererade:", categoriesDiv.children.length);
-            }
+            function generateChannels() {
+                console.log("Genererar kanaler...");
+                const newsList = document.getElementById('newsChannels');
+                const musicList = document.getElementById('musicChannels');
+                const entertainmentList = document.getElementById('entertainmentChannels');
+                const kidsList = document.getElementById('kidsChannels');
 
-            function generateChannels(category) {
-                console.log("Genererar kanaler för:", category);
-                channelList.innerHTML = '';
-                if (!channels[category]) {
-                    console.error("Kategorin finns inte:", category);
-                    channelList.textContent = "Inga kanaler tillgängliga";
+                if (!newsList || !musicList || !entertainmentList || !kidsList) {
+                    console.error("Ett eller flera element saknas");
                     return;
                 }
-                channels[category].forEach(channel => {
-                    const channelDiv = document.createElement('div');
-                    channelDiv.className = 'channel';
-                    channelDiv.textContent = channel.name;
-                    channelDiv.addEventListener('click', () => handleChannelClick(channel));
-                    channelList.appendChild(channelDiv);
+
+                Object.keys(channels).forEach(category => {
+                    channels[category].forEach(channel => {
+                        const channelDiv = document.createElement('div');
+                        channelDiv.className = 'channel';
+                        channelDiv.textContent = channel.name;
+
+                        // Hover: Spela upp i stora spelaren (bara för strömkanaler)
+                        if (!channel.redirect) {
+                            channelDiv.addEventListener('mouseenter', () => {
+                                videoContainer.style.display = 'block';
+                                playStream(channel.url);
+                            });
+
+                            channelDiv.addEventListener('mouseleave', () => {
+                                mainPlayer.pause();
+                            });
+                        }
+
+                        channelDiv.addEventListener('click', () => handleChannelClick(channel));
+                        document.getElementById(`${category}Channels`).appendChild(channelDiv);
+                    });
                 });
-                console.log("Antal kanaler genererade:", channelList.children.length);
+                console.log("Kanallistan har genererats.");
             }
 
             function handleChannelClick(channel) {
-                console.log("Klick på:", channel.name);
-                videoContainer.style.display = 'block';
+                console.log("Klickade på kanal: " + channel.name);
+                videoContainer.style.display = 'none';
+                mainPlayer.pause();
+
                 if (channel.redirect && channel.newTab) {
-                    window.open(channel.url, '_blank');
-                    videoContainer.style.display = 'none';
+                    console.log("Öppnar i riktigt popup-fönster: " + channel.url);
+                    window.open(channel.url, channel.name, 'width=800,height=450,scrollbars=yes,resizable=yes');
                 } else {
+                    console.log("Spelar upp ström: " + channel.url);
+                    videoContainer.style.display = 'block';
                     playStream(channel.url);
-                    container.classList.add('fullscreen');
-                    channelOverlay.textContent = channel.name;
-                    channelOverlay.style.display = 'block';
-                    clearTimeout(overlayTimeout);
-                    overlayTimeout = setTimeout(() => {
-                        channelOverlay.style.display = 'none';
-                    }, 3000);
                 }
             }
 
             function playStream(url) {
-                console.log("Spelar upp:", url);
-                mainPlayer.src({ src: url, type: 'application/x-mpegURL' });
-                mainPlayer.play().catch(error => {
-                    console.error("Uppspelningsfel:", error);
-                    alert("Kunde inte spela upp strömmen.");
-                    videoContainer.style.display = 'none';
-                    container.classList.remove('fullscreen');
+                console.log("Försöker spela upp: " + url);
+                mainPlayer.src({
+                    src: url,
+                    type: 'application/x-mpegURL'
+                });
+                mainPlayer.ready(function () {
+                    mainPlayer.play().catch(error => {
+                        console.error("Uppspelningsfel för " + url + ":", error);
+                        alert("Kunde inte spela upp strömmen. Det kan bero på CORS, en trasig länk eller serverproblem.");
+                    });
                 });
             }
 
-            mainPlayer.on('fullscreenchange', () => {
-                if (!document.fullscreenElement) {
-                    container.classList.remove('fullscreen');
-                    videoContainer.style.display = 'none';
-                    mainPlayer.pause();
-                }
-            });
-
-            document.addEventListener('click', (e) => {
-                if (container.classList.contains('fullscreen') && !videoContainer.contains(e.target) && !channelList.contains(e.target)) {
-                    container.classList.remove('fullscreen');
-                    videoContainer.style.display = 'none';
-                    mainPlayer.pause();
-                }
-            });
-
             try {
-                generateCategories();
+                generateChannels();
             } catch (error) {
-                console.error("Fel vid uppstart:", error);
-                channelList.textContent = "Ett fel uppstod vid laddning";
+                console.error("Fel vid generering av kanaler:", error);
             }
         });
     </script>

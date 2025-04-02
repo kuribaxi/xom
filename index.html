@@ -8,7 +8,269 @@
     <style>
         body {
             margin: 0;
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min Streamingsida</title>
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
             background: #1a1a1a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .header {
+            padding: 10px 0;
+            background: #333;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2em;
+            color: #e50914;
+        }
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px 0;
+            background: #222;
+        }
+        .category-tab {
+            padding: 10px 20px;
+            background: #444;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .category-tab:hover, .category-tab.active {
+            background: #e50914;
+        }
+        .channel-list {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 0;
+            background: #333;
+            white-space: nowrap;
+            width: 100%;
+        }
+        .channel {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 80px;
+            background: #555;
+            margin: 0 5px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+        .channel:hover {
+            background: #e50914;
+        }
+        .video-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: relative;
+            background: #000;
+        }
+        #main-video {
+            width: 100%;
+            height: 100%;
+        }
+        .fullscreen .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+            display: block;
+        }
+        .fullscreen .header, .fullscreen .categories, .fullscreen .channel-list {
+            display: none;
+        }
+        .channel-overlay {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.5em;
+            z-index: 1010;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Min Streamingsida</h1>
+        </div>
+        <div class="categories" id="categories"></div>
+        <div class="channel-list" id="channelList"></div>
+        <div class="video-container">
+            <video id="main-video" class="video-js vjs-default-skin" controls>
+                <source src="" type="application/x-mpegURL">
+            </video>
+            <div class="channel-overlay" id="channelOverlay"></div>
+        </div>
+    </div>
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("DOM laddad, initierar...");
+
+            const mainPlayer = videojs('main-video', {
+                fluid: true,
+                responsive: true,
+                html5: {
+                    hls: {
+                        overrideNative: true
+                    }
+                }
+            });
+            const container = document.querySelector('.container');
+            const videoContainer = document.querySelector('.video-container');
+            const channelList = document.getElementById('channelList');
+            const categoriesDiv = document.getElementById('categories');
+            const channelOverlay = document.getElementById('channelOverlay');
+            let overlayTimeout;
+
+            if (!channelList || !categoriesDiv) {
+                console.error("Kanallista eller kategorier saknas i DOM");
+                return;
+            }
+
+            function formatChannelName(url) {
+                const namePart = url.split('/').pop().replace('.html', '').replace(/-/g, ' ');
+                return namePart.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            }
+
+            const channels = {
+                news: [
+                    { name: "Zagros", url: "https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8" },
+                    { name: "Zoom", url: "https://live.zoomnews.info/live/Zoom_playlist.m3u8" },
+                    { name: "Kanal8", url: "https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8" },
+                    { name: "Rudaw", url: "https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8" }
+                ],
+                music: [
+                    { name: "4 Kurd", url: "https://4kuhls.persiana.live/hls/stream.m3u8" },
+                    { name: "Med Music", url: "http://54.36.110.140/live3/live3.m3u8" }
+                ],
+                entertainment: [
+                    { name: "Aryen", url: "https://aryen.tv/live/tv/playlist.m3u8" },
+                    { name: "Cira", url: "https://cira-tv.akamaized.net/hls/stream_0.m3u8" }
+                ],
+                kids: [
+                    { name: "Baxche", url: "https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8" },
+                    { name: "Afarin Kids", url: "https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8" }
+                ]
+            };
+
+            function generateCategories() {
+                console.log("Genererar kategorier...");
+                Object.keys(channels).forEach((category, index) => {
+                    const tab = document.createElement('div');
+                    tab.className = 'category-tab';
+                    tab.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                    tab.addEventListener('click', () => {
+                        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        generateChannels(category);
+                    });
+                    categoriesDiv.appendChild(tab);
+                    if (index === 0) {
+                        tab.classList.add('active');
+                        generateChannels(category);
+                    }
+                });
+            }
+
+            function generateChannels(category) {
+                console.log("Genererar kanaler för:", category);
+                channelList.innerHTML = '';
+                channels[category].forEach(channel => {
+                    const channelDiv = document.createElement('div');
+                    channelDiv.className = 'channel';
+                    channelDiv.textContent = channel.name;
+                    channelDiv.addEventListener('click', () => handleChannelClick(channel));
+                    channelList.appendChild(channelDiv);
+                });
+                console.log("Antal kanaler genererade:", channelList.children.length);
+            }
+
+            function handleChannelClick(channel) {
+                console.log("Klick på:", channel.name);
+                videoContainer.style.display = 'block';
+                if (channel.redirect && channel.newTab) {
+                    window.open(channel.url, '_blank');
+                    videoContainer.style.display = 'none';
+                } else {
+                    playStream(channel.url);
+                    container.classList.add('fullscreen');
+                    channelOverlay.textContent = channel.name;
+                    channelOverlay.style.display = 'block';
+                    clearTimeout(overlayTimeout);
+                    overlayTimeout = setTimeout(() => {
+                        channelOverlay.style.display = 'none';
+                    }, 3000);
+                }
+            }
+
+            function playStream(url) {
+                console.log("Spelar upp:", url);
+                mainPlayer.src({ src: url, type: 'application/x-mpegURL' });
+                mainPlayer.play().catch(error => {
+                    console.error("Uppspelningsfel:", error);
+                    alert("Kunde inte spela upp strömmen.");
+                    videoContainer.style.display = 'none';
+                    container.classList.remove('fullscreen');
+                });
+            }
+
+            mainPlayer.on('fullscreenchange', () => {
+                if (!document.fullscreenElement) {
+                    container.classList.remove('fullscreen');
+                    videoContainer.style.display = 'none';
+                    mainPlayer.pause();
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (container.classList.contains('fullscreen') && !videoContainer.contains(e.target) && !channelList.contains(e.target)) {
+                    container.classList.remove('fullscreen');
+                    videoContainer.style.display = 'none';
+                    mainPlayer.pause();
+                }
+            });
+
+            try {
+                generateCategories();
+            } catch (error) {
+                console.error("Fel vid uppstart:", error);
+            }
+        });
+    </script>
+</body>
+</html>            background: #1a1a1a;
             color: #fff;
             font-family: Arial, sans-serif;
             height: 100vh;

@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2113.65">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="sv"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Min Streamingsida&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #1a1a1a;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.header {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #333;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>h1 {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #e50914;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.categories {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #222;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.category-tab {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #444;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: background 0.3s;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.category-tab:hover, .category-tab.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #e50914;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.channel-list {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow-x: auto;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #333;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>white-space: nowrap;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #fff; /* Visuell bekräftelse */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.channel {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: inline-flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 120px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 80px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #555;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 5px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: background 0.3s;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-shrink: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.channel:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #e50914;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.video-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #000;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#main-video {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.fullscreen .video-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>left: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100vw;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1000;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.fullscreen .header, .fullscreen .categories, .fullscreen .channel-list {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.channel-overlay {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>left: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateX(-50%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0, 0, 0, 0.7);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.5em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1010;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1&gt;Min Streamingsida&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="categories" id="categories"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="channel-list" id="channelList"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="video-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;video id="main-video" class="video-js vjs-default-skin" controls&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;source src="" type="application/x-mpegURL"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/video&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="channel-overlay" id="channelOverlay"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://vjs.zencdn.net/8.10.0/video.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.addEventListener('DOMContentLoaded', function () {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log("DOM laddad, initierar...");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const mainPlayer = videojs('main-video', {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>fluid: true,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>responsive: true,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>html5: {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>hls: {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>overrideNative: true</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const container = document.querySelector('.container');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const videoContainer = document.querySelector('.video-container');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const channelList = document.getElementById('channelList');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const categoriesDiv = document.getElementById('categories');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const channelOverlay = document.getElementById('channelOverlay');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let overlayTimeout;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!channelList || !categoriesDiv) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error("Kanallista eller kategorier saknas i DOM");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const channels = {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>news: [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{ name: "Zagros", url: "https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8" },</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{ name: "Zoom", url: "https://live.zoomnews.info/live/Zoom_playlist.m3u8" }</p>
+<p class="p1"><span class="Apple-converted-space">                </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>music: [</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{ name: "4 Kurd", url: "https://4kuhls.persiana.live/hls/stream.m3u8" },</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>{ name: "Med Music", url: "http://54.36.110.140/live3/live3.m3u8" }</p>
+<p class="p1"><span class="Apple-converted-space">                </span>]</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>function generateCategories() {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log("Genererar kategorier...");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>categoriesDiv.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>Object.keys(channels).forEach((category, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const tab = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tab.className = 'category-tab';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tab.textContent = category.charAt(0).toUpperCase() + category.slice(1);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tab.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>document.querySelectorAll('.category-tab').forEach(t =&gt; t.classList.remove('active'));</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>tab.classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>generateChannels(category);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>categoriesDiv.appendChild(tab);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (index === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>tab.classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>generateChannels(category);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log("Kategorier genererade:", categoriesDiv.children.length);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>function generateChannels(category) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log("Genererar kanaler för:", category);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>channelList.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (!channels[category]) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>console.error("Kategorin finns inte:", category);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>channelList.textContent = "Inga kanaler tillgängliga";</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>channels[category].forEach(channel =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const channelDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>channelDiv.className = 'channel';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>channelDiv.textContent = channel.name;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>channelDiv.addEventListener('click', () =&gt; handleChannelClick(channel));</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>channelList.appendChild(channelDiv);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log("Antal kanaler genererade:", channelList.children.length);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>function handleChannelClick(channel) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log("Klick på:", channel.name);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>videoContainer.style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>playStream(channel.url);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>container.classList.add('fullscreen');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>channelOverlay.textContent = channel.name;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>channelOverlay.style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>clearTimeout(overlayTimeout);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>overlayTimeout = setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>channelOverlay.style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}, 3000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>function playStream(url) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log("Spelar upp:", url);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>mainPlayer.src({ src: url, type: 'application/x-mpegURL' });</p>
+<p class="p1"><span class="Apple-converted-space">                </span>mainPlayer.play().catch(error =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>console.error("Uppspelningsfel:", error);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>alert("Kunde inte spela upp strömmen.");</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>videoContainer.style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>container.classList.remove('fullscreen');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>mainPlayer.on('fullscreenchange', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (!document.fullscreenElement) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>container.classList.remove('fullscreen');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>videoContainer.style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>mainPlayer.pause();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.addEventListener('click', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (container.classList.contains('fullscreen') &amp;&amp; !videoContainer.contains(e.target) &amp;&amp; !channelList.contains(e.target)) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>container.classList.remove('fullscreen');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>videoContainer.style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>mainPlayer.pause();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>generateCategories();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error("Fel vid uppstart:", error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>channelList.textContent = "Ett fel uppstod vid laddning";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>

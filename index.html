@@ -23,6 +23,8 @@
             padding: 10px 0;
             background: #333;
             text-align: center;
+            opacity: 0.7; /* Transparens för header */
+            transition: opacity 0.5s ease; /* Smidig övergång för visning/döljning */
         }
         h1 {
             margin: 0;
@@ -35,6 +37,8 @@
             gap: 20px;
             padding: 10px 0;
             background: #222;
+            opacity: 0.7; /* Transparens för kategorier */
+            transition: opacity 0.5s ease;
         }
         .category-tab {
             padding: 10px 20px;
@@ -55,6 +59,8 @@
             width: 100%;
             min-height: 100px;
             border: 1px solid #fff;
+            opacity: 0.7; /* Transparens för kanallista */
+            transition: opacity 0.5s ease;
         }
         .channel {
             display: inline-flex;
@@ -109,6 +115,10 @@
             z-index: 1010;
             display: none;
         }
+        /* Klass för att dölja element */
+        .hidden {
+            opacity: 0 !important;
+        }
     </style>
 </head>
 <body>
@@ -143,11 +153,13 @@
             const videoContainer = document.querySelector('.video-container');
             const channelList = document.getElementById('channelList');
             const categoriesDiv = document.getElementById('categories');
+            const header = document.querySelector('.header');
             const channelOverlay = document.getElementById('channelOverlay');
             let overlayTimeout;
+            let hideTimeout;
 
-            if (!channelList || !categoriesDiv) {
-                console.error("Kanallista eller kategorier saknas i DOM");
+            if (!channelList || !categoriesDiv || !header) {
+                console.error("Kanallista, kategorier eller header saknas i DOM");
                 return;
             }
 
@@ -208,14 +220,7 @@
                     { name: "Sada", url: "https://sadatv.icdndhcp.com/live/sadatv/playlist.m3u8" },
                     { name: "Ronahi", url: "https://ronahi-tv.akamaized.net/hls/stream_0.m3u8" },
                     { name: "Amozhgary", url: "https://app-live.org/live/3268334b/index.m3u8" },
-                    { name: "Barin Quran", url: "https://karwan.tv/barin-quran.html", redirect: true, newTab: true },
-                    { name: "NRT 2", url: "https://media2.streambrothers.com:1936/8216/8216/playlist.m3u8" },
-                    { name: "NRT Arabic", url: "https://media2.streambrothers.com:1936/8214/8214/playlist.m3u8" },
-                    { name: "Vin TV", url: "https://live.vintv.live/hls/vintv.m3u8" },
-                    { name: "Kurdmax", url: "https://live.kurdmax.tv/kurdmax/kurdmax/playlist.m3u8" },
-                    { name: "Kurdmax Sorani", url: "https://live.kurdmax.tv/kurdmaxsorani/kurdmaxsorani/playlist.m3u8" },
-                    { name: "Kurdmax Pepule", url: "https://live.kurdmax.tv/kurdmaxpepule/kurdmaxpepule/playlist.m3u8" },
-                    { name: "GEM Kurd", url: "https://live.gemkurd.tv/gemkurd/gemkurd/playlist.m3u8" }
+                    { name: "Barin Quran", url: "https://karwan.tv/barin-quran.html", redirect: true, newTab: true }
                 ],
                 kids: [
                     { name: "Baxche", url: "https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8" },
@@ -309,6 +314,30 @@
                     mainPlayer.pause();
                 }
             });
+
+            // Funktion för att visa element
+            function showElements() {
+                header.classList.remove('hidden');
+                categoriesDiv.classList.remove('hidden');
+                channelList.classList.remove('hidden');
+            }
+
+            // Funktion för att dölja element
+            function hideElements() {
+                header.classList.add('hidden');
+                categoriesDiv.classList.add('hidden');
+                channelList.classList.add('hidden');
+            }
+
+            // Visa element vid musrörelse och starta timer för att dölja
+            document.addEventListener('mousemove', () => {
+                showElements();
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(hideElements, 5000); // Dölj efter 5 sekunder
+            });
+
+            // Dölj element initialt efter 5 sekunder
+            hideTimeout = setTimeout(hideElements, 5000);
 
             try {
                 generateCategories();

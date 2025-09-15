@@ -1,321 +1,193 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min Streamingsida</title>
-    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>XOM TV - Iranska Kanaler</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
-            margin: 0;
-            background: #1a1a1a;
-            color: #fff;
             font-family: Arial, sans-serif;
-            height: 100vh;
-            overflow: hidden;
+            background: #1a1a2e;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
         }
         .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         .header {
-            padding: 10px 0;
-            background: #333;
             text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
         }
-        h1 {
+        .header h1 {
+            font-size: 2.5em;
+            color: #4ecdc4;
             margin: 0;
-            font-size: 2em;
-            color: #e50914;
         }
-        .categories {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 10px 0;
-            background: #222;
+        .header p {
+            font-size: 1.2em;
+            margin: 10px 0 0;
         }
-        .category-tab {
-            padding: 10px 20px;
-            background: #444;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.3s;
+        .section {
+            margin: 30px 0;
         }
-        .category-tab:hover, .category-tab.active {
-            background: #e50914;
-        }
-        .channel-list {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 0;
-            background: #333;
-            white-space: nowrap;
-            width: 100%;
-            min-height: 100px;
-            border: 1px solid #fff;
+        .section h2 {
+            color: #4ecdc4;
+            border-bottom: 2px solid #4ecdc4;
+            padding-bottom: 10px;
+            font-size: 1.8em;
         }
         .channel {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 120px;
-            height: 80px;
-            background: #555;
-            margin: 0 5px;
-            text-align: center;
+            display: inline-block;
+            margin: 8px;
+            padding: 12px 20px;
+            background: #4ecdc4;
+            color: #1a1a2e;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background 0.3s;
-            flex-shrink: 0;
+            transition: background 0.3s, transform 0.3s;
         }
         .channel:hover {
-            background: #e50914;
+            background: #45b7aa;
+            transform: translateY(-2px);
         }
-        .video-container {
-            flex: 1;
-            width: 100%;
-            height: 100%;
+        .video-player {
             display: none;
-            position: relative;
-            background: #000;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
         }
-        #main-video {
+        .video-player video {
             width: 100%;
-            height: 100%;
+            max-width: 100%;
+            border-radius: 10px;
         }
-        .fullscreen .video-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1000;
-            display: block;
-        }
-        .fullscreen .header, .fullscreen .categories, .fullscreen .channel-list {
-            display: none;
-        }
-        .channel-overlay {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 5px;
+        .channel-name {
             font-size: 1.5em;
-            z-index: 1010;
-            display: none;
+            color: #4ecdc4;
+            margin: 10px 0;
+        }
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .channel {
+                display: block;
+                margin: 10px auto;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Min Streamingsida</h1>
+            <h1>📺 XOM TV</h1>
+            <p>Iranska TV-kanaler • Klicka för att titta</p>
         </div>
-        <div class="categories" id="categories"></div>
-        <div class="channel-list" id="channelList"></div>
-        <div class="video-container">
-            <video id="main-video" class="video-js vjs-default-skin" controls>
-                <source src="" type="application/x-mpegURL">
-            </video>
-            <div class="channel-overlay" id="channelOverlay"></div>
+        <div class="video-player" id="videoPlayer">
+            <h3 class="channel-name" id="channelName">Ingen kanal vald</h3>
+            <video id="player" controls></video>
+        </div>
+        <div class="section">
+            <h2>⭐ Iranska Kanaler</h2>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/tv1.m3u8?t=1757870529226" class="channel" aria-label="Titta på TV1">TV1</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/tv2.m3u8?t=1757871250791" class="channel" aria-label="Titta på TV2">TV2</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/tv3.m3u8?t=1757871251942" class="channel" aria-label="Titta på TV3">TV3</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/tv4.m3u8?t=1757871254788" class="channel" aria-label="Titta på TV4">TV4</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/tv5.m3u8?t=1757871279765" class="channel" aria-label="Titta på TV5">TV5</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/nasim.m3u8?t=1757871258347" class="channel" aria-label="Titta på NASIM">NASIM</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/irinn.m3u8?t=1757871268758" class="channel" aria-label="Titta på KHABAR1">KHABAR1</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/irinn2.m3u8?t=1757871261314" class="channel" aria-label="Titta på KHABAR2">KHABAR2</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/varzesh.m3u8?t=1757871272209" class="channel" aria-label="Titta på VARZESH">VARZESH</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/pouya.m3u8?t=1757871287034" class="channel" aria-label="Titta på POUYA">POUYA</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/omid.m3u8?t=1757871317760" class="channel" aria-label="Titta på OMID">OMID</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/ifilm.m3u8?t=1757871643731" class="channel" aria-label="Titta på IFILM">IFILM</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/namayesh.m3u8?t=1757871719649" class="channel" aria-label="Titta på NAMAYESH">NAMAYESH</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/tamasha.m3u8?t=1757871721596" class="channel" aria-label="Titta på TAMASHA">TAMASHA</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/mostanad.m3u8?t=1757871724100" class="channel" aria-label="Titta på MOSTANAD">MOSTANAD</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/amozesh.m3u8?t=1757871727005" class="channel" aria-label="Titta på AMOZESH">AMOZESH</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/salamat.m3u8?t=1757871731152" class="channel" aria-label="Titta på SALAMAT">SALAMAT</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/ofogh.m3u8?t=1757871731152" class="channel" aria-label="Titta på OFOGH">OFOGH</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/nvod1.m3u8?t=1757875752133" class="channel" aria-label="Titta på KOODAK">KOODAK</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/nvod8.m3u8?t=1757875753737" class="channel" aria-label="Titta på IRAN JAVAN">IRAN JAVAN</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/nvod9.m3u8?t=1757875753737" class="channel" aria-label="Titta på KAFEBAZI">KAFEBAZI</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/nvod10.m3u8?t=1757875758664" class="channel" aria-label="Titta på FILM">FILM</a>
+        </div>
+        <div class="section">
+            <h2>🏙️ Regionala Kanaler</h2>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/alborz.m3u8?t=1757871975911" class="channel" aria-label="Titta på ALBORZ">ALBORZ</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/rasht.m3u8?t=1757871977771" class="channel" aria-label="Titta på RASHT">RASHT</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/mazandaran.m3u8?t=1757871980048" class="channel" aria-label="Titta på MAZANDARAN">MAZANDARAN</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/tabriz.m3u8?t=1757871982316" class="channel" aria-label="Titta på TABRIZ">TABRIZ</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/booshehr.m3u8?t=1757871985788" class="channel" aria-label="Titta på BOSHEHR">BOSHEHR</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/ahvaz.m3u8?t=1757871988922" class="channel" aria-label="Titta på AHVAZ">AHVAZ</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/bandarabas.m3u8?t=1757872000212" class="channel" aria-label="Titta på BANDARABBAS">BANDARABBAS</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/esfehan.m3u8?t=1757872000859" class="channel" aria-label="Titta på ESFFAHAN">ESFFAHAN</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/kordestan.m3u8?t=1757872007497" class="channel" aria-label="Titta på KORDESTAN">KORDESTAN</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/markazi.m3u8?t=1757872014857" class="channel" aria-label="Titta på MARKAZI">MARKAZI</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/khorasaneshomali.m3u8?t=1757872023492" class="channel" aria-label="Titta på KHORASAN SHOMALI">KHORASAN SHOMALI</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/khorasanejonoobi.m3u8?t=1757872029298" class="channel" aria-label="Titta på KHORASAN GONOBI">KHORASAN GONOBI</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/yazd.m3u8?t=1757872042742" class="channel" aria-label="Titta på YAZD">YAZD</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/ardabil.m3u8?t=1757872047367" class="channel" aria-label="Titta på ARDABIL">ARDABIL</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/jahanbin.m3u8?t=1757872052388" class="channel" aria-label="Titta på SHAHREKORD">SHAHREKORD</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/yasooj.m3u8?t=1757872056013" class="channel" aria-label="Titta på YASOOJ">YASOOJ</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/zahedan.m3u8?t=1757873645577" class="channel" aria-label="Titta på ZAHEDAN">ZAHEDAN</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/qazvin.m3u8?t=1757873648511" class="channel" aria-label="Titta på QAZVIN">QAZVIN</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/semnan.m3u8?t=1757873651036" class="channel" aria-label="Titta på SEMNAN">SEMNAN</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/fars.m3u8?t=1757873654282" class="channel" aria-label="Titta på FARS">FARS</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/qom.m3u8?t=1757873657938" class="channel" aria-label="Titta på QOM">QOM</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/orumiyeh.m3u8?t=1757873657938" class="channel" aria-label="Titta på UROMIYEH">UROMIYEH</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/golestan.m3u8?t=1757873668114" class="channel" aria-label="Titta på GORGAN">GORGAN</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/eshragh.m3u8?t=1757873879629" class="channel" aria-label="Titta på ESHRAGH">ESHRAGH</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/khorasanerazavi.m3u8?t=1757873882640" class="channel" aria-label="Titta på KHORASAN RAZAVI">KHORASAN RAZAVI</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/kermanshah.m3u8?t=1757873886210" class="channel" aria-label="Titta på KERMANSHAH">KERMANSHAH</a>
+            <a href="#" data-stream="https://www.fam.ir/api/bp-player/get-link/igap/kerman.m3u8?t=1757873889837" class="channel" aria-label="Titta på KERMAN">KERMAN</a>
         </div>
     </div>
-    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log("DOM laddad, initierar...");
+        const video = document.getElementById('player');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const channelName = document.getElementById('channelName');
+        const channels = document.querySelectorAll('.channel');
 
-            const mainPlayer = videojs('main-video', {
-                fluid: true,
-                responsive: true,
-                html5: {
-                    hls: {
-                        overrideNative: true
-                    }
-                }
-            });
-            const container = document.querySelector('.container');
-            const videoContainer = document.querySelector('.video-container');
-            const channelList = document.getElementById('channelList');
-            const categoriesDiv = document.getElementById('categories');
-            const channelOverlay = document.getElementById('channelOverlay');
-            let overlayTimeout;
-
-            if (!channelList || !categoriesDiv) {
-                console.error("Kanallista eller kategorier saknas i DOM");
-                return;
-            }
-
-            function formatChannelName(url) {
-                const namePart = url.split('/').pop().replace('.html', '').replace(/-/g, ' ');
-                return namePart.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-            }
-
-            const channels = {
-                news: [
-                    { name: "Zagros", url: "https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8" },
-                    { name: "Zoom", url: "https://live.zoomnews.info/live/Zoom_playlist.m3u8" },
-                    { name: "Kanal8", url: "https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8" },
-                    { name: "Rudaw", url: "https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8" },
-                    { name: "Kurdsat News", url: "https://kurdsat-news.akamaized.net/hls/kurdsat-news.m3u8" },
-                    { name: "Sterk", url: "https://muzkurd.com/sterktv/sterk/chunklist_w913361557.m3u8" },
-                    { name: "NRT News", url: "https://media.streambrothers.com:1936/8226/8226/playlist.m3u8" },
-                    { name: "Kurdistan24", url: "https://d1x82nydcxndze.cloudfront.net/live/index_720p25.m3u8" },
-                    { name: formatChannelName("https://karwan.tv/kurdsat-news-tv.html"), url: "https://karwan.tv/kurdsat-news-tv.html", redirect: true, newTab: true },
-                    { name: formatChannelName("https://karwan.tv/mmn-news.html"), url: "https://karwan.tv/mmn-news.html", redirect: true, newTab: true },
-                    { name: formatChannelName("https://karwan.tv/shams-tv.html"), url: "https://karwan.tv/shams-tv.html", redirect: true, newTab: true }
-                ],
-                music: [
-                    { name: "4 Kurd", url: "https://4kuhls.persiana.live/hls/stream.m3u8" },
-                    { name: "Med Music", url: "http://54.36.110.140/live3/live3.m3u8" },
-                    { name: formatChannelName("https://karwan.tv/med-muzik-tv.html"), url: "https://karwan.tv/med-muzik-tv.html", redirect: true, newTab: true },
-                    { name: formatChannelName("https://karwan.tv/mmn-clip.html"), url: "https://karwan.tv/mmn-clip.html", redirect: true, newTab: true },
-                    { name: formatChannelName("https://karwan.tv/graryan-tv.html"), url: "https://karwan.tv/graryan-tv.html", redirect: true, newTab: true },
-                    { name: formatChannelName("https://karwan.tv/kanal-21.html"), url: "https://karwan.tv/kanal-21.html", redirect: true, newTab: true },
-                    { name: formatChannelName("https://karwan.tv/kurd-7.html"), url: "https://karwan.tv/kurd-7.html", redirect: true, newTab: true }
-                ],
-                entertainment: [
-                    { name: "Aryen", url: "https://aryen.tv/live/tv/playlist.m3u8" },
-                    { name: "Cira", url: "https://cira-tv.akamaized.net/hls/stream_0.m3u8" },
-                    { name: "Waar", url: "https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_source/chunks.m3u8" },
-                    { name: "Rojava", url: "https://rojava-tv.akamaized.net/hls/rojava-tv.m3u8" },
-                    { name: "Kurdsat HD", url: "https://kurdsat.akamaized.net/hls/kurdsatâ€¬â€¬m3u8" },
-                    { name: "Kurdistan TV", url: "https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8" },
-                    { name: "PDKI", url: "https://iko-live.akamaized.net/kurdhd/master.m3u8" },
-                    { name: "Komala", url: "https://live.tvkomala.com/live/komala/playlist.m3u8" },
-                    { name: "GK", url: "https://live.host247.net/gk/gksat/playlist.m3u8" },
-                    { name: "IRIB Kurdistan", url: "https://lenz.splus.ir/PLTV/88888888/224/3221226647/index.m3u8" },
-                    { name: "Mahabad", url: "https://ncdn.telewebion.com/mahabad/live/playlist.m3u8" },
-                    { name: "TRT Kurdi", url: "https://tv-trtkurdi.medya.trt.com.tr/master.m3u8" },
-                    { name: "Sahar", url: "https://kurdish.sahartv.ir/live", redirect: true, newTab: true },
-                    { name: "Ava TV", url: "https://ava2.site/upload/ava.m3u8" },
-                    { name: "UTV Hawler", url: "https://utvhawler.net/index.htm", redirect: true, newTab: true },
-                    { name: "ALA", url: "https://karwan.tv/ala-tv.html", redirect: true, newTab: true },
-                    { name: "ANIMAL", url: "https://karwan.tv/animal-box.html", redirect: true, newTab: true },
-                    { name: formatChannelName("https://karwan.tv/mmn-documentary.html"), url: "https://karwan.tv/mmn-documentary.html", redirect: true, newTab: true },
-                    { name: "AVAR", url: "https://karwan.tv/avar-tv.html", redirect: true, newTab: true },
-                    { name: "Kirkuk TV", url: "https://live.kirkuklive.live/hls/stream/index.m3u8" },
-                    { name: formatChannelName("https://karwan.tv/welat-tv.html"), url: "https://karwan.tv/welat-tv.html", redirect: true, newTab: true },
-                    { name: "Barin-family", url: "https://karwan.tv/barin-family.html", redirect: true, newTab: true },
-                    { name: "Payam", url: "https://media2.streambrothers.com:1936/8218/8218/playlist.m3u8" },
-                    { name: "Speda", url: "https://www.speda.net/tv1/", redirect: true, newTab: true },
-                    { name: "Shar TV", url: "http://avrstream.com:1935/live/SHARTV/chunklist_w2095841563.m3u8" },
-                    { name: "Sada", url: "https://sadatv.icdndhcp.com/live/sadatv/playlist.m3u8" },
-                    { name: "Ronahi", url: "https://ronahi-tv.akamaized.net/hls/stream_0.m3u8" },
-                    { name: "Amozhgary", url: "https://app-live.org/live/3268334b/index.m3u8" },
-                    { name: "Barin Quran", url: "https://karwan.tv/barin-quran.html", redirect: true, newTab: true },
-                    { name: "NRT 2", url: "https://media2.streambrothers.com:1936/8216/8216/playlist.m3u8" },
-                    { name: "NRT Arabic", url: "https://media2.streambrothers.com:1936/8214/8214/playlist.m3u8" },
-                    { name: "Vin TV", url: "https://live.vintv.live/hls/vintv.m3u8" },
-                    { name: "Kurdmax", url: "https://live.kurdmax.tv/kurdmax/kurdmax/playlist.m3u8" },
-                    { name: "Kurdmax Sorani", url: "https://live.kurdmax.tv/kurdmaxsorani/kurdmaxsorani/playlist.m3u8" },
-                    { name: "Kurdmax Pepule", url: "https://live.kurdmax.tv/kurdmaxpepule/kurdmaxpepule/playlist.m3u8" },
-                    { name: "GEM Kurd", url: "https://live.gemkurd.tv/gemkurd/gemkurd/playlist.m3u8" }
-                ],
-                kids: [
-                    { name: "Baxche", url: "https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8" },
-                    { name: "Afarin Kids", url: "https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8" },
-                    { name: "Zarok Kurmanci", url: "https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8" },
-                    { name: "Zarok Sorani", url: "https://zindisorani.zaroktv.com.tr/hls/stream.m3u8" },
-                    { name: "Barin Kids", url: "https://karwan.tv/barin-kids.html", redirect: true, newTab: true }
-                ]
-            };
-
-            function generateCategories() {
-                console.log("Genererar kategorier...");
-                categoriesDiv.innerHTML = '';
-                Object.keys(channels).forEach((category, index) => {
-                    const tab = document.createElement('div');
-                    tab.className = 'category-tab';
-                    tab.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-                    tab.addEventListener('click', () => {
-                        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                        tab.classList.add('active');
-                        generateChannels(category);
+        channels.forEach(channel => {
+            channel.addEventListener('click', (e) => {
+                e.preventDefault();
+                const streamUrl = channel.getAttribute('data-stream');
+                const channelText = channel.textContent; // Hämta kanalnamnet från texten
+                
+                // Uppdatera kanalnamnet i videospelaren
+                channelName.textContent = channelText;
+                
+                if (Hls.isSupported()) {
+                    const hls = new Hls();
+                    hls.loadSource(streamUrl);
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                        videoPlayer.style.display = 'block';
+                        video.play();
                     });
-                    categoriesDiv.appendChild(tab);
-                    if (index === 0) {
-                        tab.classList.add('active');
-                        generateChannels(category);
-                    }
-                });
-                console.log("Kategorier genererade:", categoriesDiv.children.length);
-            }
-
-            function generateChannels(category) {
-                console.log("Genererar kanaler fÃ¶r:", category);
-                channelList.innerHTML = '';
-                if (!channels[category]) {
-                    console.error("Kategorin finns inte:", category);
-                    channelList.textContent = "Inga kanaler tillgÃ¤ngliga";
-                    return;
-                }
-                channels[category].forEach(channel => {
-                    const channelDiv = document.createElement('div');
-                    channelDiv.className = 'channel';
-                    channelDiv.textContent = channel.name;
-                    channelDiv.addEventListener('click', () => handleChannelClick(channel));
-                    channelList.appendChild(channelDiv);
-                });
-                console.log("Antal kanaler genererade:", channelList.children.length);
-            }
-
-            function handleChannelClick(channel) {
-                console.log("Klick pÃ¥:", channel.name);
-                videoContainer.style.display = 'block';
-                if (channel.redirect && channel.newTab) {
-                    window.open(channel.url, '_blank');
-                    videoContainer.style.display = 'none';
+                    hls.on(Hls.Events.ERROR, (event, data) => {
+                        console.error('HLS Error:', data);
+                        alert('Kunde inte ladda strömmen. Kontrollera att URL:en fungerar eller försök igen senare.');
+                    });
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = streamUrl;
+                    videoPlayer.style.display = 'block';
+                    video.play();
                 } else {
-                    playStream(channel.url);
-                    container.classList.add('fullscreen');
-                    channelOverlay.textContent = channel.name;
-                    channelOverlay.style.display = 'block';
-                    clearTimeout(overlayTimeout);
-                    overlayTimeout = setTimeout(() => {
-                        channelOverlay.style.display = 'none';
-                    }, 3000);
-                }
-            }
-
-            function playStream(url) {
-                console.log("Spelar upp:", url);
-                mainPlayer.src({ src: url, type: 'application/x-mpegURL' });
-                mainPlayer.play().catch(error => {
-                    console.error("Uppspelningsfel:", error);
-                    alert("Kunde inte spela upp strÃ¶mmen.");
-                    videoContainer.style.display = 'none';
-                    container.classList.remove('fullscreen');
-                });
-            }
-
-            mainPlayer.on('fullscreenchange', () => {
-                if (!document.fullscreenElement) {
-                    container.classList.remove('fullscreen');
-                    videoContainer.style.display = 'none';
-                    mainPlayer.pause();
+                    alert('Din webbläsare stöder inte HLS-strömning.');
                 }
             });
-
-            document.addEventListener('click', (e) => {
-                if (container.classList.contains('fullscreen') && !videoContainer.contains(e.target) && !channelList.contains(e.target)) {
-                    container.classList.remove('fullscreen');
-                    videoContainer.style.display = 'none';
-                    mainPlayer.pause();
-                }
-            });
-
-            try {
-                generateCategories();
-            } catch (error) {
-                console.error("Fel vid uppstart:", error);
-                channelList.textContent = "Ett fel uppstod vid laddning";
-            }
         });
     </script>
 </body>

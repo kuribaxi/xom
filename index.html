@@ -134,3 +134,101 @@
       </div>
   </body>
   </html>
+  <!DOCTYPE html>
+  <html lang="sv">
+  <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>XOM TV - Spelare</title>
+      <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+      <style>
+          body {
+              font-family: Arial, sans-serif;
+              background: #1a1a2e;
+              color: white;
+              margin: 0;
+              padding: 20px;
+              line-height: 1.6;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              min-height: 100vh;
+          }
+          .video-player {
+              max-width: 800px;
+              width: 100%;
+              text-align: center;
+          }
+          .video-player video {
+              width: 100%;
+              max-width: 100%;
+              border-radius: 10px;
+          }
+          .channel-name {
+              font-size: 2em;
+              color: #4ecdc4;
+              margin: 10px 0;
+          }
+          .back-link {
+              display: inline-block;
+              margin-top: 20px;
+              padding: 10px 20px;
+              background: #4ecdc4;
+              color: #1a1a2e;
+              border-radius: 25px;
+              text-decoration: none;
+              font-weight: bold;
+              transition: background 0.3s;
+          }
+          .back-link:hover {
+              background: #45b7aa;
+          }
+          @media (max-width: 600px) {
+              .channel-name {
+                  font-size: 1.5em;
+              }
+          }
+      </style>
+  </head>
+  <body>
+      <div class="video-player">
+          <h1 class="channel-name" id="channelName">Laddar...</h1>
+          <video id="player" controls autoplay></video>
+          <a href="index.html" class="back-link">Tillbaka till kanallistan</a>
+      </div>
+      <script>
+          // Hämta query-parametrar från URL:en
+          const urlParams = new URLSearchParams(window.location.search);
+          const streamUrl = urlParams.get('stream');
+          const channelName = urlParams.get('name') || 'Okänd kanal';
+
+          // Sätt kanalnamnet
+          document.getElementById('channelName').textContent = channelName;
+
+          // Spela upp strömmen
+          const video = document.getElementById('player');
+          if (streamUrl) {
+              if (Hls.isSupported()) {
+                  const hls = new Hls();
+                  hls.loadSource(streamUrl);
+                  hls.attachMedia(video);
+                  hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                      video.play();
+                  });
+                  hls.on(Hls.Events.ERROR, (event, data) => {
+                      console.error('HLS Error:', data);
+                      alert('Kunde inte ladda strömmen. Kontrollera att URL:en fungerar eller försök igen senare.');
+                  });
+              } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                  video.src = streamUrl;
+                  video.play();
+              } else {
+                  alert('Din webbläsare stöder inte HLS-strömning.');
+              }
+          } else {
+              alert('Ingen ström-URL angiven.');
+          }
+      </script>
+  </body>
+  </html>

@@ -180,18 +180,16 @@
             const channelName = element.getAttribute('data-name');
             channelNameElement.textContent = channelName;
 
-            // Stäng befintlig HLS-instans om den finns
             if (hls) {
                 hls.destroy();
             }
 
-            // Testa strömmen utan HLS först
             video.src = streamUrl;
             video.load();
 
             if (Hls.isSupported()) {
                 hls = new Hls({
-                    debug: true, // Aktivera debug-loggning
+                    debug: true,
                     xhrSetup: function (xhr, url) {
                         console.log('Försöker ladda:', url);
                     }
@@ -201,26 +199,26 @@
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
                     video.play().catch(error => {
                         console.error('Autoplay failed:', error);
-                        alert('Autoplay blockerat. Starta videon manuellt.');
+                        channelNameElement.textContent = `${channelName} (Starta videon manuellt)`;
                     });
                 });
                 hls.on(Hls.Events.ERROR, (event, data) => {
                     console.error('HLS Error Details:', data);
                     if (data.details === 'manifestLoadError') {
-                        alert('Kunde inte ladda manifestet. Kontrollera URL eller CORS-problem.');
+                        channelNameElement.textContent = `${channelName} (Fel: Manifest kunde inte laddas. Se konsolen.)`;
                     } else if (data.details === 'networkError') {
-                        alert('Nätverksfel. Kontrollera din anslutning eller proxy.');
+                        channelNameElement.textContent = `${channelName} (Fel: Nätverksproblem. Se konsolen.)`;
                     } else {
-                        alert('Ett okänt HLS-fel uppstod. Se konsolen för detaljer.');
+                        channelNameElement.textContent = `${channelName} (Fel: Okänt HLS-problem. Se konsolen.)`;
                     }
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.play().catch(error => {
                     console.error('Autoplay failed:', error);
-                    alert('Autoplay blockerat. Starta videon manuellt.');
+                    channelNameElement.textContent = `${channelName} (Starta videon manuellt)`;
                 });
             } else {
-                alert('Din webbläsare stöder inte HLS-strömning.');
+                channelNameElement.textContent = `${channelName} (Webbläsaren stöder inte HLS.)`;
             }
         }
     </script>

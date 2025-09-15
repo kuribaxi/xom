@@ -69,6 +69,9 @@
             background: #45b7aa;
             transform: translateY(-2px);
         }
+        .channel.active-channel {
+            color: red; /* Ändrar textfärg till rött för den aktiva kanalen */
+        }
         .player-section {
             flex: 3;
             min-width: 75%;
@@ -174,11 +177,20 @@
         const video = document.getElementById('player');
         const channelNameElement = document.getElementById('channelName');
         let hls = null;
+        let activeChannel = null;
 
         function playChannel(element) {
             const streamUrl = element.getAttribute('data-stream');
             const channelName = element.getAttribute('data-name');
             channelNameElement.textContent = channelName;
+
+            // Ta bort active-class från tidigare kanal
+            if (activeChannel) {
+                activeChannel.classList.remove('active-channel');
+            }
+            // Lägg till active-class på den nuvarande kanalen
+            element.classList.add('active-channel');
+            activeChannel = element;
 
             if (hls) {
                 hls.destroy();

@@ -1,42 +1,41 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Afarin Kanal Test</title>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <meta charset="UTF-8" />
+    <title>Afarin DASH Player</title>
+    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        video {
+            width: 80%;
+            max-width: 900px;
+            margin-top: 20px;
+            border-radius: 10px;
+            outline: none;
+        }
+    </style>
 </head>
-<body style="background:#000; color:#fff; text-align:center;">
+<body>
+    <h1>Kanal: Afarin - DASH</h1>
+    <video id="videoPlayer" controls autoplay></video>
 
-<h1>Afarin Kanal Test</h1>
-<video id="player" controls style="width:80vw; max-width:800px;"></video>
+    <script>
+        const url = "https://live.karwan.tv/afarin-baxcha/index.mpd?token=bb190ffd3033283b110c955d05944e8303d52e8a-e29ef1e5dbda4f454bd27c52c20f7e04-1761785968-1761775168&remote=no_check_ip";
 
-<script>
-const url = "https://live.karwan.tv/afarin-baxcha/tracks-a1/init.m4v?token=6785fcbf40cbeb847da70bbc80434c403e631eb1-f79c26fe4ba482229705564942258db1-1761785109-1761774309";
-const player = document.getElementById('player');
+        const video = document.getElementById('videoPlayer');
+        const player = dashjs.MediaPlayer().create();
+        player.initialize(video, url, true);
 
-if (Hls.isSupported()) {
-  const hls = new Hls();
-
-  hls.on(Hls.Events.ERROR, (event, data) => {
-    console.error("HLS.js error:", data);
-    alert("Fel i videostream: " + data.type + " - " + data.details);
-  });
-
-  hls.loadSource(url);
-  hls.attachMedia(player);
-  hls.on(Hls.Events.MANIFEST_PARSED, () => {
-    console.log("Manifest parsed, start playing");
-    player.play().catch(e => console.warn("Spelning misslyckades:", e));
-  });
-
-} else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-  player.src = url;
-  player.addEventListener('loadedmetadata', () => player.play());
-} else {
-  alert("Din webbläsare stödjer inte HLS.");
-}
-</script>
-
+        player.on(dashjs.MediaPlayer.events.ERROR, function(e) {
+            console.error("DASH.js error:", e);
+            alert("Fel vid uppspelning: " + e.error);
+        });
+    </script>
 </body>
 </html>

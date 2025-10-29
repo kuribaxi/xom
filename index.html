@@ -1,57 +1,42 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Afarin Kanal</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        body {
-            background-color: #1a1a2e;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        video {
-            width: 80%;
-            max-width: 800px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        h1 {
-            color: #4ecdc4;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Afarin Kanal Test</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
-<body>
-    <h1>Kanal: Afarin</h1>
-    <video id="player" controls></video>
+<body style="background:#000; color:#fff; text-align:center;">
 
-    <script>
-        const player = document.getElementById('player');
-        const url = "https://live.karwan.tv/afarin-baxcha/tracks-a1/init.m4v?token=6785fcbf40cbeb847da70bbc80434c403e631eb1-f79c26fe4ba482229705564942258db1-1761785109-1761774309";
+<h1>Afarin Kanal Test</h1>
+<video id="player" controls style="width:80vw; max-width:800px;"></video>
 
-        if (Hls.isSupported()) {
-            const hls = new Hls();
-            hls.loadSource(url);
-            hls.attachMedia(player);
-            hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                player.play().catch(() => {});
-            });
-            hls.on(Hls.Events.ERROR, function (event, data) {
-                console.error("HLS.js error:", data);
-                // Eventuell hantering av fel kan läggas till här
-            });
-        } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-            // För Safari som har stöd för native HLS
-            player.src = url;
-            player.addEventListener('loadedmetadata', function () {
-                player.play().catch(() => {});
-            });
-        } else {
-            alert("Din webbläsare stöder inte HLS-strömning.");
-        }
-    </script>
+<script>
+const url = "https://live.karwan.tv/afarin-baxcha/tracks-a1/init.m4v?token=6785fcbf40cbeb847da70bbc80434c403e631eb1-f79c26fe4ba482229705564942258db1-1761785109-1761774309";
+const player = document.getElementById('player');
+
+if (Hls.isSupported()) {
+  const hls = new Hls();
+
+  hls.on(Hls.Events.ERROR, (event, data) => {
+    console.error("HLS.js error:", data);
+    alert("Fel i videostream: " + data.type + " - " + data.details);
+  });
+
+  hls.loadSource(url);
+  hls.attachMedia(player);
+  hls.on(Hls.Events.MANIFEST_PARSED, () => {
+    console.log("Manifest parsed, start playing");
+    player.play().catch(e => console.warn("Spelning misslyckades:", e));
+  });
+
+} else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+  player.src = url;
+  player.addEventListener('loadedmetadata', () => player.play());
+} else {
+  alert("Din webbläsare stödjer inte HLS.");
+}
+</script>
+
 </body>
 </html>

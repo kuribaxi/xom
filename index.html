@@ -1,6 +1,3 @@
-Här är ett enkelt exempel på en HTML-sida som laddar och spelar upp en kanal med namn "Afarin" med din angivna m3u8-länk med token. Spelaren använder Hls.js för att spela upp strömmen i samma fönster, och jag inkluderade ett enkelt JavaScript som kan anpassas för att uppdatera token automatiskt (med plats för att fylla i tokenuppdatering):
-
-```html
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -33,27 +30,28 @@ Här är ett enkelt exempel på en HTML-sida som laddar och spelar upp en kanal 
 
     <script>
         const player = document.getElementById('player');
-        let hls = null;
+        const url = "https://live.karwan.tv/afarin-baxcha/tracks-a1/init.m4v?token=6785fcbf40cbeb847da70bbc80434c403e631eb1-f79c26fe4ba482229705564942258db1-1761785109-1761774309";
 
-        // Den ursprungliga m3u8-länken med token
-        let streamUrl = "https://live.karwan.tv/afarin-baxcha/tracks-a1/init.m4v?token=6785fcbf40cbeb847da70bbc80434c403e631eb1-f79c26fe4ba482229705564942258db1-1761785109-1761774309";
-
-        function startPlayer(url) {
-            if (hls) {
-                hls.destroy();
-                hls = null;
-            }
-
-            if (Hls.isSupported()) {
-                hls = new Hls();
-                hls.loadSource(url);
-                hls.attachMedia(player);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    player.play().catch(() => { /* användaren måste kanske klicka play */ });
-                });
-                hls.on(Hls.Events.ERROR, (event, data) => {
-                    console.error("HLS Error:", data);
-                });
-            } else if (player.canPlayType('application/vnd.apple.mpegurl
-
-[1](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/1656023/cb526c1c-ef00-4fbe-8ad5-d09d0d064262/paste.txt)
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(player);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                player.play().catch(() => {});
+            });
+            hls.on(Hls.Events.ERROR, function (event, data) {
+                console.error("HLS.js error:", data);
+                // Eventuell hantering av fel kan läggas till här
+            });
+        } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+            // För Safari som har stöd för native HLS
+            player.src = url;
+            player.addEventListener('loadedmetadata', function () {
+                player.play().catch(() => {});
+            });
+        } else {
+            alert("Din webbläsare stöder inte HLS-strömning.");
+        }
+    </script>
+</body>
+</html>

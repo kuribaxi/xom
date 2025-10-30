@@ -2,40 +2,24 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8" />
-    <title>Afarin DASH Player</title>
-    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+    <title>Afarin Baxcha via Karwan.tv player</title>
     <style>
         body {
             background-color: #1a1a2e;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        video {
-            width: 80%;
-            max-width: 900px;
-            margin-top: 20px;
-            border-radius: 10px;
-            outline: none;
+        iframe {
+            border: none;
+            width: 1000px;
+            height: 500px;
         }
     </style>
 </head>
 <body>
-    <h1>Kanal: Afarin - DASH</h1>
-    <video id="videoPlayer" controls autoplay></video>
-
-    <script>
-        const url = "https://live.karwan.tv/afarin-baxcha/index.mpd?token=bb190ffd3033283b110c955d05944e8303d52e8a-e29ef1e5dbda4f454bd27c52c20f7e04-1761785968-1761775168&remote=no_check_ip";
-
-        const video = document.getElementById('videoPlayer');
-        const player = dashjs.MediaPlayer().create();
-        player.initialize(video, url, true);
-
-        player.on(dashjs.MediaPlayer.events.ERROR, function(e) {
-            console.error("DASH.js error:", e);
-            alert("Fel vid uppspelning: " + e.error);
-        });
-    </script>
+    <iframe src="https://karwan.tv/embed/2318" allowfullscreen></iframe>
 </body>
 </html>

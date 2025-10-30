@@ -2,7 +2,9 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afarin Player</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/4.7.1/dash.all.min.js"></script>
     <style>
         body {
             background-color: #1a1a2e;
@@ -21,23 +23,43 @@
             margin: 0 auto;
             border-radius: 10px;
             overflow: hidden;
+            background: #16213e;
+            padding: 20px;
         }
-        iframe {
+        video {
             width: 100%;
             aspect-ratio: 16 / 9;
             border: none;
             border-radius: 10px;
+            background: #000;
+        }
+        .info {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #aaa;
         }
     </style>
 </head>
 <body>
     <h1>Kanal: Afarin</h1>
     <div class="player-container">
-        <iframe 
-            src="https://karwan.tv/afarin-baxcha.html" 
-            allowfullscreen
-            allow="autoplay; fullscreen; picture-in-picture">
-        </iframe>
+        <video id="videoPlayer" controls autoplay></video>
+        <div class="info">
+            <p>MPEG-DASH Livestream</p>
+        </div>
     </div>
+
+    <script>
+        const url = "https://live.karwan.tv/afarin-baxcha/index.mpd?token=a9b4a475b06a458df8f9164573ece1aea1d2d4ea-34dbf2cf88725025d68f9caf5a6badf0-1761866547-1761855747&remote=no_check_ip";
+        const video = document.getElementById('videoPlayer');
+        const player = dashjs.MediaPlayer().create();
+        player.initialize(video, url, true);
+        
+        // Felhantering
+        player.on(dashjs.MediaPlayer.events.ERROR, function(e) {
+            console.error('Player error:', e);
+            document.querySelector('.info p').textContent = 'Fel vid uppspelning. Länken kan ha gått ut.';
+        });
+    </script>
 </body>
 </html>

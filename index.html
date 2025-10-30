@@ -38,6 +38,34 @@
             font-size: 14px;
             color: #aaa;
         }
+        .timer {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #0f3460;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .timer span {
+            color: #fbbf24;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .controls {
+            margin-top: 15px;
+        }
+        button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
     </style>
 </head>
 <body>
@@ -47,8 +75,14 @@
         <div class="info">
             <p>MPEG-DASH Livestream</p>
         </div>
+        <div class="timer">
+            Token uppdateras om: <span id="countdown">18:00</span>
+        </div>
+        <div class="controls">
+            <button onclick="manualRefresh()">🔄 Uppdatera nu</button>
+            <button onclick="toggleAutoRefresh()" id="toggleBtn">⏸️ Pausa auto-uppdatering</button>
+        </div>
     </div>
-
     <script>
         const url = "https://live.karwan.tv/afarin-baxcha/index.mpd?token=a9b4a475b06a458df8f9164573ece1aea1d2d4ea-34dbf2cf88725025d68f9caf5a6badf0-1761866547-1761855747&remote=no_check_ip";
         const video = document.getElementById('videoPlayer');
@@ -59,6 +93,95 @@
         player.on(dashjs.MediaPlayer.events.ERROR, function(e) {
             console.error('Player error:', e);
             document.querySelector('.info p').textContent = 'Fel vid uppspelning. Länken kan ha gått ut.';
+        });
+
+        // Auto-refresh efter 18 minuter (innan token går ut efter 20 min)
+        const REFRESH_TIME = 18 * 60 * 1000; // 18 minuter i millisekunder
+        let nextRefresh = Date.now() + REFRESH_TIME;
+        let autoRefreshEnabled = true;
+        let countdownInterval;
+        let refreshTimeout;
+
+        // Funktion för att uppdatera nedräkningen
+        function updateCountdown() {
+            if (!autoRefreshEnabled) {
+                document.getElementById('countdown').textContent = 'PAUSAD';
+                return;
+            }
+
+            const timeLeft = Math.max(0, nextRefresh - Date.now());
+            const minutes = Math.floor(timeLeft / 60000);
+            const seconds = Math.floor((timeLeft % 60000) / 1000);
+            document.getElementById('countdown').textContent = 
+                minutes + ':' + seconds.toString().padStart(2, '0');
+            
+            if (timeLeft === 0) {
+                clearInterval(countdownInterval);
+            }
+        }
+
+        // Funktion för att ladda om sidan
+        function refreshPage() {
+            if (!autoRefreshEnabled) return;
+            
+            // Spara volyminställningar
+            localStorage.setItem('afarinVolume', video.volume);
+            localStorage.setItem('afarinMuted', video.muted);
+            
+            console.log('Token uppdateras - laddar om sidan...');
+            location.reload();
+        }
+
+        // Manuell uppdatering
+        function manualRefresh() {
+            clearTimeout(refreshTimeout);
+            clearInterval(countdownInterval);
+            refreshPage();
+        }
+
+        // Toggle auto-refresh
+        function toggleAutoRefresh() {
+            autoRefreshEnabled = !autoRefreshEnabled;
+            const btn = document.getElementById('toggleBtn');
+            
+            if (autoRefreshEnabled) {
+                btn.textContent = '⏸️ Pausa auto-uppdatering';
+                nextRefresh = Date.now() + REFRESH_TIME;
+                refreshTimeout = setTimeout(refreshPage, REFRESH_TIME);
+                countdownInterval = setInterval(updateCountdown, 1000);
+            } else {
+                btn.textContent = '▶️ Aktivera auto-uppdatering';
+                clearTimeout(refreshTimeout);
+                clearInterval(countdownInterval);
+            }
+            updateCountdown();
+        }
+
+        // Starta nedräkning och schemalägg uppdatering
+        refreshTimeout = setTimeout(refreshPage, REFRESH_TIME);
+        countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Återställ volyminställningar från tidigare session
+        const savedVolume = localStorage.getItem('afarinVolume');
+        const savedMuted = localStorage.getItem('afarinMuted');
+        if (savedVolume) video.volume = parseFloat(savedVolume);
+        if (savedMuted) video.muted = savedMuted === 'true';
+
+        // Spara volym vid ändring
+        video.addEventListener('volumechange', function() {
+            localStorage.setItem('afarinVolume', video.volume);
+            localStorage.setItem('afarinMuted', video.muted);
+        });
+
+        // Hantera sidsynlighet - ladda om om sidan varit inaktiv för länge
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && autoRefreshEnabled) {
+                if (Date.now() > nextRefresh) {
+                    console.log('Sidan blev aktiv efter token-utgång, laddar om...');
+                    location.reload();
+                }
+            }
         });
     </script>
 </body>

@@ -2,24 +2,42 @@
 <html lang="sv">
 <head>
     <meta charset="UTF-8" />
-    <title>Afarin Baxcha via Karwan.tv player</title>
+    <title>Afarin Player</title>
     <style>
         body {
             background-color: #1a1a2e;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .player-container {
+            width: 80%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
         }
         iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
             border: none;
-            width: 1000px;
-            height: 500px;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <iframe src="https://karwan.tv/embed/2318" allowfullscreen></iframe>
+    <h1>Kanal: Afarin</h1>
+    <div class="player-container">
+        <iframe 
+            src="https://karwan.tv/afarin-baxcha.html" 
+            allowfullscreen
+            allow="autoplay; fullscreen; picture-in-picture">
+        </iframe>
+    </div>
 </body>
 </html>

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Content Security Policy för säkerhet -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: http:; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: http: data:; media-src 'self' https: http: blob: data:; frame-src 'self' https: http:; connect-src 'self' https: http: ws: wss:;">
     <title>XOM TV – Alla Iranska Kanaler (dec 2025)</title>
+    <!-- HLS.js bibliotek för att spela m3u8 streams -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.10/dist/hls.min.js"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
@@ -207,6 +209,7 @@
             background: #45b7aa;
         }
         
+        /* Video element styling */
         #videoPlayer {
             flex: 1;
             width: 100%;
@@ -214,6 +217,7 @@
             background: #000;
         }
         
+        /* Iframe för telewebion streams */
         #iframePlayer {
             flex: 1;
             width: 100%;
@@ -245,6 +249,7 @@
             min-height: 44px;
         }
 
+        /* Error overlay */
         .error-overlay {
             display: none;
             position: absolute;
@@ -277,6 +282,7 @@
             font-weight: bold;
         }
 
+        /* Loading spinner */
         .loading-spinner {
             display: none;
             position: absolute;
@@ -301,6 +307,7 @@
             display: block;
         }
 
+        /* Screen reader only */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -318,12 +325,14 @@
                 height:auto;
                 min-height:0;
             }
+
             .player-area{
                 flex:0 0 auto;
                 height:70vh !important;
                 min-height:300px;
                 max-height:calc(100vh - 30vh);
             }
+
             .sidebar{
                 width:100%;
                 height:30vh !important;
@@ -334,15 +343,18 @@
                 position:relative;
                 display:none;
             }
+
             .header{
                 padding:12px 10px;
             }
+            
             .header-top {
                 flex-direction:row;
                 align-items:center;
                 justify-content:space-between;
                 margin-bottom:5px;
             }
+            
             .menu-toggle{
                 display:inline-block;
                 order:-1;
@@ -350,17 +362,20 @@
                 padding:6px 10px;
                 font-size:0.9em;
             }
+            
             .header h1{
                 font-size:1.3em;
                 margin:0;
                 text-align:center;
                 flex:1;
             }
+            
             .warning{
                 font-size:0.75em;
                 margin-top:5px;
                 line-height:1.2;
             }
+            
             .filter-buttons {
                 gap: 5px;
                 margin-top: 8px;
@@ -373,10 +388,12 @@
                 text-align: center;
                 min-height: 44px;
             }
+
             .player-header{
                 padding:10px;
                 flex-wrap:wrap;
             }
+            
             .player-header h2{
                 font-size:1.2em;
                 margin-bottom:5px;
@@ -384,17 +401,20 @@
                 width:100%;
                 text-align:center;
             }
+            
             .player-controls{
                 order:2;
                 justify-content:center;
                 width:100%;
                 gap:15px;
             }
+            
             .pip-btn {
                 padding: 6px 10px;
                 font-size: 0.85em;
                 margin: 0;
             }
+
             .sidebar .section h3{
                 display:block;
                 margin:12px 0 6px 0;
@@ -405,6 +425,7 @@
                 background:#0f3460;
                 z-index:10;
             }
+
             .channel{
                 margin:4px 0;
                 padding:12px 10px;
@@ -419,17 +440,21 @@
                 height:75vh !important;
                 min-height:280px;
             }
+
             .sidebar{
                 height:25vh !important;
                 min-height:180px;
             }
+
             .header h1{
                 font-size:1.2em;
             }
+            
             .menu-toggle{
                 padding:5px 8px;
                 font-size:0.8em;
             }
+            
             .filter-buttons {
                 flex-wrap: wrap;
             }
@@ -438,13 +463,16 @@
                 padding: 5px 8px;
                 min-width: calc(50% - 5px);
             }
+            
             .player-header h2{
                 font-size:1.1em;
             }
+            
             .pip-btn {
                 padding: 5px 8px;
                 font-size: 0.8em;
             }
+            
             .channel{
                 padding:12px 9px;
                 font-size:0.9em;
@@ -460,16 +488,20 @@
                 height:20vh !important;
                 min-height:150px;
             }
+            
             .header h1{
                 font-size:1.1em;
             }
+            
             .warning{
                 font-size:0.7em;
             }
+            
             .filter-btn {
                 font-size: 0.7em;
                 padding: 4px 6px;
             }
+            
             .player-header h2{
                 font-size:1em;
             }
@@ -638,9 +670,28 @@
             <div class="channel" onclick="load('eshragh','ZANJAN',this)"><span class="label">ZANJAN</span><button class="fav" onclick="toggleFav(event,'eshragh','ZANJAN',this)" aria-label="Lägg till favorit">☆</button></div>
         </div>
 
+        <!-- Kurdiska kanaler -->
         <div class="section" id="kurdishSection">
             <h3>Kurdiska Kanaler</h3>
-            <div class="channel extra-link" onclick="loadHLS('medmusic_hls','Med Music (HLS)', 'https://zindu.tv/intern-play.php?url=http://54.36.110.140/live3/live3.m3u8', this)">
+            <div class="channel extra-link" onclick="loadHLS('zagros_hls','Zagros (HLS)', 'https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8', this)"><span class="label">Zagros (HLS)</span><button class="fav" onclick="toggleFav(event,'zagros_hls','Zagros (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('kanal8_hls','Kanal8 (HLS)', 'https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8', this)"><span class="label">Kanal8 (HLS)</span><button class="fav" onclick="toggleFav(event,'kanal8_hls','Kanal8 (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('rudaw_hls','Rudaw (HLS)', 'https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8', this)"><span class="label">Rudaw (HLS)</span><button class="fav" onclick="toggleFav(event,'rudaw_hls','Rudaw (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('kurdnews_hls','Kurdsat News (HLS)', 'https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS.m3u8', this)"><span class="label">Kurdsat News (HLS)</span><button class="fav" onclick="toggleFav(event,'kurdnews_hls','Kurdsat News (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('sterk_hls','Sterk (HLS)', 'https://5dab1db4b25fe.streamlock.net/sterk/sterktv/chunklist_w1084077249.m3u8', this)"><span class="label">Sterk (HLS)</span><button class="fav" onclick="toggleFav(event,'sterk_hls','Sterk (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('nrt_hls','NRT News (HLS)', 'https://media.streambrothers.com:1936/8226/8226/playlist.m3u8', this)"><span class="label">NRT News (HLS)</span><button class="fav" onclick="toggleFav(event,'nrt_hls','NRT News (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('4kurd_hls','4 Kurd (HLS)', 'https://4kuhls.persiana.live/hls/stream.m3u8', this)"><span class="label">4 Kurd (HLS)</span><button class="fav" onclick="toggleFav(event,'4kurd_hls','4 Kurd (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('medmusic_hls','Med Music (HLS)', 'http://54.36.110.140/live3/live3.m3u8', this)"><span class="label">Med Music (HLS)</span><button class="fav" onclick="toggleFav(event,'medmusic_hls','Med Music (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('aryen_hls','Aryen (HLS)', 'https://stream.aryen.tv/live/tv/chunklist_w189856026.m3u8', this)"><span class="label">Aryen (HLS)</span><button class="fav" onclick="toggleFav(event,'aryen_hls','Aryen (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('cira_hls','Cira (HLS)', 'https://cira-tv.akamaized.net/hls/stream_0.m3u8', this)"><span class="label">Cira (HLS)</span><button class="fav" onclick="toggleFav(event,'cira_hls','Cira (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('waar_hls','Waar (HLS)', 'https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_source/chunks.m3u8', this)"><span class="label">Waar (HLS)</span><button class="fav" onclick="toggleFav(event,'waar_hls','Waar (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('rojava_hls','Rojava (HLS)', 'https://rojava-tv.akamaized.net/hls/rojava-tv.m3u8', this)"><span class="label">Rojava (HLS)</span><button class="fav" onclick="toggleFav(event,'rojava_hls','Rojava (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('kurdhd_hls','Kurdsat HD (HLS)', 'https://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD.m3u8', this)"><span class="label">Kurdsat HD (HLS)</span><button class="fav" onclick="toggleFav(event,'kurdhd_hls','Kurdsat HD (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('kurdistantv_hls','Kurdistan TV (HLS)', 'https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8', this)"><span class="label">Kurdistan TV (HLS)</span><button class="fav" onclick="toggleFav(event,'kurdistantv_hls','Kurdistan TV (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('pdki_hls','PDKI (HLS)', 'https://cdn.northtelecom.org/KurdChannel.m3u8', this)"><span class="label">PDKI (HLS)</span><button class="fav" onclick="toggleFav(event,'pdki_hls','PDKI (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('komala_hls','Komala (HLS)', 'https://live.tvkomala.com/live/komala/playlist.m3u8', this)"><span class="label">Komala (HLS)</span><button class="fav" onclick="toggleFav(event,'komala_hls','Komala (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('gk_hls','GK (HLS)', 'https://live.host247.net/gk/gksat/playlist.m3u8', this)"><span class="label">GK (HLS)</span><button class="fav" onclick="toggleFav(event,'gk_hls','GK (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel web-link" onclick="openLink('https://www.ava.news/livewatch')"><span class="label">Ava TV (Web)</span><button class="fav" onclick="toggleFav(event,'ava_web','Ava TV (Web)',this)" aria-label="Lägg till favorit">☆</button></div>
+             <div class="channel extra-link" onclick="loadHLS('medmusic_hls','Med Music (HLS)', 'https://zindu.tv/intern-play.php?url=http://54.36.110.140/live3/live3.m3u8', this)">
                 <span class="label">Med Music (HLS)</span>
                 <button class="fav" onclick="toggleFav(event,'medmusic_hls','Med Music (HLS)',this)">☆</button>
             </div>
@@ -660,287 +711,569 @@
                 <span class="label">TRT Kurdî (HLS)</span>
                 <button class="fav" onclick="toggleFav(event,'trtkurdi_hls','TRT Kurdî (HLS)',this)">☆</button>
             </div>
-            <div class="channel extra-link" onclick="loadHLS('zagros_hls','Zagros (HLS)', 'https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8', this)"><span class="label">Zagros (HLS)</span><button class="fav" onclick="toggleFav(event,'zagros_hls','Zagros (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
-            <div class="channel extra-link" onclick="loadHLS('kanal8_hls','Kanal8 (HLS)', 'https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8', this)"><span class="label">Kanal8 (HLS)</span><button class="fav" onclick="toggleFav(event,'kanal8_hls','Kanal8 (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel web-link" onclick="openLink('https://utvhawler.net/index.htm')"><span class="label">UTV Hawler (Web)</span><button class="fav" onclick="toggleFav(event,'utv_web','UTV Hawler (Web)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('baxche_hls','Baxche (HLS)', 'https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8', this)"><span class="label">Baxche (HLS)</span><button class="fav" onclick="toggleFav(event,'baxche_hls','Baxche (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('afarinkids_hls','Afarin Kids (HLS)', 'https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8', this)"><span class="label">Afarin Kids (HLS)</span><button class="fav" onclick="toggleFav(event,'afarinkids_hls','Afarin Kids (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('zarokkurm_hls','Zarok Kurmanci (HLS)', 'https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8', this)"><span class="label">Zarok Kurmanci (HLS)</span><button class="fav" onclick="toggleFav(event,'zarokkurm_hls','Zarok Kurmanci (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel extra-link" onclick="loadHLS('zaroksor_hls','Zarok Sorani (HLS)', 'https://zindisorani.zaroktv.com.tr/hls/stream.m3u8', this)"><span class="label">Zarok Sorani (HLS)</span><button class="fav" onclick="toggleFav(event,'zaroksor_hls','Zarok Sorani (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
         </div>
 
+        <!-- Karwan TV -->
         <div class="section" id="karwanSection">
-            <h3>Karwan TV Länkar</h3>
-            <div class="channel karwan-link" onclick="loadWeb('https://karwan.tv/tv1.html', 'TV1 (Karwan)', this)"><span class="label">TV1 (Karwan)</span><button class="fav" onclick="toggleFav(event,'karwan_tv1','TV1 (Karwan)',this, true)">☆</button></div>
+            <h3>Karwan TV</h3>
+            <div class="channel karwan-link" onclick="openKarwan()">
+                <span class="label">Karwan TV (öppnas i nytt fönster)</span>
+            </div>
+        </div>
+
+        <!-- Webbplatser -->
+        <div class="section" id="webLinksSection">
+            <h3>Webbplatser</h3>
+            <div class="channel extra-link" onclick="loadHLS('ifilm_extra2','IFILM Farsi (Alt 2)', 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', this)">
+                <span class="label">IFILM Farsi (Alt 2)</span>
+                <button class="fav" onclick="toggleFav(event,'ifilm_extra2','IFILM Farsi (Alt 2)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('iribkurd_hls','IRIB Kurdistan (HLS)', 'https://lenz.splus.ir/PLTV/88888888/224/3221226647/index.m3u8', this)"><span class="label">IRIB Kurdistan (HLS)</span><button class="fav" onclick="toggleFav(event,'iribkurd_hls','IRIB Kurdistan (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel web-link" onclick="openLink('https://kurdish.sahartv.ir/live')"><span class="label">Sahar TV (Web)</span><button class="fav" onclick="toggleFav(event,'sahar_web','Sahar TV (Web)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel web-link" onclick="openLink('https://www.aparatchi.com/iran-live-tv')"><span class="label">Aparatchi - Iran Live TV</span></div>
+            <div class="channel web-link" onclick="openLink('http://www.imvbox.tv/en')"><span class="label">IMVBox</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.giniko.com/watch.php?id=372')"><span class="label">Giniko TV</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.persianity.com/')"><span class="label">Persianity</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.parsatv.com/#irib')"><span class="label">Parsa TV</span></div>
+            <div class="channel web-link" onclick="openLink('http://mdbmax.com')"><span class="label">MDB Max</span></div>
+            <div class="channel web-link" onclick="openLink('https://farsiplex.com/')"><span class="label">FarsiPlex</span></div>
+            <div class="channel web-link" onclick="openLink('https://flnd.buzz/')"><span class="label">Flnd Buzz</span></div>
+            <div class="channel web-link" onclick="openLink('https://farsiland.com/iran-movie-2025/')"><span class="label">Farsiland Movies</span></div>
+            <div class="channel web-link" onclick="openLink('https://persianhive.com/movies_films/')"><span class="label">Persian Hive</span></div>
+            <div class="channel web-link" onclick="openLink('https://namakade.com/index.html?EcD6wOwBgwilFvmHXvTv')"><span class="label">Namakade</span></div>
+            <div class="channel web-link" onclick="openLink('https://telewebion.com/')"><span class="label">Telewebion</span></div>
+            <div class="channel web-link" onclick="openLink('https://beta.sepehrtv.ir/')"><span class="label">Sepehr TV</span></div>
+            <div class="channel web-link" onclick="openLink('https://sassantv.com/index.html')"><span class="label">Sassan TV</span></div>
         </div>
     </div>
 </div>
 
 <script>
-    let hls;
-    const video = document.getElementById('videoPlayer');
-    const iframe = document.getElementById('iframePlayer');
-    const channelNameDisplay = document.getElementById('channelName');
+    let currentStream = null;
+    let currentChannel = 'tv1';
+    let currentTitle = 'TV1';
+    let currentChannelEl = null;
+    let hls = null;
+    let userAgentMode = 'auto';
+    let streamErrorCount = 0;
+    const MAX_ERRORS = 3;
     
-    // De nya HLS-strömmarna för Favorites-systemet
-    const hlsStreams = {
-        'medmusic_hls': 'https://zindu.tv/intern-play.php?url=http://54.36.110.140/live3/live3.m3u8',
+    // Telewebion kanaler
+    const telewebionChannels = {
+        'tv1': 'tv1',
+        'tv2': 'tv2', 
+        'tv3': 'tv3',
+        'tv4': 'tv4',
+        'Tehran': 'tvtehran',
+        'nasim': 'nasim',
+        'varzesh': 'varzesh',
+        'irinn': 'irinn',
+        'irinn2': 'khabar',
+        'ifilm': 'ifilm',
+        'ifilmdari': 'ifilm2',
+        'ifilmen': 'ifilmen',
+        'ifilmar': 'ifilmar',
+        'tv1plus': 'tv1plus',
+        'omid': 'omid',
+        'namayesh': 'namayesh',
+        'mostanad': 'mostanad',
+        'hdtest': 'hdtest',
+        'amouzesh': 'amouzesh',
+        'salamat': 'salamat',
+        'ofogh': 'ofogh',
+        'quran': 'quran',
+        'pooya': 'pooya',
+        'javaneh': 'javaneh',
+        'sepehr': 'sepehr',
+        'faratar': 'faratar',
+        'nava': 'nava',
+        'nama': 'nama',
+        'iribu': 'iribu',
+        'ara': 'ara',
+        'iraneman': 'iraneman',
+        'golkhane': 'golkhane',
+        'negarestan': 'negarestan',
+        'karoon': 'karoon',
+        'sport3': 'sport3',
+        'sport1': 'sport1',
+        'parseh': 'parseh',
+        'nesfejahan': 'nesfejahan',
+        'sarbedaran': 'sarbedaran',
+        
+        // Regionala kanaler
+        'mahabad': 'mahabad',
+        'kordestan': 'kordestan',
+        'zagros': 'kermanshah',
+        'ilam': 'ilam',
+        'bushehr': 'booshehr',
+        'abadan': 'abadan',
+        'khalijefars': 'khalijefars',
+        'khoozestan': 'ahvaz',
+        'kish': 'kish',
+        'hamoon': 'zahedan',
+        'alborz': 'alborz',
+        'aftab': 'arak',
+        'semnan': 'semnan',
+        'noor': 'qom',
+        'qazvin': 'qazvin',
+        'jahanbin': 'bakhtiari',
+        'sina': 'hamedan',
+        'aflak': 'lorestan',
+        'kerman': 'kerman',
+        'esfahan': 'esfahan',
+        'fars': 'shiraz',
+        'taban': 'yazd',
+        'dena': 'kohgiluyeh',
+        'khavaran': 'khorasanej',
+        'atrak': 'khorasansh',
+        'khorasanrazavi': 'khorasanr',
+        'sabz': 'golestan',
+        'tabarestan': 'mazandaran',
+        'baran': 'gilan',
+        'sabalan': 'ardabil',
+        'sahand': 'tabriz',
+        'azarbayjangharbi': 'urmia',
+        'eshragh': 'zanjan'
+    };
+
+    // Favorites system
+    let favorites = JSON.parse(localStorage.getItem('xomTvFavorites')) || [];
+    
+    function updateFavoritesList() {
+        const favList = document.getElementById('favoritesList');
+        if (favorites.length === 0) {
+            favList.innerHTML = '<div style="color:#fff; padding:10px; text-align:center;">Inga favoriter</div>';
+            return;
+        }
+        
+        favList.innerHTML = '';
+        favorites.forEach(fav => {
+            const favItem = document.createElement('div');
+            favItem.className = 'channel';
+            favItem.innerHTML = `
+                <span class="label">${fav.title}</span>
+                <button class="fav fav-active" onclick="toggleFav(event,'${fav.id}','${fav.title}',this)" aria-label="Ta bort favorit">★</button>
+            `;
+            
+            // HLS streams mapping
+            const hlsStreams = {
+                'medmusic_hls': 'https://zindu.tv/intern-play.php?url=http://54.36.110.140/live3/live3.m3u8',
         'cira_hls': 'https://vsd74.okcdn.ru/hls/9890583349861.m3u8/sig/URwADHA0Oyc/expires/1768168069508/srcIp/2.249.117.190/urls/185.226.53.83/clientType/0/srcAg/CHROME_MAC/mid/10267254464101/9890583349861_high/index.m3u8',
         'rojava_hls': 'https://hlspackager.akamaized.net/live/DB/ROJAVA_HD/HLS/ROJAVA_HD-mp4a_128000_eng=20000.m3u8',
         'payam_hls': 'https://media2.streambrothers.com:1936/8218/8218/chunklist_w377646187.m3u8',
         'trtkurdi_hls': 'https://tv-trtkurdi.medya.trt.com.tr/master_1440.m3u8',
-        'ifilmdari_hls': 'https://live.presstv.ir/hls/ifilm2.m3u8',
-        'ifilmen_hls': 'https://live.presstv.ir/hls/ifilmen.m3u8',
-        'ifilmar_hls': 'https://live.presstv.ir/hls/ifilmar.m3u8',
-        'zagros_hls': 'https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8',
-        'kanal8_hls': 'https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8'
-    };
+                'ifilm_extra2': 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8',
+                'ifilmdari_hls': 'https://live.presstv.ir/hls/ifilm2.m3u8',
+                'ifilmen_hls': 'https://live.presstv.ir/hls/ifilmen.m3u8',
+                'ifilmar_hls': 'https://live.presstv.ir/hls/ifilmar.m3u8',
+                'zagros_hls': 'https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8',
+                'kanal8_hls': 'https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8',
+                'rudaw_hls': 'https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8',
+                'kurdnews_hls': 'https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS.m3u8',
+                'sterk_hls': 'https://5dab1db4b25fe.streamlock.net/sterk/sterktv/chunklist_w1084077249.m3u8',
+                'nrt_hls': 'https://media.streambrothers.com:1936/8226/8226/playlist.m3u8',
+                '4kurd_hls': 'https://4kuhls.persiana.live/hls/stream.m3u8',
+                'medmusic_hls': 'http://54.36.110.140/live3/live3.m3u8',
+                'aryen_hls': 'https://stream.aryen.tv/live/tv/chunklist_w189856026.m3u8',
+                'cira_hls': 'https://cira-tv.akamaized.net/hls/stream_0.m3u8',
+                'waar_hls': 'https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_source/chunks.m3u8',
+                'rojava_hls': 'https://rojava-tv.akamaized.net/hls/rojava-tv.m3u8',
+                'kurdhd_hls': 'https://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD.m3u8',
+                'kurdistantv_hls': 'https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8',
+                'pdki_hls': 'https://cdn.northtelecom.org/KurdChannel.m3u8',
+                'komala_hls': 'https://live.tvkomala.com/live/komala/playlist.m3u8',
+                'gk_hls': 'https://live.host247.net/gk/gksat/playlist.m3u8',
+                'iribkurd_hls': 'https://lenz.splus.ir/PLTV/88888888/224/3221226647/index.m3u8',
+                'baxche_hls': 'https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8',
+                'afarinkids_hls': 'https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8',
+                'zarokkurm_hls': 'https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8',
+                'zaroksor_hls': 'https://zindisorani.zaroktv.com.tr/hls/stream.m3u8'
+            };
+            
+            // Set the onclick handler
+            if (hlsStreams[fav.id]) {
+                favItem.onclick = function() {
+                    loadHLS(fav.id, fav.title, hlsStreams[fav.id], this);
+                };
+            } else {
+                favItem.onclick = function() {
+                    load(fav.id, fav.title, this);
+                };
+            }
+            
+            favList.appendChild(favItem);
+        });
+    }
+    
+    function toggleFav(event, id, title, button) {
+        event.stopPropagation();
+        
+        const index = favorites.findIndex(fav => fav.id === id);
+        if (index === -1) {
+            favorites.push({id, title});
+            button.classList.add('fav-active');
+            button.innerHTML = '★';
+            button.setAttribute('aria-label', 'Ta bort favorit');
+        } else {
+            favorites.splice(index, 1);
+            button.classList.remove('fav-active');
+            button.innerHTML = '☆';
+            button.setAttribute('aria-label', 'Lägg till favorit');
+        }
+        
+        localStorage.setItem('xomTvFavorites', JSON.stringify(favorites));
+        updateFavoritesList();
+    }
+    
+    // Initialize favorites on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateFavoritesList();
+        
+        // Update star buttons based on favorites
+        document.querySelectorAll('.channel').forEach(ch => {
+            const favBtn = ch.querySelector('.fav');
+            if (favBtn) {
+                const onclick = ch.getAttribute('onclick');
+                let channelId = '';
+                
+                if (onclick) {
+                    if (onclick.includes("load('")) {
+                        const match = onclick.match(/load\('([^']+)'/);
+                        if (match) channelId = match[1];
+                    } else if (onclick.includes("loadHLS('")) {
+                        const match = onclick.match(/loadHLS\('([^']+)'/);
+                        if (match) channelId = match[1];
+                    }
+                }
+                
+                if (channelId && favorites.some(fav => fav.id === channelId)) {
+                    favBtn.classList.add('fav-active');
+                    favBtn.innerHTML = '★';
+                }
+            }
+        });
+        
+        load('tv1', 'TV1', document.querySelector('.channel.active'));
+    });
 
-    const telewebionChannels = {
-        'tv1': 'tv1', 'tv2': 'tv2', 'tv3': 'tv3', 'tv4': 'tv4', 'Tehran': 'tehran',
-        'nasim': 'nasim', 'varzesh': 'varzesh', 'irinn': 'irinn', 'irinn2': 'khabar2',
-        'ifilm': 'ifilm', 'tv1plus': 'tv1plus', 'omid': 'omid', 'namayesh': 'namayesh',
-        'mostanad': 'mostanad', 'hdtest': 'hdtest', 'amouzesh': 'amouzesh',
-        'salamat': 'salamat', 'ofogh': 'ofogh', 'quran': 'quran', 'pooya': 'pooya',
-        'javaneh': 'javaneh', 'sepehr': 'sepehr', 'faratar': 'faratar', 'nava': 'nava',
-        'nama': 'nama', 'iribu': 'iribu', 'ara': 'ara', 'iraneman': 'iraneman',
-        'golkhane': 'golkhane', 'negarestan': 'negarestan', 'karoon': 'karoon',
-        'sport3': 'sport3', 'sport1': 'sport1', 'parseh': 'parseh',
-        'nesfejahan': 'nesfejahan', 'sarbedaran': 'sarbedaran', 'mahabad': 'mahabad',
-        'kordestan': 'kordestan', 'zagros': 'zagros', 'ilam': 'ilam', 'bushehr': 'bushehr',
-        'abadan': 'abadan', 'khalijefars': 'khalijefars', 'khoozestan': 'khoozestan',
-        'kish': 'kish', 'hamoon': 'hamoon', 'alborz': 'alborz', 'aftab': 'aftab',
-        'semnan': 'semnan', 'noor': 'noor', 'qazvin': 'qazvin', 'jahanbin': 'jahanbin',
-        'sina': 'sina', 'aflak': 'aflak', 'kerman': 'kerman', 'esfahan': 'esfahan',
-        'fars': 'fars', 'taban': 'taban', 'dena': 'dena', 'khavaran': 'khavaran',
-        'atrak': 'atrak', 'khorasanrazavi': 'khorasanrazavi', 'sabz': 'sabz',
-        'tabarestan': 'tabarestan', 'baran': 'baran', 'sabalan': 'sabalan',
-        'sahand': 'sahand', 'azarbayjangharbi': 'azarbayjangharbi', 'eshragh': 'eshragh'
-    };
-
-    let currentChannel = 'tv1';
-    let currentTitle = 'TV1';
-    let currentChannelEl = null;
-    let userAgentMode = 0; // 0: Auto, 1: Mobile (Android), 2: Desktop (Chrome)
-    const modeNames = ["Auto", "Android", "Chrome"];
-
-    function load(id, title, el) {
-        currentChannel = id;
-        currentTitle = title;
-        currentChannelEl = el;
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const isHidden = sidebar.style.display === 'none' || sidebar.style.display === '';
+        sidebar.style.display = isHidden ? 'block' : 'none';
         
-        document.querySelectorAll('.channel').forEach(c => c.classList.remove('active'));
-        if(el) el.classList.add('active');
-        
-        channelNameDisplay.innerText = title;
-        video.style.display = 'none';
-        iframe.style.display = 'block';
-        
-        hideError();
-        showLoading();
-        
-        const slug = telewebionChannels[id] || id;
-        iframe.src = `https://m.telewebion.com/embed/live/${slug}?autoplay=1&mute=0`;
-        
-        iframe.onload = () => hideLoading();
+        if (window.innerWidth <= 900) {
+            if (isHidden) {
+                sidebar.style.display = 'block';
+                document.querySelector('.menu-toggle').innerHTML = '✕ <span class="sr-only">Dölj kanaler</span>';
+            } else {
+                sidebar.style.display = 'none';
+                document.querySelector('.menu-toggle').innerHTML = '📺 <span class="sr-only">Visa kanaler</span>';
+            }
+        }
     }
 
-    function loadHLS(id, title, url, el) {
-        currentTitle = title;
-        currentChannelEl = el;
+    function filterChannels(filter) {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
         
-        document.querySelectorAll('.channel').forEach(c => c.classList.remove('active'));
-        if(el) el.classList.add('active');
+        const sections = {
+            'all': ['favSection', 'nationalSection', 'regionalSection', 'kurdishSection', 'karwanSection', 'webLinksSection'],
+            'national': ['favSection', 'nationalSection'],
+            'regional': ['favSection', 'regionalSection'],
+            'kurdish': ['favSection', 'kurdishSection'],
+            'karwan': ['favSection', 'karwanSection'],
+            'web': ['favSection', 'webLinksSection']
+        };
         
-        channelNameDisplay.innerText = title;
-        iframe.style.display = 'none';
-        iframe.src = '';
-        video.style.display = 'block';
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.add('hidden');
+        });
         
-        hideError();
-        showLoading();
-        
-        if (hls) hls.destroy();
+        sections[filter].forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section) section.classList.remove('hidden');
+        });
+    }
 
+    function getTelewebionUrl(channel) {
+        const channelSlug = telewebionChannels[channel] || channel;
+        const baseUrl = 'https://m.telewebion.com/embed/live/';
+        
+        let userAgentParam = '';
+        if (userAgentMode === 'mobile') {
+            userAgentParam = '&mobile=1';
+        } else if (userAgentMode === 'desktop') {
+            userAgentParam = '&desktop=1';
+        }
+        
+        return `${baseUrl}${channelSlug}?autoplay=1&mute=0${userAgentParam}`;
+    }
+
+    function showLoading() {
+        document.getElementById('loadingSpinner').classList.add('active');
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingSpinner').classList.remove('active');
+    }
+
+    function showError(message) {
+        document.getElementById('errorMessage').textContent = message;
+        document.getElementById('errorOverlay').classList.add('active');
+        streamErrorCount++;
+    }
+
+    function hideError() {
+        document.getElementById('errorOverlay').classList.remove('active');
+        streamErrorCount = 0;
+    }
+
+    function load(channel, title, element) {
+        if (element) {
+            if (currentChannelEl) {
+                currentChannelEl.classList.remove('active');
+            }
+            element.classList.add('active');
+            currentChannelEl = element;
+        }
+        
+        currentChannel = channel;
+        currentTitle = title;
+        document.getElementById('channelName').textContent = title;
+        
+        showLoading();
+        hideError();
+        
+        const videoPlayer = document.getElementById('videoPlayer');
+        const iframePlayer = document.getElementById('iframePlayer');
+        
+        videoPlayer.style.display = 'none';
+        iframePlayer.style.display = 'block';
+        
+        if (hls) {
+            hls.destroy();
+            hls = null;
+        }
+        
+        videoPlayer.pause();
+        videoPlayer.src = '';
+        
+        const telewebionUrl = getTelewebionUrl(channel);
+        iframePlayer.src = telewebionUrl;
+        
+        setTimeout(() => {
+            hideLoading();
+        }, 5000);
+        
+        // Auto-close sidebar on mobile
+        if (window.innerWidth <= 900) {
+            setTimeout(() => {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.style.display = 'none';
+                document.querySelector('.menu-toggle').innerHTML = '📺 <span class="sr-only">Visa kanaler</span>';
+            }, 300);
+        }
+    }
+
+    function loadHLS(channel, title, streamUrl, element) {
+        if (element) {
+            if (currentChannelEl) {
+                currentChannelEl.classList.remove('active');
+            }
+            element.classList.add('active');
+            currentChannelEl = element;
+        }
+        
+        currentChannel = channel;
+        currentTitle = title;
+        document.getElementById('channelName').textContent = title;
+        
+        showLoading();
+        hideError();
+        
+        const videoPlayer = document.getElementById('videoPlayer');
+        const iframePlayer = document.getElementById('iframePlayer');
+        
+        iframePlayer.style.display = 'none';
+        iframePlayer.src = '';
+        videoPlayer.style.display = 'block';
+        
+        if (hls) {
+            hls.destroy();
+            hls = null;
+        }
+        
+        videoPlayer.pause();
+        videoPlayer.src = '';
+        
         if (Hls.isSupported()) {
             hls = new Hls({
                 enableWorker: true,
                 lowLatencyMode: true,
-                backBufferLength: 60
+                backBufferLength: 90
             });
-            hls.loadSource(url);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                video.play();
+            
+            hls.loadSource(streamUrl);
+            hls.attachMedia(videoPlayer);
+            
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                videoPlayer.play().catch(e => {
+                    console.log('Autoplay prevented:', e);
+                    showError('Autoplay blockerad. Klicka på play-knappen.');
+                });
                 hideLoading();
+                streamErrorCount = 0;
             });
-            hls.on(Hls.Events.ERROR, (event, data) => {
+            
+            hls.on(Hls.Events.ERROR, function(event, data) {
+                console.error('HLS error:', data);
                 if (data.fatal) {
-                    showError(`Streamfel: ${data.type}`);
-                    hideLoading();
+                    switch(data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            showError('Nätverksfel. Försöker ladda om...');
+                            hls.startLoad();
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            showError('Media fel. Försöker återställa...');
+                            hls.recoverMediaError();
+                            break;
+                        default:
+                            showError('Kunde inte ladda stream.');
+                            hls.destroy();
+                            break;
+                    }
                 }
             });
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = url;
-            video.addEventListener('loadedmetadata', () => {
-                video.play();
+        } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+            videoPlayer.src = streamUrl;
+            videoPlayer.addEventListener('loadedmetadata', function() {
+                videoPlayer.play().catch(e => {
+                    console.log('Autoplay prevented:', e);
+                    showError('Autoplay blockerad. Klicka på play-knappen.');
+                });
+                hideLoading();
+                streamErrorCount = 0;
+            });
+            
+            videoPlayer.addEventListener('error', function() {
+                showError('Kunde inte ladda HLS stream');
                 hideLoading();
             });
-        }
-    }
-
-    function loadWeb(url, title, el) {
-        currentTitle = title;
-        currentChannelEl = el;
-        document.querySelectorAll('.channel').forEach(c => c.classList.remove('active'));
-        if(el) el.classList.add('active');
-        channelNameDisplay.innerText = title;
-        video.style.display = 'none';
-        iframe.style.display = 'block';
-        hideError();
-        iframe.src = url;
-    }
-
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const menuToggle = document.querySelector('.menu-toggle');
-        if (sidebar.style.display === 'block') {
-            sidebar.style.display = 'none';
-            menuToggle.innerHTML = '📺 <span class="sr-only">Visa kanaler</span>';
         } else {
-            sidebar.style.display = 'block';
-            menuToggle.innerHTML = '✕ <span class="sr-only">Dölj kanaler</span>';
+            showError('Din webbläsare stöder inte HLS playback');
+            hideLoading();
         }
-    }
-
-    function filterChannels(category) {
-        const sections = document.querySelectorAll('.section');
-        const buttons = document.querySelectorAll('.filter-btn');
         
-        buttons.forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        // Auto-close sidebar on mobile
+        if (window.innerWidth <= 900) {
+            setTimeout(() => {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.style.display = 'none';
+                document.querySelector('.menu-toggle').innerHTML = '📺 <span class="sr-only">Visa kanaler</span>';
+            }, 300);
+        }
+    }
 
-        if (category === 'all') {
-            sections.forEach(s => s.classList.remove('hidden'));
-        } else {
-            sections.forEach(s => {
-                if (s.id === category + 'Section' || s.id === 'favSection') {
-                    s.classList.remove('hidden');
-                } else {
-                    s.classList.add('hidden');
-                }
+    function openKarwan() {
+        window.open('https://karwan.tv', '_blank');
+    }
+
+    function openLink(url) {
+        window.open(url, '_blank');
+    }
+
+    function togglePictureInPicture(event) {
+        event.stopPropagation();
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        if (document.pictureInPictureElement) {
+            document.exitPictureInPicture().catch(error => {
+                console.error('Error exiting PiP:', error);
             });
-        }
-    }
-
-    function toggleFav(e, id, title, btn, isWeb = false) {
-        e.stopPropagation();
-        let favs = JSON.parse(localStorage.getItem('xomtv_favs') || '[]');
-        const index = favs.findIndex(f => f.id === id);
-        
-        if (index > -1) {
-            favs.splice(index, 1);
-            btn.classList.remove('fav-active');
-            btn.innerText = '☆';
-        } else {
-            favs.push({ id, title, isWeb });
-            btn.classList.add('fav-active');
-            btn.innerText = '★';
-        }
-        
-        localStorage.setItem('xomtv_favs', JSON.stringify(favs));
-        renderFavorites();
-    }
-
-    function renderFavorites() {
-        const list = document.getElementById('favoritesList');
-        const favs = JSON.parse(localStorage.getItem('xomtv_favs') || '[]');
-        
-        // Uppdatera stjärnor i huvudlistan
-        document.querySelectorAll('.fav').forEach(btn => {
-            const onclickAttr = btn.getAttribute('onclick');
-            favs.forEach(f => {
-                if (onclickAttr && onclickAttr.includes(`'${f.id}'`)) {
-                    btn.classList.add('fav-active');
-                    btn.innerText = '★';
-                }
+        } else if (document.pictureInPictureEnabled && videoPlayer.src) {
+            videoPlayer.requestPictureInPicture().catch(error => {
+                console.error('Error entering PiP:', error);
+                showError('Bild-i-bild stöds inte för denna stream');
             });
-        });
-
-        if (favs.length === 0) {
-            list.innerHTML = 'Inga favoriter';
-            return;
-        }
-
-        list.innerHTML = '';
-        favs.forEach(f => {
-            const div = document.createElement('div');
-            div.className = 'channel';
-            if (f.id.includes('_hls')) div.className += ' extra-link';
-            if (f.isWeb) div.className += ' web-link';
-            
-            div.onclick = () => {
-                if (f.id.includes('_hls')) {
-                    loadHLS(f.id, f.title, hlsStreams[f.id], div);
-                } else if (f.isWeb) {
-                    const originalBtn = document.querySelector(`.channel.karwan-link[onclick*="${f.id}"]`);
-                    const url = originalBtn ? originalBtn.getAttribute('onclick').match(/'([^']+)'/g)[0].replace(/'/g, "") : "";
-                    loadWeb(url, f.title, div);
-                } else {
-                    load(f.id, f.title, div);
-                }
-            };
-            
-            div.innerHTML = `<span class="label">${f.title}</span><button class="fav fav-active" onclick="toggleFav(event,'${f.id}','${f.title}',this, ${f.isWeb})">★</button>`;
-            list.appendChild(div);
-        });
-    }
-
-    function showLoading() { document.getElementById('loadingSpinner').classList.add('active'); }
-    function hideLoading() { document.getElementById('loadingSpinner').classList.remove('active'); }
-    function showError(msg) { 
-        const err = document.getElementById('errorOverlay');
-        document.getElementById('errorMessage').innerText = msg;
-        err.classList.add('active');
-    }
-    function hideError() { document.getElementById('errorOverlay').classList.remove('active'); }
-
-    function reloadPlayer() {
-        if (video.style.display === 'block') {
-            const currentSrc = video.src || (hls && hls.url);
-            if (currentSrc) loadHLS('', currentTitle, currentSrc, currentChannelEl);
         } else {
-            const currentSrc = iframe.src;
-            iframe.src = '';
-            setTimeout(() => { iframe.src = currentSrc; }, 50);
+            showError('Bild-i-bild stöds inte eller ingen video spelas');
         }
     }
 
     function toggleFullscreen() {
-        const container = document.querySelector('.player-container');
+        const playerArea = document.querySelector('.player-area');
+        
         if (!document.fullscreenElement) {
-            container.requestFullscreen().catch(err => console.log(err));
+            if (playerArea.requestFullscreen) {
+                playerArea.requestFullscreen();
+            } else if (playerArea.webkitRequestFullscreen) {
+                playerArea.webkitRequestFullscreen();
+            } else if (playerArea.msRequestFullscreen) {
+                playerArea.msRequestFullscreen();
+            }
         } else {
-            document.exitFullscreen();
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
         }
     }
 
-    async function togglePictureInPicture(e) {
-        e.stopPropagation();
-        try {
-            if (video.style.display === 'block') {
-                if (video !== document.pictureInPictureElement) {
-                    await video.requestPictureInPicture();
-                } else {
-                    await document.exitPictureInPicture();
-                }
-            } else {
-                alert("PiP fungerar för närvarande endast för HLS-strömmar (gröna knappar), inte för Telewebion/Karwan.");
-            }
-        } catch (error) {
-            console.error(error);
+    function reloadPlayer() {
+        // HLS streams mapping
+        const hlsStreams = {
+            'ifilm_extra2': 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8',
+            'ifilmdari_hls': 'https://live.presstv.ir/hls/ifilm2.m3u8',
+            'ifilmen_hls': 'https://live.presstv.ir/hls/ifilmen.m3u8',
+            'ifilmar_hls': 'https://live.presstv.ir/hls/ifilmar.m3u8',
+            'zagros_hls': 'https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8',
+            'kanal8_hls': 'https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8',
+            'rudaw_hls': 'https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8',
+            'kurdnews_hls': 'https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS.m3u8',
+            'sterk_hls': 'https://5dab1db4b25fe.streamlock.net/sterk/sterktv/chunklist_w1084077249.m3u8',
+            'nrt_hls': 'https://media.streambrothers.com:1936/8226/8226/playlist.m3u8',
+            '4kurd_hls': 'https://4kuhls.persiana.live/hls/stream.m3u8',
+            'medmusic_hls': 'http://54.36.110.140/live3/live3.m3u8',
+            'aryen_hls': 'https://stream.aryen.tv/live/tv/chunklist_w189856026.m3u8',
+            'cira_hls': 'https://cira-tv.akamaized.net/hls/stream_0.m3u8',
+            'waar_hls': 'https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_source/chunks.m3u8',
+            'rojava_hls': 'https://rojava-tv.akamaized.net/hls/rojava-tv.m3u8',
+            'kurdhd_hls': 'https://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD.m3u8',
+            'kurdistantv_hls': 'https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8',
+            'pdki_hls': 'https://cdn.northtelecom.org/KurdChannel.m3u8',
+            'komala_hls': 'https://live.tvkomala.com/live/komala/playlist.m3u8',
+            'gk_hls': 'https://live.host247.net/gk/gksat/playlist.m3u8',
+            'iribkurd_hls': 'https://lenz.splus.ir/PLTV/88888888/224/3221226647/index.m3u8',
+            'baxche_hls': 'https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8',
+            'afarinkids_hls': 'https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8',
+            'zarokkurm_hls': 'https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8',
+            'zaroksor_hls': 'https://zindisorani.zaroktv.com.tr/hls/stream.m3u8'
+        };
+        
+        if (hlsStreams[currentChannel]) {
+            loadHLS(currentChannel, currentTitle, hlsStreams[currentChannel], currentChannelEl);
+        } else {
+            load(currentChannel, currentTitle, currentChannelEl);
         }
     }
 
     function toggleUserAgentMode() {
-        userAgentMode = (userAgentMode + 1) % 3;
-        const btn = document.getElementById('userAgentBtn');
-        btn.textContent = `📱 UA: ${modeNames[userAgentMode]}`;
+        const modes = ['auto', 'mobile', 'desktop'];
+        const modeNames = {auto: 'Auto', mobile: 'Mobil', desktop: 'Desktop'};
+        const currentIndex = modes.indexOf(userAgentMode);
+        userAgentMode = modes[(currentIndex + 1) % modes.length];
+        
+        document.getElementById('userAgentBtn').textContent = `📱 UA: ${modeNames[userAgentMode]}`;
         
         if (telewebionChannels[currentChannel]) {
             load(currentChannel, currentTitle, currentChannelEl);
@@ -957,15 +1290,7 @@
         reloadPlayer();
     }
 
-    // Init
-    window.onload = () => {
-        renderFavorites();
-        // Ladda TV1 som standard
-        const firstChannel = document.querySelector('.channel');
-        load('tv1', 'TV1', firstChannel);
-    };
-
-    // Auto-hide sidebar på mobil
+    // Auto-hide sidebar when clicking a channel on mobile
     document.querySelectorAll('.channel').forEach(channel => {
         channel.addEventListener('click', function() {
             if (window.innerWidth <= 900) {
@@ -974,6 +1299,21 @@
                 document.querySelector('.menu-toggle').innerHTML = '📺 <span class="sr-only">Visa kanaler</span>';
             }
         });
+    });
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+        if (window.innerWidth <= 900) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (sidebar.style.display === 'block' && 
+                !sidebar.contains(event.target) && 
+                !menuToggle.contains(event.target)) {
+                sidebar.style.display = 'none';
+                menuToggle.innerHTML = '📺 <span class="sr-only">Visa kanaler</span>';
+            }
+        }
     });
 </script>
 

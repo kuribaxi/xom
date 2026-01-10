@@ -578,7 +578,6 @@
 
         <div class="section" id="nationalSection">
             <h3>Nationella Kanaler</h3>
-            <!-- Kanaler här - samma som tidigare -->
             <div class="channel active" onclick="load('tv1','TV1',this)">
                 <span class="label">TV1</span>
                 <button class="fav" onclick="toggleFav(event,'tv1','TV1',this)" aria-label="Lägg till favorit">☆</button>
@@ -591,7 +590,6 @@
             <div class="channel" onclick="load('varzesh','VARZESH',this)"><span class="label">VARZESH (Sport)</span><button class="fav" onclick="toggleFav(event,'varzesh','VARZESH',this)" aria-label="Lägg till favorit">☆</button></div>
             <div class="channel" onclick="load('irinn','IRINN / KHABAR',this)"><span class="label">IRINN / KHABAR</span><button class="fav" onclick="toggleFav(event,'irinn','IRINN / KHABAR',this)" aria-label="Lägg till favorit">☆</button></div>
             <div class="channel" onclick="load('irinn2','KHABAR2',this)"><span class="label">KHABAR2</span><button class="fav" onclick="toggleFav(event,'irinn2','KHABAR2',this)" aria-label="Lägg till favorit">☆</button></div>
-            <!-- REPLACED IFILM FARSI WITH HLS -->
             <div class="channel hls-channel" onclick="loadHLS('ifilm','IFILM Farsi', 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', this)">
                 <span class="label">IFILM Farsi (HLS)</span>
                 <button class="fav" onclick="toggleFav(event,'ifilm','IFILM Farsi',this)" aria-label="Lägg till favorit">☆</button>
@@ -630,7 +628,6 @@
 
         <div class="section" id="regionalSection">
             <h3>Regionala Kanaler</h3>
-            <!-- Regionala kanaler här - samma som tidigare -->
             <div class="channel" onclick="load('mahabad','MAHABAD',this)"><span class="label">MAHABAD</span><button class="fav" onclick="toggleFav(event,'mahabad','MAHABAD',this)" aria-label="Lägg till favorit">☆</button></div>
             <div class="channel" onclick="load('kordestan','KORDESTAN',this)"><span class="label">KORDESTAN</span><button class="fav" onclick="toggleFav(event,'kordestan','KORDESTAN',this)" aria-label="Lägg till favorit">☆</button></div>
             <div class="channel" onclick="load('zagros','KERMANSHAH',this)"><span class="label">KERMANSHAH</span><button class="fav" onclick="toggleFav(event,'zagros','KERMANSHAH',this)" aria-label="Lägg till favorit">☆</button></div>
@@ -667,4 +664,578 @@
         </div>
 
         <!-- Kurdiska kanaler -->
-        <div class="section" id="kurdishSection">...
+        <div class="section" id="kurdishSection">
+            <h3>Kurdiska Kanaler</h3>
+            <div class="channel" onclick="load('tishk','TISHK',this)"><span class="label">TISHK</span><button class="fav" onclick="toggleFav(event,'tishk','TISHK',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('kurd','KURD',this)"><span class="label">KURD</span><button class="fav" onclick="toggleFav(event,'kurd','KURD',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('nrt','NRT',this)"><span class="label">NRT</span><button class="fav" onclick="toggleFav(event,'nrt','NRT',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('zehni','ZEHNI',this)"><span class="label">ZEHNI</span><button class="fav" onclick="toggleFav(event,'zehni','ZEHNI',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('rok','ROK',this)"><span class="label">ROK</span><button class="fav" onclick="toggleFav(event,'rok','ROK',this)" aria-label="Lägg till favorit">☆</button></div>
+        </div>
+
+        <!-- Karwan TV (endast en kvar) -->
+        <div class="section" id="karwanSection">
+            <h3>Karwan TV</h3>
+            <div class="channel karwan-link" onclick="openKarwan()">
+                <span class="label">Karwan TV (öppnas i nytt fönster)</span>
+            </div>
+        </div>
+
+        <div class="section" id="webLinksSection">
+            <h3>Webblänkar</h3>
+            <div class="channel web-link" onclick="openLink('https://m.telewebion.com/live/tv1')"><span class="label">Telewebion (officiell)</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.irib.it/live-tv/')"><span class="label">IRIB Italiens officiella</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentStream = null;
+    let currentChannel = 'tv1';
+    let currentTitle = 'TV1';
+    let currentChannelEl = null;
+    let hls = null;
+    let userAgentMode = 'auto'; // auto, mobile, desktop
+    let streamErrorCount = 0;
+    const MAX_ERRORS = 3;
+    
+    // Telewebion kanaler
+    const telewebionChannels = {
+        'tv1': 'tv1',
+        'tv2': 'tv2', 
+        'tv3': 'tv3',
+        'tv4': 'tv4',
+        'Tehran': 'tvtehran',
+        'nasim': 'nasim',
+        'varzesh': 'varzesh',
+        'irinn': 'irinn',
+        'irinn2': 'khabar',
+        'tv1plus': 'tv1plus',
+        'omid': 'omid',
+        'namayesh': 'namayesh',
+        'mostanad': 'mostanad',
+        'hdtest': 'hdtest',
+        'amouzesh': 'amouzesh',
+        'salamat': 'salamat',
+        'ofogh': 'ofogh',
+        'quran': 'quran',
+        'pooya': 'pooya',
+        'javaneh': 'javaneh',
+        'sepehr': 'sepehr',
+        'faratar': 'faratar',
+        'nava': 'nava',
+        'nama': 'nama',
+        'iribu': 'iribu',
+        'ara': 'ara',
+        'iraneman': 'iraneman',
+        'golkhane': 'golkhane',
+        'negarestan': 'negarestan',
+        'karoon': 'karoon',
+        'sport3': 'sport3',
+        'sport1': 'sport1',
+        'parseh': 'parseh',
+        'nesfejahan': 'nesfejahan',
+        'sarbedaran': 'sarbedaran',
+        
+        // Regionala kanaler
+        'mahabad': 'mahabad',
+        'kordestan': 'kordestan',
+        'zagros': 'kermanshah',
+        'ilam': 'ilam',
+        'bushehr': 'booshehr',
+        'abadan': 'abadan',
+        'khalijefars': 'khalijefars',
+        'khoozestan': 'ahvaz',
+        'kish': 'kish',
+        'hamoon': 'zahedan',
+        'alborz': 'alborz',
+        'aftab': 'arak',
+        'semnan': 'semnan',
+        'noor': 'qom',
+        'qazvin': 'qazvin',
+        'jahanbin': 'bakhtiari',
+        'sina': 'hamedan',
+        'aflak': 'lorestan',
+        'kerman': 'kerman',
+        'esfahan': 'esfahan',
+        'fars': 'shiraz',
+        'taban': 'yazd',
+        'dena': 'kohgiluyeh',
+        'khavaran': 'khorasanej',
+        'atrak': 'khorasansh',
+        'khorasanrazavi': 'khorasanr',
+        'sabz': 'golestan',
+        'tabarestan': 'mazandaran',
+        'baran': 'gilan',
+        'sabalan': 'ardabil',
+        'sahand': 'tabriz',
+        'azarbayjangharbi': 'urmia',
+        'eshragh': 'zanjan'
+    };
+
+    // Alternative streams for some channels
+    const alternativeStreams = {
+        'tv1': 'https://live.presstv.ir/hls/tv1.m3u8',
+        'tv2': 'https://live.presstv.ir/hls/tv2.m3u8',
+        'tv3': 'https://live.presstv.ir/hls/tv3.m3u8',
+        'tv4': 'https://live.presstv.ir/hls/tv4.m3u8',
+        'nasim': 'https://live.presstv.ir/hls/nasim.m3u8',
+        'varzesh': 'https://live.presstv.ir/hls/varzesh.m3u8'
+    };
+
+    // Favorites system
+    let favorites = JSON.parse(localStorage.getItem('xomTvFavorites')) || [];
+    
+    function updateFavoritesList() {
+        const favList = document.getElementById('favoritesList');
+        if (favorites.length === 0) {
+            favList.innerHTML = '<div style="color:#fff; padding:10px; text-align:center;">Inga favoriter</div>';
+            return;
+        }
+        
+        favList.innerHTML = '';
+        favorites.forEach(fav => {
+            const favItem = document.createElement('div');
+            favItem.className = 'channel';
+            favItem.innerHTML = `
+                <span class="label">${fav.title}</span>
+                <button class="fav fav-active" onclick="toggleFav(event,'${fav.id}','${fav.title}',this)" aria-label="Ta bort favorit">★</button>
+            `;
+            favItem.onclick = function() {
+                // Determine which function to call based on channel type
+                if (fav.id === 'ifilm') {
+                    loadHLS(fav.id, fav.title, 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', this);
+                } else if (fav.id === 'ifilmdari') {
+                    loadHLS(fav.id, fav.title, 'https://live.presstv.ir/hls/ifilm2.m3u8', this);
+                } else if (fav.id === 'ifilmen') {
+                    loadHLS(fav.id, fav.title, 'https://live.presstv.ir/hls/ifilmen.m3u8', this);
+                } else if (fav.id === 'ifilmar') {
+                    loadHLS(fav.id, fav.title, 'https://live.presstv.ir/hls/ifilmar.m3u8', this);
+                } else {
+                    load(fav.id, fav.title, this);
+                }
+            };
+            favList.appendChild(favItem);
+        });
+    }
+    
+    function toggleFav(event, id, title, button) {
+        event.stopPropagation();
+        
+        const index = favorites.findIndex(fav => fav.id === id);
+        if (index === -1) {
+            // Add to favorites
+            favorites.push({id, title});
+            button.classList.add('fav-active');
+            button.innerHTML = '★';
+            button.setAttribute('aria-label', 'Ta bort favorit');
+        } else {
+            // Remove from favorites
+            favorites.splice(index, 1);
+            button.classList.remove('fav-active');
+            button.innerHTML = '☆';
+            button.setAttribute('aria-label', 'Lägg till favorit');
+        }
+        
+        localStorage.setItem('xomTvFavorites', JSON.stringify(favorites));
+        updateFavoritesList();
+        
+        // Update favorites button in sidebar if it exists
+        const allChannels = document.querySelectorAll('.channel');
+        allChannels.forEach(channel => {
+            const favBtn = channel.querySelector('.fav');
+            if (favBtn && channel.onclick && channel.onclick.toString().includes(id)) {
+                const isFavorite = favorites.some(fav => fav.id === id);
+                favBtn.classList.toggle('fav-active', isFavorite);
+                favBtn.innerHTML = isFavorite ? '★' : '☆';
+                favBtn.setAttribute('aria-label', isFavorite ? 'Ta bort favorit' : 'Lägg till favorit');
+            }
+        });
+    }
+    
+    // Initialize favorites on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateFavoritesList();
+        
+        // Set initial active state for favorites
+        document.querySelectorAll('.channel').forEach(channel => {
+            const favBtn = channel.querySelector('.fav');
+            if (favBtn) {
+                const channelId = channel.getAttribute('onclick')?.match(/load(?:HLS)?\('([^']+)'/)?.[1];
+                if (channelId) {
+                    const isFavorite = favorites.some(fav => fav.id === channelId);
+                    favBtn.classList.toggle('fav-active', isFavorite);
+                    favBtn.innerHTML = isFavorite ? '★' : '☆';
+                    favBtn.setAttribute('aria-label', isFavorite ? 'Ta bort favorit' : 'Lägg till favorit');
+                }
+            }
+        });
+        
+        // Load initial channel
+        load('tv1', 'TV1', document.querySelector('.channel.active'));
+    });
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const isHidden = sidebar.style.display === 'none' || sidebar.style.display === '';
+        sidebar.style.display = isHidden ? 'block' : 'none';
+        
+        if (window.innerWidth <= 900) {
+            if (isHidden) {
+                sidebar.style.display = 'block';
+                document.querySelector('.menu-toggle').innerHTML = '✕ <span class="sr-only">Dölj kanaler</span>';
+            } else {
+                sidebar.style.display = 'none';
+                document.querySelector('.menu-toggle').innerHTML = '📺 <span class="sr-only">Visa kanaler</span>';
+            }
+        }
+    }
+
+    function filterChannels(filter) {
+        // Update button states
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // Show/hide sections
+        const sections = {
+            'all': ['favSection', 'nationalSection', 'regionalSection', 'kurdishSection', 'karwanSection', 'webLinksSection'],
+            'national': ['favSection', 'nationalSection'],
+            'regional': ['favSection', 'regionalSection'],
+            'kurdish': ['favSection', 'kurdishSection'],
+            'karwan': ['favSection', 'karwanSection']
+        };
+        
+        // Hide all sections first
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.add('hidden');
+        });
+        
+        // Show selected sections
+        sections[filter].forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section) section.classList.remove('hidden');
+        });
+    }
+
+    function getTelewebionUrl(channel) {
+        const channelSlug = telewebionChannels[channel] || channel;
+        const baseUrl = 'https://m.telewebion.com/embed/live/';
+        
+        let userAgentParam = '';
+        if (userAgentMode === 'mobile') {
+            userAgentParam = '&mobile=1';
+        } else if (userAgentMode === 'desktop') {
+            userAgentParam = '&desktop=1';
+        }
+        
+        return `${baseUrl}${channelSlug}?autoplay=1&mute=0${userAgentParam}`;
+    }
+
+    function showLoading() {
+        document.getElementById('loadingSpinner').classList.add('active');
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingSpinner').classList.remove('active');
+    }
+
+    function showError(message) {
+        document.getElementById('errorMessage').textContent = message;
+        document.getElementById('errorOverlay').classList.add('active');
+        streamErrorCount++;
+    }
+
+    function hideError() {
+        document.getElementById('errorOverlay').classList.remove('active');
+        streamErrorCount = 0;
+    }
+
+    function load(channel, title, element) {
+        if (element) {
+            if (currentChannelEl) {
+                currentChannelEl.classList.remove('active');
+            }
+            element.classList.add('active');
+            currentChannelEl = element;
+        }
+        
+        currentChannel = channel;
+        currentTitle = title;
+        document.getElementById('channelName').textContent = title;
+        
+        showLoading();
+        hideError();
+        
+        // Hide video player, show iframe
+        const videoPlayer = document.getElementById('videoPlayer');
+        const iframePlayer = document.getElementById('iframePlayer');
+        
+        videoPlayer.style.display = 'none';
+        iframePlayer.style.display = 'block';
+        
+        // Stop any existing HLS playback
+        if (hls) {
+            hls.destroy();
+            hls = null;
+        }
+        
+        // Stop video playback
+        videoPlayer.pause();
+        videoPlayer.src = '';
+        
+        // Load telewebion iframe
+        const telewebionUrl = getTelewebionUrl(channel);
+        iframePlayer.src = telewebionUrl;
+        
+        // Set timeout to check if iframe loaded successfully
+        setTimeout(() => {
+            hideLoading();
+            // Check if we should try alternative stream
+            if (streamErrorCount >= MAX_ERRORS && alternativeStreams[channel]) {
+                showError('Telewebion stream misslyckades. Vill du prova alternativ stream?');
+            }
+        }, 5000);
+    }
+
+    function loadHLS(channel, title, streamUrl, element) {
+        if (element) {
+            if (currentChannelEl) {
+                currentChannelEl.classList.remove('active');
+            }
+            element.classList.add('active');
+            currentChannelEl = element;
+        }
+        
+        currentChannel = channel;
+        currentTitle = title;
+        document.getElementById('channelName').textContent = title;
+        
+        showLoading();
+        hideError();
+        
+        // Hide iframe, show video player
+        const videoPlayer = document.getElementById('videoPlayer');
+        const iframePlayer = document.getElementById('iframePlayer');
+        
+        iframePlayer.style.display = 'none';
+        videoPlayer.style.display = 'block';
+        
+        // Stop iframe
+        iframePlayer.src = '';
+        
+        // Stop any existing HLS playback
+        if (hls) {
+            hls.destroy();
+            hls = null;
+        }
+        
+        // Clear video source
+        videoPlayer.pause();
+        videoPlayer.src = '';
+        
+        if (Hls.isSupported()) {
+            hls = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+                backBufferLength: 90
+            });
+            
+            hls.loadSource(streamUrl);
+            hls.attachMedia(videoPlayer);
+            
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                videoPlayer.play().catch(e => {
+                    console.log('Autoplay prevented:', e);
+                    showError('Autoplay blockerad. Klicka på play-knappen.');
+                });
+                hideLoading();
+                streamErrorCount = 0;
+            });
+            
+            hls.on(Hls.Events.ERROR, function(event, data) {
+                console.error('HLS error:', data);
+                if (data.fatal) {
+                    switch(data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            showError('Nätverksfel. Försöker ladda om...');
+                            hls.startLoad();
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            showError('Media fel. Försöker återställa...');
+                            hls.recoverMediaError();
+                            break;
+                        default:
+                            showError('Kunde inte ladda stream. Försök alternativ metod.');
+                            hls.destroy();
+                            break;
+                    }
+                }
+            });
+        } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+            // Native HLS support (Safari)
+            videoPlayer.src = streamUrl;
+            videoPlayer.addEventListener('loadedmetadata', function() {
+                videoPlayer.play().catch(e => {
+                    console.log('Autoplay prevented:', e);
+                    showError('Autoplay blockerad. Klicka på play-knappen.');
+                });
+                hideLoading();
+                streamErrorCount = 0;
+            });
+            
+            videoPlayer.addEventListener('error', function() {
+                showError('Kunde inte ladda HLS stream');
+                hideLoading();
+            });
+        } else {
+            showError('Din webbläsare stöder inte HLS playback');
+            hideLoading();
+        }
+    }
+
+    function openKarwan() {
+        window.open('https://karwan.tv', '_blank');
+    }
+
+    function openLink(url) {
+        window.open(url, '_blank');
+    }
+
+    function togglePictureInPicture(event) {
+        event.stopPropagation();
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        if (document.pictureInPictureElement) {
+            document.exitPictureInPicture().catch(error => {
+                console.error('Error exiting PiP:', error);
+            });
+        } else if (document.pictureInPictureEnabled && videoPlayer.src) {
+            videoPlayer.requestPictureInPicture().catch(error => {
+                console.error('Error entering PiP:', error);
+                showError('Bild-i-bild stöds inte för denna stream');
+            });
+        } else {
+            showError('Bild-i-bild stöds inte eller ingen video spelas');
+        }
+    }
+
+    function toggleFullscreen() {
+        const playerArea = document.querySelector('.player-area');
+        
+        if (!document.fullscreenElement) {
+            if (playerArea.requestFullscreen) {
+                playerArea.requestFullscreen();
+            } else if (playerArea.webkitRequestFullscreen) {
+                playerArea.webkitRequestFullscreen();
+            } else if (playerArea.msRequestFullscreen) {
+                playerArea.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    }
+
+    function reloadPlayer() {
+        if (currentChannel === 'ifilm') {
+            loadHLS(currentChannel, currentTitle, 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', currentChannelEl);
+        } else if (currentChannel === 'ifilmdari') {
+            loadHLS(currentChannel, currentTitle, 'https://live.presstv.ir/hls/ifilm2.m3u8', currentChannelEl);
+        } else if (currentChannel === 'ifilmen') {
+            loadHLS(currentChannel, currentTitle, 'https://live.presstv.ir/hls/ifilmen.m3u8', currentChannelEl);
+        } else if (currentChannel === 'ifilmar') {
+            loadHLS(currentChannel, currentTitle, 'https://live.presstv.ir/hls/ifilmar.m3u8', currentChannelEl);
+        } else if (telewebionChannels[currentChannel]) {
+            load(currentChannel, currentTitle, currentChannelEl);
+        }
+    }
+
+    function toggleUserAgentMode() {
+        const modes = ['auto', 'mobile', 'desktop'];
+        const modeNames = {auto: 'Auto', mobile: 'Mobil', desktop: 'Desktop'};
+        const currentIndex = modes.indexOf(userAgentMode);
+        userAgentMode = modes[(currentIndex + 1) % modes.length];
+        
+        document.getElementById('userAgentBtn').textContent = `📱 UA: ${modeNames[userAgentMode]}`;
+        
+        // Reload current channel with new UA setting
+        if (telewebionChannels[currentChannel]) {
+            load(currentChannel, currentTitle, currentChannelEl);
+        }
+    }
+
+    function retryCurrentStream() {
+        hideError();
+        reloadPlayer();
+    }
+
+    function tryAlternativeStream() {
+        hideError();
+        
+        if (alternativeStreams[currentChannel]) {
+            loadHLS(currentChannel, currentTitle, alternativeStreams[currentChannel], currentChannelEl);
+        } else {
+            showError('Inget alternativt stream tillgängligt för denna kanal');
+        }
+    }
+
+    // Handle PiP events
+    document.addEventListener('DOMContentLoaded', function() {
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        videoPlayer.addEventListener('enterpictureinpicture', function() {
+            console.log('Entered Picture-in-Picture');
+        });
+        
+        videoPlayer.addEventListener('leavepictureinpicture', function() {
+            console.log('Left Picture-in-Picture');
+        });
+    });
+
+    // Handle fullscreen change
+    document.addEventListener('fullscreenchange', function() {
+        const isFullscreen = !!document.fullscreenElement;
+        console.log('Fullscreen changed:', isFullscreen);
+    });
+
+    // Auto-hide sidebar on mobile when clicking a channel
+    document.querySelectorAll('.channel').forEach(channel => {
+        channel.addEventListener('click', function() {
+            if (window.innerWidth <= 900) {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.style.display = 'none';
+                document.querySelector('.menu-toggle').innerHTML = '📺 <span class="sr-only">Visa kanaler</span>';
+            }
+        });
+    });
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+        if (window.innerWidth <= 900) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (sidebar.style.display === 'block' && 
+                !sidebar.contains(event.target) && 
+                !menuToggle.contains(event.target)) {
+                sidebar.style.display = 'none';
+                menuToggle.innerHTML = '📺 <span class="sr-only">Visa kanaler</span>';
+            }
+        }
+    });
+
+    // Initialize
+    window.onload = function() {
+        updateFavoritesList();
+    };
+</script>
+
+</body>
+</html>

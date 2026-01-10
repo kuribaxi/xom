@@ -49,7 +49,7 @@
             margin-top: 10px;
             justify-content: center;
             width: 100%;
-            max-width: 600px;
+            max-width: 800px;
         }
         .filter-btn {
             background: #0f3460;
@@ -133,6 +133,15 @@
         }
         .channel.hls-channel:hover {
             background: #2980b9;
+        }
+        
+        /* Extra länkar stil */
+        .channel.extra-link {
+            background: #2ecc71;
+            color: white;
+        }
+        .channel.extra-link:hover {
+            background: #27ae60;
         }
         
         /* Web-länkar stil */
@@ -530,7 +539,9 @@
         <button class="filter-btn" onclick="filterChannels('national')">1. Nationella kanaler</button>
         <button class="filter-btn" onclick="filterChannels('regional')">2. Regionala kanaler</button>
         <button class="filter-btn" onclick="filterChannels('kurdish')">3. Kurdiska kanaler</button>
-        <button class="filter-btn" onclick="filterChannels('karwan')">4. Karwan TV</button>
+        <button class="filter-btn" onclick="filterChannels('extra')">4. Extra länkar</button>
+        <button class="filter-btn" onclick="filterChannels('karwan')">5. Karwan TV</button>
+        <button class="filter-btn" onclick="filterChannels('web')">6. Webbplatser</button>
     </div>
     <p class="warning">Kör via lokal server → python -m http.server</p>
     <p class="mobile-header-info">Klicka på "Visa kanaler" för att välja kanal</p>
@@ -590,13 +601,10 @@
             <div class="channel" onclick="load('varzesh','VARZESH',this)"><span class="label">VARZESH (Sport)</span><button class="fav" onclick="toggleFav(event,'varzesh','VARZESH',this)" aria-label="Lägg till favorit">☆</button></div>
             <div class="channel" onclick="load('irinn','IRINN / KHABAR',this)"><span class="label">IRINN / KHABAR</span><button class="fav" onclick="toggleFav(event,'irinn','IRINN / KHABAR',this)" aria-label="Lägg till favorit">☆</button></div>
             <div class="channel" onclick="load('irinn2','KHABAR2',this)"><span class="label">KHABAR2</span><button class="fav" onclick="toggleFav(event,'irinn2','KHABAR2',this)" aria-label="Lägg till favorit">☆</button></div>
-            <div class="channel hls-channel" onclick="loadHLS('ifilm','IFILM Farsi', 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', this)">
-                <span class="label">IFILM Farsi (HLS)</span>
-                <button class="fav" onclick="toggleFav(event,'ifilm','IFILM Farsi',this)" aria-label="Lägg till favorit">☆</button>
-            </div>
-            <div class="channel hls-channel" onclick="loadHLS('ifilmdari','IFILM Dari', 'https://live.presstv.ir/hls/ifilm2.m3u8', this)"><span class="label">IFILM Dari (HLS)</span><button class="fav" onclick="toggleFav(event,'ifilmdari','IFILM Dari',this)" aria-label="Lägg till favorit">☆</button></div>
-            <div class="channel hls-channel" onclick="loadHLS('ifilmen','IFILM English', 'https://live.presstv.ir/hls/ifilmen.m3u8', this)"><span class="label">IFILM English (HLS)</span><button class="fav" onclick="toggleFav(event,'ifilmen','IFILM English',this)" aria-label="Lägg till favorit">☆</button></div>
-            <div class="channel hls-channel" onclick="loadHLS('ifilmar','IFILM Arabic', 'https://live.presstv.ir/hls/ifilmar.m3u8', this)"><span class="label">IFILM Arabic (HLS)</span><button class="fav" onclick="toggleFav(event,'ifilmar','IFILM Arabic',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('ifilm','IFILM Farsi',this)"><span class="label">IFILM Farsi</span><button class="fav" onclick="toggleFav(event,'ifilm','IFILM Farsi',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('ifilmdari','IFILM Dari',this)"><span class="label">IFILM Dari</span><button class="fav" onclick="toggleFav(event,'ifilmdari','IFILM Dari',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('ifilmen','IFILM English',this)"><span class="label">IFILM English</span><button class="fav" onclick="toggleFav(event,'ifilmen','IFILM English',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('ifilmar','IFILM Arabic',this)"><span class="label">IFILM Arabic</span><button class="fav" onclick="toggleFav(event,'ifilmar','IFILM Arabic',this)" aria-label="Lägg till favorit">☆</button></div>
             <div class="channel" onclick="load('tv1plus','TV1PLUS',this)"><span class="label">TV1PLUS</span><button class="fav" onclick="toggleFav(event,'tv1plus','TV1PLUS',this)" aria-label="Lägg till favorit">☆</button></div>
             <div class="channel" onclick="load('omid','OMID',this)"><span class="label">OMID</span><button class="fav" onclick="toggleFav(event,'omid','OMID',this)" aria-label="Lägg till favorit">☆</button></div>
             <div class="channel" onclick="load('namayesh','NAMAYESH',this)"><span class="label">NAMAYESH</span><button class="fav" onclick="toggleFav(event,'namayesh','NAMAYESH',this)" aria-label="Lägg till favorit">☆</button></div>
@@ -666,14 +674,55 @@
         <!-- Kurdiska kanaler -->
         <div class="section" id="kurdishSection">
             <h3>Kurdiska Kanaler</h3>
-            <div class="channel" onclick="load('tishk','TISHK',this)"><span class="label">TISHK</span><button class="fav" onclick="toggleFav(event,'tishk','TISHK',this)" aria-label="Lägg till favorit">☆</button></div>
-            <div class="channel" onclick="load('kurd','KURD',this)"><span class="label">KURD</span><button class="fav" onclick="toggleFav(event,'kurd','KURD',this)" aria-label="Lägg till favorit">☆</button></div>
-            <div class="channel" onclick="load('nrt','NRT',this)"><span class="label">NRT</span><button class="fav" onclick="toggleFav(event,'nrt','NRT',this)" aria-label="Lägg till favorit">☆</button></div>
-            <div class="channel" onclick="load('zehni','ZEHNI',this)"><span class="label">ZEHNI</span><button class="fav" onclick="toggleFav(event,'zehni','ZEHNI',this)" aria-label="Lägg till favorit">☆</button></div>
-            <div class="channel" onclick="load('rok','ROK',this)"><span class="label">ROK</span><button class="fav" onclick="toggleFav(event,'rok','ROK',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('kurdish1','KURDISK TV',this)"><span class="label">KURDISK TV</span><button class="fav" onclick="toggleFav(event,'kurdish1','KURDISK TV',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('kurdish2','KURD SAT',this)"><span class="label">KURD SAT</span><button class="fav" onclick="toggleFav(event,'kurdish2','KURD SAT',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('kurdish3','KURDISTAN TV',this)"><span class="label">KURDISTAN TV</span><button class="fav" onclick="toggleFav(event,'kurdish3','KURDISTAN TV',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('kurdish4','KURDISTAN 24',this)"><span class="label">KURDISTAN 24</span><button class="fav" onclick="toggleFav(event,'kurdish4','KURDISTAN 24',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel" onclick="load('kurdish5','RUDW',this)"><span class="label">RUDW</span><button class="fav" onclick="toggleFav(event,'kurdish5','RUDW',this)" aria-label="Lägg till favorit">☆</button></div>
         </div>
 
-        <!-- Karwan TV (endast en kvar) -->
+        <!-- Extra länkar -->
+        <div class="section" id="extraSection">
+            <h3>Extra länkar</h3>
+            <div class="channel extra-link" onclick="loadHLS('ifilm_extra1','IFILM Farsi (Alternativ 1)', 'https://gg.hls2.xyz/live/AP%20iFilm%20Persian/chunks.m3u8?nimblesessionid=99152588', this)">
+                <span class="label">IFILM Farsi (Alternativ 1)</span>
+                <button class="fav" onclick="toggleFav(event,'ifilm_extra1','IFILM Farsi (Alternativ 1)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('ifilm_extra2','IFILM Farsi (Alternativ 2)', 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', this)">
+                <span class="label">IFILM Farsi (Alternativ 2)</span>
+                <button class="fav" onclick="toggleFav(event,'ifilm_extra2','IFILM Farsi (Alternativ 2)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('tv1_extra','TV1 (Alternativ)', 'https://gg.hls2.xyz/live/irib-tv1/chunks.m3u8?nimblesessionid=99137128', this)">
+                <span class="label">TV1 (Alternativ)</span>
+                <button class="fav" onclick="toggleFav(event,'tv1_extra','TV1 (Alternativ)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('tv2_extra','TV2 (Alternativ)', 'https://gg.hls2.xyz/live/irib-tv2/chunks.m3u8?nimblesessionid=99137587', this)">
+                <span class="label">TV2 (Alternativ)</span>
+                <button class="fav" onclick="toggleFav(event,'tv2_extra','TV2 (Alternativ)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('tv3_extra','TV3 (Alternativ)', 'https://gg.hls2.xyz/live/tv3/chunks.m3u8?nimblesessionid=99136648', this)">
+                <span class="label">TV3 (Alternativ)</span>
+                <button class="fav" onclick="toggleFav(event,'tv3_extra','TV3 (Alternativ)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('tv4_extra','TV4 (Alternativ)', 'https://gg.hls2.xyz/live/irib-tv4/chunks.m3u8?nimblesessionid=99137848', this)">
+                <span class="label">TV4 (Alternativ)</span>
+                <button class="fav" onclick="toggleFav(event,'tv4_extra','TV4 (Alternativ)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('varzesh_extra','VARZESH (Alternativ)', 'https://gg.hls2.xyz/live/irib-varzesh/chunks.m3u8?nimblesessionid=99140600', this)">
+                <span class="label">VARZESH (Alternativ)</span>
+                <button class="fav" onclick="toggleFav(event,'varzesh_extra','VARZESH (Alternativ)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('khabar_extra','KHABAR (Alternativ)', 'https://gg.hls2.xyz/live/irib-khabar/chunks.m3u8?nimblesessionid=99141190', this)">
+                <span class="label">KHABAR (Alternativ)</span>
+                <button class="fav" onclick="toggleFav(event,'khabar_extra','KHABAR (Alternativ)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('presstv','Press TV', 'https://live.presstv.ir/hls/presstv_5_482/index.m3u8', this)">
+                <span class="label">Press TV</span>
+                <button class="fav" onclick="toggleFav(event,'presstv','Press TV',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+        </div>
+
+        <!-- Karwan TV -->
         <div class="section" id="karwanSection">
             <h3>Karwan TV</h3>
             <div class="channel karwan-link" onclick="openKarwan()">
@@ -681,10 +730,22 @@
             </div>
         </div>
 
+        <!-- Webbplatser -->
         <div class="section" id="webLinksSection">
-            <h3>Webblänkar</h3>
-            <div class="channel web-link" onclick="openLink('https://m.telewebion.com/live/tv1')"><span class="label">Telewebion (officiell)</span></div>
-            <div class="channel web-link" onclick="openLink('https://www.irib.it/live-tv/')"><span class="label">IRIB Italiens officiella</span></div>
+            <h3>Webbplatser</h3>
+            <div class="channel web-link" onclick="openLink('https://www.aparatchi.com/iran-live-tv')"><span class="label">Aparatchi - Iran Live TV</span></div>
+            <div class="channel web-link" onclick="openLink('http://www.imvbox.tv/en')"><span class="label">IMVBox</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.giniko.com/watch.php?id=372')"><span class="label">Giniko TV</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.persianity.com/')"><span class="label">Persianity</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.parsatv.com/#irib')"><span class="label">Parsa TV</span></div>
+            <div class="channel web-link" onclick="openLink('http://mdbmax.com')"><span class="label">MDB Max</span></div>
+            <div class="channel web-link" onclick="openLink('https://farsiplex.com/')"><span class="label">FarsiPlex</span></div>
+            <div class="channel web-link" onclick="openLink('https://flnd.buzz/')"><span class="label">Flnd Buzz</span></div>
+            <div class="channel web-link" onclick="openLink('https://farsiland.com/iran-movie-2025/')"><span class="label">Farsiland Movies</span></div>
+            <div class="channel web-link" onclick="openLink('https://persianhive.com/movies_films/')"><span class="label">Persian Hive</span></div>
+            <div class="channel web-link" onclick="openLink('https://namakade.com/index.html?EcD6wOwBgwilFvmHXvTv')"><span class="label">Namakade</span></div>
+            <div class="channel web-link" onclick="openLink('https://telewebion.com/')"><span class="label">Telewebion</span></div>
+            <div class="channel web-link" onclick="openLink('https://sepehrtv.ir/')"><span class="label">Sepehr TV</span></div>
         </div>
     </div>
 </div>
@@ -710,6 +771,10 @@
         'varzesh': 'varzesh',
         'irinn': 'irinn',
         'irinn2': 'khabar',
+        'ifilm': 'ifilm',
+        'ifilmdari': 'ifilm2',
+        'ifilmen': 'ifilmen',
+        'ifilmar': 'ifilmar',
         'tv1plus': 'tv1plus',
         'omid': 'omid',
         'namayesh': 'namayesh',
@@ -770,17 +835,14 @@
         'sabalan': 'ardabil',
         'sahand': 'tabriz',
         'azarbayjangharbi': 'urmia',
-        'eshragh': 'zanjan'
-    };
-
-    // Alternative streams for some channels
-    const alternativeStreams = {
-        'tv1': 'https://live.presstv.ir/hls/tv1.m3u8',
-        'tv2': 'https://live.presstv.ir/hls/tv2.m3u8',
-        'tv3': 'https://live.presstv.ir/hls/tv3.m3u8',
-        'tv4': 'https://live.presstv.ir/hls/tv4.m3u8',
-        'nasim': 'https://live.presstv.ir/hls/nasim.m3u8',
-        'varzesh': 'https://live.presstv.ir/hls/varzesh.m3u8'
+        'eshragh': 'zanjan',
+        
+        // Kurdiska kanaler
+        'kurdish1': 'kurdish1',
+        'kurdish2': 'kurdish2',
+        'kurdish3': 'kurdish3',
+        'kurdish4': 'kurdish4',
+        'kurdish5': 'kurdish5'
     };
 
     // Favorites system
@@ -801,20 +863,37 @@
                 <span class="label">${fav.title}</span>
                 <button class="fav fav-active" onclick="toggleFav(event,'${fav.id}','${fav.title}',this)" aria-label="Ta bort favorit">★</button>
             `;
-            favItem.onclick = function() {
-                // Determine which function to call based on channel type
-                if (fav.id === 'ifilm') {
-                    loadHLS(fav.id, fav.title, 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', this);
-                } else if (fav.id === 'ifilmdari') {
-                    loadHLS(fav.id, fav.title, 'https://live.presstv.ir/hls/ifilm2.m3u8', this);
-                } else if (fav.id === 'ifilmen') {
-                    loadHLS(fav.id, fav.title, 'https://live.presstv.ir/hls/ifilmen.m3u8', this);
-                } else if (fav.id === 'ifilmar') {
-                    loadHLS(fav.id, fav.title, 'https://live.presstv.ir/hls/ifilmar.m3u8', this);
+            
+            // Set the onclick handler based on channel type
+            if (fav.id.includes('_extra') || fav.id === 'presstv') {
+                // Extra links need special handling
+                const streamUrls = {
+                    'ifilm_extra1': 'https://gg.hls2.xyz/live/AP%20iFilm%20Persian/chunks.m3u8?nimblesessionid=99152588',
+                    'ifilm_extra2': 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8',
+                    'tv1_extra': 'https://gg.hls2.xyz/live/irib-tv1/chunks.m3u8?nimblesessionid=99137128',
+                    'tv2_extra': 'https://gg.hls2.xyz/live/irib-tv2/chunks.m3u8?nimblesessionid=99137587',
+                    'tv3_extra': 'https://gg.hls2.xyz/live/tv3/chunks.m3u8?nimblesessionid=99136648',
+                    'tv4_extra': 'https://gg.hls2.xyz/live/irib-tv4/chunks.m3u8?nimblesessionid=99137848',
+                    'varzesh_extra': 'https://gg.hls2.xyz/live/irib-varzesh/chunks.m3u8?nimblesessionid=99140600',
+                    'khabar_extra': 'https://gg.hls2.xyz/live/irib-khabar/chunks.m3u8?nimblesessionid=99141190',
+                    'presstv': 'https://live.presstv.ir/hls/presstv_5_482/index.m3u8'
+                };
+                
+                if (streamUrls[fav.id]) {
+                    favItem.onclick = function() {
+                        loadHLS(fav.id, fav.title, streamUrls[fav.id], this);
+                    };
                 } else {
-                    load(fav.id, fav.title, this);
+                    favItem.onclick = function() {
+                        load(fav.id, fav.title, this);
+                    };
                 }
-            };
+            } else {
+                favItem.onclick = function() {
+                    load(fav.id, fav.title, this);
+                };
+            }
+            
             favList.appendChild(favItem);
         });
     }
@@ -839,39 +918,11 @@
         
         localStorage.setItem('xomTvFavorites', JSON.stringify(favorites));
         updateFavoritesList();
-        
-        // Update favorites button in sidebar if it exists
-        const allChannels = document.querySelectorAll('.channel');
-        allChannels.forEach(channel => {
-            const favBtn = channel.querySelector('.fav');
-            if (favBtn && channel.onclick && channel.onclick.toString().includes(id)) {
-                const isFavorite = favorites.some(fav => fav.id === id);
-                favBtn.classList.toggle('fav-active', isFavorite);
-                favBtn.innerHTML = isFavorite ? '★' : '☆';
-                favBtn.setAttribute('aria-label', isFavorite ? 'Ta bort favorit' : 'Lägg till favorit');
-            }
-        });
     }
     
     // Initialize favorites on page load
     document.addEventListener('DOMContentLoaded', function() {
         updateFavoritesList();
-        
-        // Set initial active state for favorites
-        document.querySelectorAll('.channel').forEach(channel => {
-            const favBtn = channel.querySelector('.fav');
-            if (favBtn) {
-                const channelId = channel.getAttribute('onclick')?.match(/load(?:HLS)?\('([^']+)'/)?.[1];
-                if (channelId) {
-                    const isFavorite = favorites.some(fav => fav.id === channelId);
-                    favBtn.classList.toggle('fav-active', isFavorite);
-                    favBtn.innerHTML = isFavorite ? '★' : '☆';
-                    favBtn.setAttribute('aria-label', isFavorite ? 'Ta bort favorit' : 'Lägg till favorit');
-                }
-            }
-        });
-        
-        // Load initial channel
         load('tv1', 'TV1', document.querySelector('.channel.active'));
     });
 
@@ -900,11 +951,13 @@
         
         // Show/hide sections
         const sections = {
-            'all': ['favSection', 'nationalSection', 'regionalSection', 'kurdishSection', 'karwanSection', 'webLinksSection'],
+            'all': ['favSection', 'nationalSection', 'regionalSection', 'kurdishSection', 'extraSection', 'karwanSection', 'webLinksSection'],
             'national': ['favSection', 'nationalSection'],
             'regional': ['favSection', 'regionalSection'],
             'kurdish': ['favSection', 'kurdishSection'],
-            'karwan': ['favSection', 'karwanSection']
+            'extra': ['favSection', 'extraSection'],
+            'karwan': ['favSection', 'karwanSection'],
+            'web': ['favSection', 'webLinksSection']
         };
         
         // Hide all sections first
@@ -992,10 +1045,6 @@
         // Set timeout to check if iframe loaded successfully
         setTimeout(() => {
             hideLoading();
-            // Check if we should try alternative stream
-            if (streamErrorCount >= MAX_ERRORS && alternativeStreams[channel]) {
-                showError('Telewebion stream misslyckades. Vill du prova alternativ stream?');
-            }
         }, 5000);
     }
 
@@ -1067,7 +1116,7 @@
                             hls.recoverMediaError();
                             break;
                         default:
-                            showError('Kunde inte ladda stream. Försök alternativ metod.');
+                            showError('Kunde inte ladda stream.');
                             hls.destroy();
                             break;
                     }
@@ -1144,15 +1193,25 @@
     }
 
     function reloadPlayer() {
-        if (currentChannel === 'ifilm') {
-            loadHLS(currentChannel, currentTitle, 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', currentChannelEl);
-        } else if (currentChannel === 'ifilmdari') {
-            loadHLS(currentChannel, currentTitle, 'https://live.presstv.ir/hls/ifilm2.m3u8', currentChannelEl);
-        } else if (currentChannel === 'ifilmen') {
-            loadHLS(currentChannel, currentTitle, 'https://live.presstv.ir/hls/ifilmen.m3u8', currentChannelEl);
-        } else if (currentChannel === 'ifilmar') {
-            loadHLS(currentChannel, currentTitle, 'https://live.presstv.ir/hls/ifilmar.m3u8', currentChannelEl);
-        } else if (telewebionChannels[currentChannel]) {
+        if (currentChannel.includes('_extra') || currentChannel === 'presstv') {
+            const streamUrls = {
+                'ifilm_extra1': 'https://gg.hls2.xyz/live/AP%20iFilm%20Persian/chunks.m3u8?nimblesessionid=99152588',
+                'ifilm_extra2': 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8',
+                'tv1_extra': 'https://gg.hls2.xyz/live/irib-tv1/chunks.m3u8?nimblesessionid=99137128',
+                'tv2_extra': 'https://gg.hls2.xyz/live/irib-tv2/chunks.m3u8?nimblesessionid=99137587',
+                'tv3_extra': 'https://gg.hls2.xyz/live/tv3/chunks.m3u8?nimblesessionid=99136648',
+                'tv4_extra': 'https://gg.hls2.xyz/live/irib-tv4/chunks.m3u8?nimblesessionid=99137848',
+                'varzesh_extra': 'https://gg.hls2.xyz/live/irib-varzesh/chunks.m3u8?nimblesessionid=99140600',
+                'khabar_extra': 'https://gg.hls2.xyz/live/irib-khabar/chunks.m3u8?nimblesessionid=99141190',
+                'presstv': 'https://live.presstv.ir/hls/presstv_5_482/index.m3u8'
+            };
+            
+            if (streamUrls[currentChannel]) {
+                loadHLS(currentChannel, currentTitle, streamUrls[currentChannel], currentChannelEl);
+            } else {
+                load(currentChannel, currentTitle, currentChannelEl);
+            }
+        } else {
             load(currentChannel, currentTitle, currentChannelEl);
         }
     }
@@ -1178,12 +1237,8 @@
 
     function tryAlternativeStream() {
         hideError();
-        
-        if (alternativeStreams[currentChannel]) {
-            loadHLS(currentChannel, currentTitle, alternativeStreams[currentChannel], currentChannelEl);
-        } else {
-            showError('Inget alternativt stream tillgängligt för denna kanal');
-        }
+        // For now, just reload
+        reloadPlayer();
     }
 
     // Handle PiP events
@@ -1230,11 +1285,6 @@
             }
         }
     });
-
-    // Initialize
-    window.onload = function() {
-        updateFavoritesList();
-    };
 </script>
 
 </body>

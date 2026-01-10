@@ -838,10 +838,40 @@
                 <button class="fav fav-active" onclick="toggleFav(event,'${fav.id}','${fav.title}',this)" aria-label="Ta bort favorit">★</button>
             `;
             
-            // Set the onclick handler based on channel type
-            if (fav.id === 'ifilm_extra2') {
+            // HLS streams mapping
+            const hlsStreams = {
+                'ifilm_extra2': 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8',
+                'ifilmdari_hls': 'https://live.presstv.ir/hls/ifilm2.m3u8',
+                'ifilmen_hls': 'https://live.presstv.ir/hls/ifilmen.m3u8',
+                'ifilmar_hls': 'https://live.presstv.ir/hls/ifilmar.m3u8',
+                'zagros_hls': 'https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8',
+                'kanal8_hls': 'https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8',
+                'rudaw_hls': 'https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8',
+                'kurdnews_hls': 'https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS.m3u8',
+                'sterk_hls': 'https://5dab1db4b25fe.streamlock.net/sterk/sterktv/chunklist_w1084077249.m3u8',
+                'nrt_hls': 'https://media.streambrothers.com:1936/8226/8226/playlist.m3u8',
+                '4kurd_hls': 'https://4kuhls.persiana.live/hls/stream.m3u8',
+                'medmusic_hls': 'http://54.36.110.140/live3/live3.m3u8',
+                'aryen_hls': 'https://stream.aryen.tv/live/tv/chunklist_w189856026.m3u8',
+                'cira_hls': 'https://cira-tv.akamaized.net/hls/stream_0.m3u8',
+                'waar_hls': 'https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_source/chunks.m3u8',
+                'rojava_hls': 'https://rojava-tv.akamaized.net/hls/rojava-tv.m3u8',
+                'kurdhd_hls': 'https://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD.m3u8',
+                'kurdistantv_hls': 'https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8',
+                'pdki_hls': 'https://cdn.northtelecom.org/KurdChannel.m3u8',
+                'komala_hls': 'https://live.tvkomala.com/live/komala/playlist.m3u8',
+                'gk_hls': 'https://live.host247.net/gk/gksat/playlist.m3u8',
+                'iribkurd_hls': 'https://lenz.splus.ir/PLTV/88888888/224/3221226647/index.m3u8',
+                'baxche_hls': 'https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8',
+                'afarinkids_hls': 'https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8',
+                'zarokkurm_hls': 'https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8',
+                'zaroksor_hls': 'https://zindisorani.zaroktv.com.tr/hls/stream.m3u8'
+            };
+            
+            // Set the onclick handler
+            if (hlsStreams[fav.id]) {
                 favItem.onclick = function() {
-                    loadHLS(fav.id, fav.title, 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', this);
+                    loadHLS(fav.id, fav.title, hlsStreams[fav.id], this);
                 };
             } else {
                 favItem.onclick = function() {
@@ -1173,8 +1203,38 @@
     }
 
     function reloadPlayer() {
-        if (currentChannel === 'ifilm_extra2') {
-            loadHLS('ifilm_extra2', 'IFILM Farsi (Alt 2)', 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', currentChannelEl);
+        // HLS streams mapping
+        const hlsStreams = {
+            'ifilm_extra2': 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8',
+            'ifilmdari_hls': 'https://live.presstv.ir/hls/ifilm2.m3u8',
+            'ifilmen_hls': 'https://live.presstv.ir/hls/ifilmen.m3u8',
+            'ifilmar_hls': 'https://live.presstv.ir/hls/ifilmar.m3u8',
+            'zagros_hls': 'https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8',
+            'kanal8_hls': 'https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8',
+            'rudaw_hls': 'https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8',
+            'kurdnews_hls': 'https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS.m3u8',
+            'sterk_hls': 'https://5dab1db4b25fe.streamlock.net/sterk/sterktv/chunklist_w1084077249.m3u8',
+            'nrt_hls': 'https://media.streambrothers.com:1936/8226/8226/playlist.m3u8',
+            '4kurd_hls': 'https://4kuhls.persiana.live/hls/stream.m3u8',
+            'medmusic_hls': 'http://54.36.110.140/live3/live3.m3u8',
+            'aryen_hls': 'https://stream.aryen.tv/live/tv/chunklist_w189856026.m3u8',
+            'cira_hls': 'https://cira-tv.akamaized.net/hls/stream_0.m3u8',
+            'waar_hls': 'https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_source/chunks.m3u8',
+            'rojava_hls': 'https://rojava-tv.akamaized.net/hls/rojava-tv.m3u8',
+            'kurdhd_hls': 'https://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD.m3u8',
+            'kurdistantv_hls': 'https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8',
+            'pdki_hls': 'https://cdn.northtelecom.org/KurdChannel.m3u8',
+            'komala_hls': 'https://live.tvkomala.com/live/komala/playlist.m3u8',
+            'gk_hls': 'https://live.host247.net/gk/gksat/playlist.m3u8',
+            'iribkurd_hls': 'https://lenz.splus.ir/PLTV/88888888/224/3221226647/index.m3u8',
+            'baxche_hls': 'https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8',
+            'afarinkids_hls': 'https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8',
+            'zarokkurm_hls': 'https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8',
+            'zaroksor_hls': 'https://zindisorani.zaroktv.com.tr/hls/stream.m3u8'
+        };
+        
+        if (hlsStreams[currentChannel]) {
+            loadHLS(currentChannel, currentTitle, hlsStreams[currentChannel], currentChannelEl);
         } else {
             load(currentChannel, currentTitle, currentChannelEl);
         }

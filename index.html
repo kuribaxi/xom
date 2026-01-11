@@ -469,7 +469,7 @@
         { name: 'Namakade', url: 'https://namakade.com', method: 'external', color: 'orange' },
         { name: 'Telewebion', url: 'https://telewebion.com/', method: 'external', color: 'orange' },
         { name: 'Sepehr TV', url: 'https://beta.sepehrtv.ir/', method: 'external', color: 'orange' },
-        { name: 'Sassan TV', url: 'https://sassantv.com/', method: 'external', color: 'orange' },  // <-- Komma lagt till här!
+        { name: 'Sassan TV', url: 'https://sassantv.com/', method: 'external', color: 'orange' },
         { name: 'Giniko TV', url: 'https://giniko.com/watch.php?id=iran', method: 'external', color: 'orange' }
       ]
     };
@@ -514,9 +514,18 @@
 
     function updateActiveChannel() {
       document.querySelectorAll('.channel-item').forEach(item => {
+        // Ta bort 'active' klassen från alla
         item.classList.remove('active');
-        if (item.textContent.trim().startsWith(currentChannel.name)) {
+        
+        // Ta bort 'red' klassen från alla
+        item.classList.remove('red');
+        
+        // Kontrollera om detta är den aktiva kanalen
+        const channelName = item.querySelector('span').textContent;
+        if (channelName === currentChannel.name) {
+          // Lägg till båda klasserna för röd färg
           item.classList.add('active');
+          item.classList.add('red');
         }
       });
     }

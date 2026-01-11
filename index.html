@@ -548,6 +548,12 @@
       
       const wrapper = document.getElementById('video-wrapper');
       
+      // Destroy old HLS instance first
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+      
       if (method === 'web') {
         wrapper.innerHTML = `<iframe src="${url}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>`;
         return;
@@ -556,13 +562,13 @@
       wrapper.innerHTML = '<video id="video-player" controls autoplay></video>';
       const video = document.getElementById('video-player');
 
-      if (hls) {
-        hls.destroy();
-      }
-
       if (url.includes('.m3u8')) {
+        // HLS stream
         if (Hls.isSupported()) {
           hls = new Hls({
+            debug: false,
+            enableWorker: true,
+            lowLatencyMode: true,
             xhrSetup: function(xhr, url) {
               const ua = document.getElementById('ua-select').value;
               if (ua) {
@@ -572,22 +578,51 @@
           });
           hls.loadSource(url);
           hls.attachMedia(video);
+          
+          hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play().catch(e => console.log('Autoplay prevented:', e));
+          });
+          
           hls.on(Hls.Events.ERROR, function(event, data) {
-            showError();
+            console.error('HLS Error:', data);
+            if (data.fatal) {
+              switch(data.type) {
+                case Hls.ErrorTypes.NETWORK_ERROR:
+                  console.log('Network error, trying to recover...');
+                  hls.startLoad();
+                  break;
+                case Hls.ErrorTypes.MEDIA_ERROR:
+                  console.log('Media error, trying to recover...');
+                  hls.recoverMediaError();
+                  break;
+                default:
+                  showError();
+                  break;
+              }
+            }
           });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          // Native HLS support (Safari)
           video.src = url;
+          video.play().catch(e => console.log('Autoplay prevented:', e));
         } else {
           showError();
         }
       } else {
+        // Regular video stream
         video.src = url;
-        video.onerror = showError;
+        video.play().catch(e => console.log('Autoplay prevented:', e));
+        video.onerror = function() {
+          console.error('Video error');
+          showError();
+        };
       }
 
+      // Update active state
       document.querySelectorAll('.channel-item').forEach(item => {
         item.classList.remove('active');
-        if (item.textContent.includes(name)) {
+        const itemText = item.querySelector('span');
+        if (itemText && itemText.textContent === name) {
           item.classList.add('active');
         }
       });
@@ -605,9 +640,29 @@
     }
 
     function reloadStream() {
-      const currentUrl = channels.national.find(ch => ch.name === currentChannel)?.url;
+      // Search in all categories for current channel
+      let currentUrl, currentMethod;
+      
+      for (const category in channels) {
+        const found = channels[category].find(ch => ch.name === currentChannel);
+        if (found) {
+          currentUrl = found.url;
+          currentMethod = found.method || 'hls';
+          break;
+        }
+      }
+      
+      // Also check favorites
+      if (!currentUrl) {
+        const foundFav = favorites.find(f => f.name === currentChannel);
+        if (foundFav) {
+          currentUrl = foundFav.url;
+          currentMethod = foundFav.method;
+        }
+      }
+      
       if (currentUrl) {
-        loadChannel(currentUrl, currentChannel);
+        loadChannel(currentUrl, currentChannel, currentMethod);
       }
     }
 

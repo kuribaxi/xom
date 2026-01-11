@@ -175,6 +175,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      border: none;
     }
 
     .error-message {
@@ -288,7 +289,7 @@
     <button class="nav-btn" onclick="filterCategory('national')">1. Nationella</button>
     <button class="nav-btn" onclick="filterCategory('regional')">2. Regionala</button>
     <button class="nav-btn" onclick="filterCategory('kurdish')">3. Kurdiska</button>
-    <button class="nav-btn" onclick="window.open('https://karwantv.com', '_blank')">4. Karwan TV</button>
+    <button class="nav-btn" onclick="filterCategory('karwan')">4. Karwan TV</button>
     <button class="nav-btn" onclick="filterCategory('websites')">5. Webbplatser</button>
   </div>
 
@@ -305,7 +306,7 @@
     <main class="video-container">
       <div class="video-header">
         <div>
-          <div class="video-title" id="current-channel">Kanal8 (HLS)</div>
+          <div class="video-title" id="current-channel">TV1</div>
           <div class="ua-selector">
             📱 UA: 
             <select id="ua-select" onchange="reloadStream()">
@@ -333,46 +334,138 @@
   <script>
     const channels = {
       national: [
-        { name: 'TV1', url: 'https://telewebion.com/live/tv1', color: 'cyan' },
-        { name: 'TV2', url: 'https://telewebion.com/live/tv2', color: 'cyan' },
-        { name: 'TV3', url: 'https://telewebion.com/live/tv3', color: 'cyan' },
-        { name: 'TV4', url: 'https://telewebion.com/live/tv4', color: 'cyan' },
-        { name: 'Tehran', url: 'https://telewebion.com/live/tehran', color: 'cyan' },
-        { name: 'NASIM', url: 'https://telewebion.com/live/nasim', color: 'cyan' },
-        { name: 'VARZESH (Sport)', url: 'https://telewebion.com/live/varzesh', color: 'cyan' },
-        { name: 'IRINN / KHABAR', url: 'https://telewebion.com/live/irinn', color: 'cyan' },
-        { name: 'IFILM Farsi', url: 'https://telewebion.com/live/ifilm', color: 'cyan' },
-        { name: 'IFILM English (HLS)', url: 'https://live.ifilmtv.com/ifilmtv-english/index.m3u8', color: 'green' }
+        { name: 'TV1', url: 'http://127.0.0.1:8000/streams/tv1.m3u8', color: 'cyan' },
+        { name: 'TV2', url: 'http://127.0.0.1:8000/streams/tv2.m3u8', color: 'cyan' },
+        { name: 'TV3', url: 'http://127.0.0.1:8000/streams/tv3.m3u8', color: 'cyan' },
+        { name: 'TV4', url: 'http://127.0.0.1:8000/streams/tv4.m3u8', color: 'cyan' },
+        { name: 'Tehran', url: 'http://127.0.0.1:8000/streams/tehran.m3u8', color: 'cyan' },
+        { name: 'NASIM', url: 'http://127.0.0.1:8000/streams/nasim.m3u8', color: 'cyan' },
+        { name: 'VARZESH (Sport)', url: 'http://127.0.0.1:8000/streams/varzesh.m3u8', color: 'cyan' },
+        { name: 'IRINN / KHABAR', url: 'http://127.0.0.1:8000/streams/irinn.m3u8', color: 'cyan' },
+        { name: 'KHABAR2', url: 'http://127.0.0.1:8000/streams/khabar2.m3u8', color: 'cyan' },
+        { name: 'IFILM Farsi', url: 'http://127.0.0.1:8000/streams/ifilm.m3u8', color: 'cyan' },
+        { name: 'IFILM Dari (HLS)', url: 'https://live.ifilmtv.com/ifilmtv-dari/index.m3u8', color: 'green' },
+        { name: 'IFILM English (HLS)', url: 'https://live.ifilmtv.com/ifilmtv-english/index.m3u8', color: 'green' },
+        { name: 'IFILM Arabic (HLS)', url: 'https://live.ifilmtv.com/ifilmtv-arabic/index.m3u8', color: 'green' },
+        { name: 'TV1PLUS', url: 'http://127.0.0.1:8000/streams/tv1plus.m3u8', color: 'cyan' },
+        { name: 'OMID', url: 'http://127.0.0.1:8000/streams/omid.m3u8', color: 'cyan' },
+        { name: 'NAMAYESH', url: 'http://127.0.0.1:8000/streams/namayesh.m3u8', color: 'cyan' },
+        { name: 'MOSTANAD', url: 'http://127.0.0.1:8000/streams/mostanad.m3u8', color: 'cyan' },
+        { name: 'TAMASHA', url: 'http://127.0.0.1:8000/streams/tamasha.m3u8', color: 'cyan' },
+        { name: 'AMOOZESH', url: 'http://127.0.0.1:8000/streams/amoozesh.m3u8', color: 'cyan' },
+        { name: 'SALAMAT', url: 'http://127.0.0.1:8000/streams/salamat.m3u8', color: 'cyan' },
+        { name: 'OFOGH', url: 'http://127.0.0.1:8000/streams/ofogh.m3u8', color: 'cyan' },
+        { name: 'QURAN TV', url: 'http://127.0.0.1:8000/streams/quran.m3u8', color: 'cyan' },
+        { name: 'POOYA & JAVANAN', url: 'http://127.0.0.1:8000/streams/pooya.m3u8', color: 'cyan' },
+        { name: 'JAVANEH / KOODAK+', url: 'http://127.0.0.1:8000/streams/javaneh.m3u8', color: 'cyan' },
+        { name: 'SEPEHR', url: 'http://127.0.0.1:8000/streams/sepehr.m3u8', color: 'cyan' },
+        { name: 'FARATAR', url: 'http://127.0.0.1:8000/streams/faratar.m3u8', color: 'cyan' },
+        { name: 'NAVA', url: 'http://127.0.0.1:8000/streams/nava.m3u8', color: 'cyan' },
+        { name: 'NAMA', url: 'http://127.0.0.1:8000/streams/nama.m3u8', color: 'cyan' },
+        { name: 'ROYA', url: 'http://127.0.0.1:8000/streams/roya.m3u8', color: 'cyan' },
+        { name: 'ARA', url: 'http://127.0.0.1:8000/streams/ara.m3u8', color: 'cyan' },
+        { name: 'IRANEMAN', url: 'http://127.0.0.1:8000/streams/iraneman.m3u8', color: 'cyan' },
+        { name: 'GOLKHANE', url: 'http://127.0.0.1:8000/streams/golkhane.m3u8', color: 'cyan' },
+        { name: 'NEGARESTAN', url: 'http://127.0.0.1:8000/streams/negarestan.m3u8', color: 'cyan' },
+        { name: 'KAROON', url: 'http://127.0.0.1:8000/streams/karoon.m3u8', color: 'cyan' },
+        { name: 'TELEWEBION', url: 'http://127.0.0.1:8000/streams/telewebion.m3u8', color: 'cyan' },
+        { name: 'TELEWEBION1', url: 'http://127.0.0.1:8000/streams/telewebion1.m3u8', color: 'cyan' },
+        { name: 'TELEWEBION2', url: 'http://127.0.0.1:8000/streams/telewebion2.m3u8', color: 'cyan' },
+        { name: 'PARSEH', url: 'http://127.0.0.1:8000/streams/parseh.m3u8', color: 'cyan' },
+        { name: 'NESFEJAHAN', url: 'http://127.0.0.1:8000/streams/nesfejahan.m3u8', color: 'cyan' },
+        { name: 'SARBEDARAN', url: 'http://127.0.0.1:8000/streams/sarbedaran.m3u8', color: 'cyan' }
       ],
       regional: [
-        { name: 'MAHABAD', url: 'https://telewebion.com/live/mahabad', color: 'cyan' },
-        { name: 'KORDESTAN', url: 'https://telewebion.com/live/kordestan', color: 'cyan' },
-        { name: 'KERMANSHAH', url: 'https://telewebion.com/live/kermanshah', color: 'cyan' },
-        { name: 'GILAN', url: 'https://telewebion.com/live/gilan', color: 'cyan' },
-        { name: 'ARDABIL', url: 'https://telewebion.com/live/ardabil', color: 'cyan' },
-        { name: 'TABRIZ', url: 'https://telewebion.com/live/tabriz', color: 'cyan' },
-        { name: 'URMIA', url: 'https://telewebion.com/live/urmia', color: 'cyan' },
-        { name: 'ZANJAN', url: 'https://telewebion.com/live/zanjan', color: 'cyan' }
+        { name: 'MAHABAD', url: 'http://127.0.0.1:8000/streams/mahabad.m3u8', color: 'cyan' },
+        { name: 'KORDESTAN', url: 'http://127.0.0.1:8000/streams/kordestan.m3u8', color: 'cyan' },
+        { name: 'KERMANSHAH', url: 'http://127.0.0.1:8000/streams/kermanshah.m3u8', color: 'cyan' },
+        { name: 'ILAM', url: 'http://127.0.0.1:8000/streams/ilam.m3u8', color: 'cyan' },
+        { name: 'BOOSHEHR', url: 'http://127.0.0.1:8000/streams/booshehr.m3u8', color: 'cyan' },
+        { name: 'ABADAN', url: 'http://127.0.0.1:8000/streams/abadan.m3u8', color: 'cyan' },
+        { name: 'BANDARABBAS', url: 'http://127.0.0.1:8000/streams/bandarabbas.m3u8', color: 'cyan' },
+        { name: 'AHVAZ', url: 'http://127.0.0.1:8000/streams/ahvaz.m3u8', color: 'cyan' },
+        { name: 'KISH', url: 'http://127.0.0.1:8000/streams/kish.m3u8', color: 'cyan' },
+        { name: 'ZAHEDAN', url: 'http://127.0.0.1:8000/streams/zahedan.m3u8', color: 'cyan' },
+        { name: 'ALBORZ', url: 'http://127.0.0.1:8000/streams/alborz.m3u8', color: 'cyan' },
+        { name: 'ARAK', url: 'http://127.0.0.1:8000/streams/arak.m3u8', color: 'cyan' },
+        { name: 'SEMNAN', url: 'http://127.0.0.1:8000/streams/semnan.m3u8', color: 'cyan' },
+        { name: 'QOM', url: 'http://127.0.0.1:8000/streams/qom.m3u8', color: 'cyan' },
+        { name: 'QAZVIN', url: 'http://127.0.0.1:8000/streams/qazvin.m3u8', color: 'cyan' },
+        { name: '4Mahalebakhtiari', url: 'http://127.0.0.1:8000/streams/4mahalebakhtiari.m3u8', color: 'cyan' },
+        { name: 'HAMADAN', url: 'http://127.0.0.1:8000/streams/hamadan.m3u8', color: 'cyan' },
+        { name: 'LORESTAN', url: 'http://127.0.0.1:8000/streams/lorestan.m3u8', color: 'cyan' },
+        { name: 'KERMAN', url: 'http://127.0.0.1:8000/streams/kerman.m3u8', color: 'cyan' },
+        { name: 'ESFEHAN', url: 'http://127.0.0.1:8000/streams/esfehan.m3u8', color: 'cyan' },
+        { name: 'FARS', url: 'http://127.0.0.1:8000/streams/fars.m3u8', color: 'cyan' },
+        { name: 'YAZD', url: 'http://127.0.0.1:8000/streams/yazd.m3u8', color: 'cyan' },
+        { name: 'YASOOJ', url: 'http://127.0.0.1:8000/streams/yasooj.m3u8', color: 'cyan' },
+        { name: 'KH.JONOBI', url: 'http://127.0.0.1:8000/streams/khjonobi.m3u8', color: 'cyan' },
+        { name: 'KH.SHOMALI', url: 'http://127.0.0.1:8000/streams/khshomali.m3u8', color: 'cyan' },
+        { name: 'KH.RAZAVI', url: 'http://127.0.0.1:8000/streams/khrazavi.m3u8', color: 'cyan' },
+        { name: 'GORGAN', url: 'http://127.0.0.1:8000/streams/gorgan.m3u8', color: 'cyan' },
+        { name: 'MAZANDARAN', url: 'http://127.0.0.1:8000/streams/mazandaran.m3u8', color: 'cyan' },
+        { name: 'GILAN', url: 'http://127.0.0.1:8000/streams/gilan.m3u8', color: 'cyan' },
+        { name: 'ARDABIL', url: 'http://127.0.0.1:8000/streams/ardabil.m3u8', color: 'cyan' },
+        { name: 'TABRIZ', url: 'http://127.0.0.1:8000/streams/tabriz.m3u8', color: 'cyan' },
+        { name: 'URMIA', url: 'http://127.0.0.1:8000/streams/urmia.m3u8', color: 'cyan' },
+        { name: 'ZANJAN', url: 'http://127.0.0.1:8000/streams/zanjan.m3u8', color: 'cyan' }
       ],
       kurdish: [
         { name: 'Zagros (HLS)', url: 'https://5a61de8ed719d.streamlock.net/liveTrans/ngrp:myStream_all/playlist.m3u8', color: 'green' },
-        { name: 'Kanal8 (HLS)', url: 'https://live.channel8.com/channel8-live/smil:channel8.smil/playlist.m3u8', color: 'red' },
+        { name: 'Kanal8 (HLS)', url: 'https://live.channel8.com/channel8-live/smil:channel8.smil/playlist.m3u8', color: 'green' },
         { name: 'Rudaw (HLS)', url: 'https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8', color: 'green' },
-        { name: 'Kurdsat News (HLS)', url: 'https://bozztv.com/g/kurdsat-news/index.m3u8', color: 'green' },
+        { name: 'Kurdsat News (HLS)', url: 'https://bozztv.com/1gbw5/tintela/tintela/playlist.m3u8', color: 'green' },
         { name: 'Sterk (HLS)', url: 'https://us01.streamcloud-services.com/sterk/ngrp:livestream_all/playlist.m3u8', color: 'green' },
         { name: 'NRT News (HLS)', url: 'https://media.streambrothers.com:1936/8226/8226/playlist.m3u8', color: 'green' },
         { name: '4 Kurd (HLS)', url: 'https://ghasel.online/4Kurd/index.m3u8', color: 'green' },
-        { name: 'Med Music (HLS)', url: 'https://medmusic.cdn.asset.aparat.com/medmusic/index.m3u8', color: 'green' }
+        { name: 'Med Music (HLS)', url: 'https://medmusic.cdn.asset.aparat.com/medmusic/index.m3u8', color: 'green' },
+        { name: 'Aryen (HLS)', url: 'https://hls.aryen.me/hls/stream.m3u8', color: 'green' },
+        { name: 'Cira (HLS)', url: 'https://live.ciratv.net/ciratv/index.m3u8', color: 'green' },
+        { name: 'Waar (HLS)', url: 'https://hls.waartv.eu/hls/stream.m3u8', color: 'green' },
+        { name: 'Rojava (HLS)', url: 'https://live.rojavatv.net/rojavatv/index.m3u8', color: 'green' },
+        { name: 'Kurdsat HD (HLS)', url: 'https://bozztv.com/1gbw5/tintela/tintela/playlist.m3u8', color: 'green' },
+        { name: 'Kurdistan TV (HLS)', url: 'https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8', color: 'green' },
+        { name: 'PDKI (HLS)', url: 'https://live.pdki.tv/pdkitv/index.m3u8', color: 'green' },
+        { name: 'Komala (HLS)', url: 'https://live.komala.tv/komala/index.m3u8', color: 'green' },
+        { name: 'GK (HLS)', url: 'https://hls.gktop.tv/hls/stream.m3u8', color: 'green' },
+        { name: 'Ava TV (Web)', url: 'http://127.0.0.1:8000/web/ava.html', method: 'web', color: 'orange' },
+        { name: 'Med Music (HLS) ', url: 'https://medmusic.cdn.asset.aparat.com/medmusic/index.m3u8', color: 'green' },
+        { name: 'Cira TV (HLS) ', url: 'https://live.ciratv.net/ciratv/index.m3u8', color: 'green' },
+        { name: 'Rojava TV (HLS) ', url: 'https://live.rojavatv.net/rojavatv/index.m3u8', color: 'green' },
+        { name: 'Payam TV (HLS) ', url: 'https://live.payamtv.com/payamtv/index.m3u8', color: 'green' },
+        { name: 'TRT Kurdî (HLS) ', url: 'https://tv-trtturk.medya.trt.com.tr/master_720.m3u8', color: 'green' },
+        { name: 'UTV Hawler (Web)', url: 'http://127.0.0.1:8000/web/utv.html', method: 'web', color: 'orange' },
+        { name: 'Baxche (HLS)', url: 'https://live.baxchetv.com/baxche/index.m3u8', color: 'green' },
+        { name: 'Afarin Kids (HLS)', url: 'https://live.afarin.tv/afarin-kids/index.m3u8', color: 'green' },
+        { name: 'Zarok Kurmanci (HLS)', url: 'https://zindilair.zaroktv.com.tr/hls/stream.m3u8', color: 'green' },
+        { name: 'Zarok Sorani (HLS)', url: 'https://zindisorani.zaroktv.com.tr/hls/stream.m3u8', color: 'green' }
+      ],
+      karwan: [
+        { name: 'Karwan TV (öppnas i nytt fönster)', url: 'https://www.karwantv.com/', method: 'external', color: 'purple' }
       ],
       websites: [
-        { name: 'IFILM Farsi (Alt 2)', url: 'https://ifilmtv.com/live/farsi', method: 'web', color: 'green' },
-        { name: 'Sahar TV (Web)', url: 'https://sahartv.ir/live', method: 'web', color: 'orange' },
-        { name: 'Telewebion', url: 'https://telewebion.com', method: 'web', color: 'orange' }
+        { name: 'IFILM Farsi (Alt 2)', url: 'http://127.0.0.1:8000/web/ifilm.html', method: 'web', color: 'green' },
+        { name: 'IRIB Kurdistan (HLS)', url: 'https://live.irib.ir/Channel-Live/smil:Channel5/playlist.m3u8', color: 'green' },
+        { name: 'Sahar TV (Web)', url: 'http://127.0.0.1:8000/web/sahar.html', method: 'web', color: 'orange' },
+        { name: 'Aparatchi - Iran Live TV', url: 'http://127.0.0.1:8000/web/aparatchi.html', method: 'web', color: 'orange' },
+        { name: 'IMVBox', url: 'http://127.0.0.1:8000/web/imvbox.html', method: 'web', color: 'orange' },
+        { name: 'Giniko TV', url: 'https://giniko.com/watch.php?id=iran', method: 'external', color: 'orange' },
+        { name: 'Persianity', url: 'https://persianity.com', method: 'external', color: 'orange' },
+        { name: 'Parsa TV', url: 'https://parsatv.com', method: 'external', color: 'orange' },
+        { name: 'MDB Max', url: 'http://127.0.0.1:8000/web/mdbmax.html', method: 'web', color: 'orange' },
+        { name: 'FarsiPlex', url: 'https://farsiplex.com', method: 'external', color: 'orange' },
+        { name: 'Flnd Buzz', url: 'http://127.0.0.1:8000/web/flndbuzz.html', method: 'web', color: 'orange' },
+        { name: 'Farsiland Movies', url: 'https://farsiland.com/movies', method: 'external', color: 'orange' },
+        { name: 'Persian Hive', url: 'https://persianhive.com', method: 'external', color: 'orange' },
+        { name: 'Namakade', url: 'https://namakade.com', method: 'external', color: 'orange' },
+        { name: 'Telewebion', url: 'http://127.0.0.1:8000/web/telewebion.html', method: 'web', color: 'orange' },
+        { name: 'Sepehr TV', url: 'http://127.0.0.1:8000/web/sepehr.html', method: 'web', color: 'orange' },
+        { name: 'Sassan TV', url: 'http://127.0.0.1:8000/web/sassan.html', method: 'web', color: 'orange' }
       ]
     };
 
     let hls;
-    let currentChannel = { name: 'Kanal8 (HLS)', url: 'https://live.channel8.com/channel8-live/smil:channel8.smil/playlist.m3u8' };
+    let currentChannel = { name: 'TV1', url: 'http://127.0.0.1:8000/streams/tv1.m3u8' };
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
     function renderChannels(filter = null) {
@@ -386,6 +479,7 @@
           national: 'Nationella Kanaler',
           regional: 'Regionala Kanaler',
           kurdish: 'Kurdiska Kanaler',
+          karwan: 'Karwan TV',
           websites: 'Webbplatser'
         };
 
@@ -455,8 +549,13 @@
         hls = null;
       }
       
+      if (method === 'external') {
+        window.open(url, '_blank');
+        return;
+      }
+      
       if (method === 'web') {
-        wrapper.innerHTML = `<iframe src="${url}" style="border:none;" allowfullscreen allow="autoplay"></iframe>`;
+        wrapper.innerHTML = `<iframe src="${url}" allowfullscreen allow="autoplay"></iframe>`;
         updateActiveChannel();
         return;
       }
@@ -469,6 +568,7 @@
           hls = new Hls({
             debug: false,
             enableWorker: true,
+            lowLatencyMode: false,
             xhrSetup: function(xhr) {
               const ua = document.getElementById('ua-select').value;
               if (ua) xhr.setRequestHeader('User-Agent', ua);

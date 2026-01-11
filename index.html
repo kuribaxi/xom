@@ -587,4 +587,65 @@
 
       document.querySelectorAll('.channel-item').forEach(item => {
         item.classList.remove('active');
-        if (item.textContent.
+        if (item.textContent.includes(name)) {
+          item.classList.add('active');
+        }
+      });
+    }
+
+    function showError() {
+      document.getElementById('video-wrapper').innerHTML = `
+        <div class="error-message">
+          <h3>⚠️ Kunde inte ladda stream</h3>
+          <button class="btn" onclick="reloadStream()">Försök igen</button>
+          <button class="btn" onclick="tryAlternative()">Testa alternativ stream</button>
+          <p style="margin-top: 20px; opacity: 0.7;">Din webbläsare stöder inte videoavspelning.</p>
+        </div>
+      `;
+    }
+
+    function reloadStream() {
+      const currentUrl = channels.national.find(ch => ch.name === currentChannel)?.url;
+      if (currentUrl) {
+        loadChannel(currentUrl, currentChannel);
+      }
+    }
+
+    function tryAlternative() {
+      alert('Testa att byta User Agent i menyn ovan eller välj en annan kanal');
+    }
+
+    function changeUserAgent() {
+      reloadStream();
+    }
+
+    function togglePiP() {
+      const video = document.getElementById('video-player');
+      if (video && document.pictureInPictureEnabled) {
+        if (document.pictureInPictureElement) {
+          document.exitPictureInPicture();
+        } else {
+          video.requestPictureInPicture().catch(err => {
+            alert('PiP stöds inte eller kunde inte aktiveras');
+          });
+        }
+      }
+    }
+
+    function toggleFullscreen() {
+      const wrapper = document.getElementById('video-wrapper');
+      if (!document.fullscreenElement) {
+        wrapper.requestFullscreen().catch(err => {
+          alert('Fullskärm kunde inte aktiveras');
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // Initialize
+    renderChannels();
+    loadChannel(channels.national[0].url, channels.national[0].name);
+  </script>
+</body>
+</html>

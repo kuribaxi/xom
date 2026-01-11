@@ -443,26 +443,33 @@
         { name: 'Zarok Sorani (HLS)', url: 'https://zindisorani.zaroktv.com.tr/hls/stream.m3u8', color: 'green' }
       ],
       karwan: [
-        { name: 'Karwan TV (öppnas i nytt fönster)', url: 'https://www.karwantv.com/', method: 'external', color: 'purple' }
-      ],
-      websites: [
-        { name: 'Sahar TV (Web)', url: 'http://127.0.0.1:8000/web/sahar.html', method: 'web', color: 'orange' },
-        { name: 'Aparatchi - Iran Live TV', url: 'http://127.0.0.1:8000/web/aparatchi.html', method: 'web', color: 'orange' },
-        { name: 'IMVBox', url: 'http://127.0.0.1:8000/web/imvbox.html', method: 'web', color: 'orange' },
-        { name: 'Giniko TV', url: 'https://giniko.com/watch.php?id=iran', method: 'external', color: 'orange' },
-        { name: 'Persianity', url: 'https://persianity.com', method: 'external', color: 'orange' },
-        { name: 'Parsa TV', url: 'https://parsatv.com', method: 'external', color: 'orange' },
-        { name: 'MDB Max', url: 'http://127.0.0.1:8000/web/mdbmax.html', method: 'web', color: 'orange' },
-        { name: 'FarsiPlex', url: 'https://farsiplex.com', method: 'external', color: 'orange' },
-        { name: 'Flnd Buzz', url: 'http://127.0.0.1:8000/web/flndbuzz.html', method: 'web', color: 'orange' },
-        { name: 'Farsiland Movies', url: 'https://farsiland.com/movies', method: 'external', color: 'orange' },
-        { name: 'Persian Hive', url: 'https://persianhive.com', method: 'external', color: 'orange' },
-        { name: 'Namakade', url: 'https://namakade.com', method: 'external', color: 'orange' },
-        { name: 'Telewebion', url: 'http://127.0.0.1:8000/web/telewebion.html', method: 'web', color: 'orange' },
-        { name: 'Sepehr TV', url: 'http://127.0.0.1:8000/web/sepehr.html', method: 'web', color: 'orange' },
-        { name: 'Sassan TV', url: 'http://127.0.0.1:8000/web/sassan.html', method: 'web', color: 'orange' }
-      ]
-    };
+        { name: 'Karwan TV (öppnas i nytt fönster)', url: 'https://www.karwan.tv/', method: 'external', color: 'purple' }
+      <!-- Webbplatser -->
+        <div class="section" id="webLinksSection">
+            <h3>Webbplatser</h3>
+            <div class="channel extra-link" onclick="loadHLS('ifilm_extra2','IFILM Farsi (Alt 2)', 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', this)">
+                <span class="label">IFILM Farsi (Alt 2)</span>
+                <button class="fav" onclick="toggleFav(event,'ifilm_extra2','IFILM Farsi (Alt 2)',this)" aria-label="Lägg till favorit">☆</button>
+            </div>
+            <div class="channel extra-link" onclick="loadHLS('iribkurd_hls','IRIB Kurdistan (HLS)', 'https://lenz.splus.ir/PLTV/88888888/224/3221226647/index.m3u8', this)"><span class="label">IRIB Kurdistan (HLS)</span><button class="fav" onclick="toggleFav(event,'iribkurd_hls','IRIB Kurdistan (HLS)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel web-link" onclick="openLink('https://kurdish.sahartv.ir/live')"><span class="label">Sahar TV (Web)</span><button class="fav" onclick="toggleFav(event,'sahar_web','Sahar TV (Web)',this)" aria-label="Lägg till favorit">☆</button></div>
+            <div class="channel web-link" onclick="openLink('https://www.aparatchi.com/iran-live-tv')"><span class="label">Aparatchi - Iran Live TV</span></div>
+            <div class="channel web-link" onclick="openLink('http://www.imvbox.tv/en')"><span class="label">IMVBox</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.giniko.com/watch.php?id=372')"><span class="label">Giniko TV</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.persianity.com/')"><span class="label">Persianity</span></div>
+            <div class="channel web-link" onclick="openLink('https://www.parsatv.com/#irib')"><span class="label">Parsa TV</span></div>
+            <div class="channel web-link" onclick="openLink('http://mdbmax.com')"><span class="label">MDB Max</span></div>
+            <div class="channel web-link" onclick="openLink('https://farsiplex.com/')"><span class="label">FarsiPlex</span></div>
+            <div class="channel web-link" onclick="openLink('https://flnd.buzz/')"><span class="label">Flnd Buzz</span></div>
+            <div class="channel web-link" onclick="openLink('https://farsiland.com/iran-movie-2025/')"><span class="label">Farsiland Movies</span></div>
+            <div class="channel web-link" onclick="openLink('https://persianhive.com/movies_films/')"><span class="label">Persian Hive</span></div>
+            <div class="channel web-link" onclick="openLink('https://namakade.com/index.html?EcD6wOwBgwilFvmHXvTv')"><span class="label">Namakade</span></div>
+            <div class="channel web-link" onclick="openLink('https://telewebion.com/')"><span class="label">Telewebion</span></div>
+            <div class="channel web-link" onclick="openLink('https://beta.sepehrtv.ir/')"><span class="label">Sepehr TV</span></div>
+            <div class="channel web-link" onclick="openLink('https://sassantv.com/index.html')"><span class="label">Sassan TV</span></div>
+        </div>
+    </div>
+</div>
 
     let hls;
     let currentChannel = { name: 'TV1', url: 'http://127.0.0.1:8000/streams/tv1.m3u8' };

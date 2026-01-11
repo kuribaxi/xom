@@ -166,20 +166,17 @@
       padding: 12px 20px;
       cursor: pointer;
       border-bottom: 1px solid rgba(255,255,255,0.05);
-      transition: all 0.3s;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      transition: all 0.2s;
+      display: block;
     }
 
     .channel-item:hover {
       background: rgba(102, 126, 234, 0.2);
-      padding-left: 25px;
     }
 
     .channel-item.active {
-      background: linear-gradient(90deg, rgba(102, 126, 234, 0.3), transparent);
-      border-left: 4px solid #667eea;
+      background: rgba(102, 126, 234, 0.3);
+      font-weight: bold;
     }
 
     .favorite-btn {
@@ -187,9 +184,11 @@
       border: none;
       color: #ffd700;
       cursor: pointer;
-      font-size: 1.2em;
+      font-size: 1em;
       padding: 0;
+      margin-left: 5px;
       transition: transform 0.2s;
+      float: right;
     }
 
     .favorite-btn:hover {
@@ -484,7 +483,7 @@
         if (container) {
           container.innerHTML = channels[category].map(ch => `
             <div class="channel-item" onclick="loadChannel('${ch.url}', '${ch.name}', '${ch.method || 'hls'}')">
-              <span>${ch.name}</span>
+              ${ch.name}
               <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite('${ch.name}', '${ch.url}', '${ch.method || 'hls'}')">
                 ${favorites.some(f => f.name === ch.name) ? '⭐' : '☆'}
               </button>
@@ -502,7 +501,7 @@
       } else {
         favList.innerHTML = favorites.map(fav => `
           <div class="channel-item" onclick="loadChannel('${fav.url}', '${fav.name}', '${fav.method}')">
-            <span>${fav.name}</span>
+            ${fav.name}
             <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite('${fav.name}', '${fav.url}', '${fav.method}')">⭐</button>
           </div>
         `).join('');
@@ -555,11 +554,11 @@
       }
       
       if (method === 'web') {
-        wrapper.innerHTML = `<iframe src="${url}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>`;
+        wrapper.innerHTML = `<iframe src="${url}" style="width:100%;height:100%;border:none;" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>`;
         return;
       }
 
-      wrapper.innerHTML = '<video id="video-player" controls autoplay></video>';
+      wrapper.innerHTML = '<video id="video-player" controls autoplay crossorigin="anonymous"></video>';
       const video = document.getElementById('video-player');
 
       if (url.includes('.m3u8')) {
@@ -569,51 +568,114 @@
             debug: false,
             enableWorker: true,
             lowLatencyMode: true,
+            backBufferLength: 90,
+            maxBufferLength: 30,
+            maxMaxBufferLength: 600,
             xhrSetup: function(xhr, url) {
               const ua = document.getElementById('ua-select').value;
               if (ua) {
                 xhr.setRequestHeader('User-Agent', ua);
               }
+              // Add CORS headers
+              xhr.withCredentials = false;
             }
           });
-          hls.loadSource(url);
-          hls.attachMedia(video);
           
           hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            video.play().catch(e => console.log('Autoplay prevented:', e));
+            console.log('Manifest loaded, starting playback...');
+            video.play().catch(e => {
+              console.log('Autoplay prevented, user interaction needed');
+              // Show play button overlay
+              const playBtn = document.createElement('button');
+              playBtn.className = 'btn';
+              playBtn.textContent = '▶ Spela';
+              playBtn.style.position = 'absolute';
+              playBtn.style.top = '50%';
+              playBtn.style.left = '50%';
+              playBtn.style.transform = 'translate(-50%, -50%)';
+              playBtn.style.zIndex = '1000';
+              playBtn.style.fontSize = '2em';
+              playBtn.style.padding = '20px 40px';
+              playBtn.onclick = () => {
+                video.play();
+                playBtn.remove();
+              };
+              wrapper.appendChild(playBtn);
+            });
           });
           
           hls.on(Hls.Events.ERROR, function(event, data) {
-            console.error('HLS Error:', data);
+            console.error('HLS Error:', data.type, data.details, data);
             if (data.fatal) {
               switch(data.type) {
                 case Hls.ErrorTypes.NETWORK_ERROR:
                   console.log('Network error, trying to recover...');
-                  hls.startLoad();
+                  setTimeout(() => hls.startLoad(), 1000);
                   break;
                 case Hls.ErrorTypes.MEDIA_ERROR:
                   console.log('Media error, trying to recover...');
                   hls.recoverMediaError();
                   break;
                 default:
+                  console.error('Fatal error, cannot recover');
                   showError();
+                  hls.destroy();
                   break;
               }
             }
           });
+          
+          hls.loadSource(url);
+          hls.attachMedia(video);
+          
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
           // Native HLS support (Safari)
           video.src = url;
-          video.play().catch(e => console.log('Autoplay prevented:', e));
+          video.play().catch(e => {
+            console.log('Autoplay prevented:', e);
+            const playBtn = document.createElement('button');
+            playBtn.className = 'btn';
+            playBtn.textContent = '▶ Spela';
+            playBtn.style.position = 'absolute';
+            playBtn.style.top = '50%';
+            playBtn.style.left = '50%';
+            playBtn.style.transform = 'translate(-50%, -50%)';
+            playBtn.style.zIndex = '1000';
+            playBtn.style.fontSize = '2em';
+            playBtn.style.padding = '20px 40px';
+            playBtn.onclick = () => {
+              video.play();
+              playBtn.remove();
+            };
+            wrapper.appendChild(playBtn);
+          });
         } else {
           showError();
         }
       } else {
         // Regular video stream
         video.src = url;
-        video.play().catch(e => console.log('Autoplay prevented:', e));
-        video.onerror = function() {
-          console.error('Video error');
+        video.play().catch(e => {
+          console.log('Autoplay prevented:', e);
+          const playBtn = document.createElement('button');
+          playBtn.className = 'btn';
+          playBtn.textContent = '▶ Spela';
+          playBtn.style.position = 'absolute';
+          playBtn.style.top = '50%';
+          playBtn.style.left = '50%';
+          playBtn.style.transform = 'translate(-50%, -50%)';
+          playBtn.style.zIndex = '1000';
+          playBtn.style.fontSize = '2em';
+          playBtn.style.padding = '20px 40px';
+          playBtn.onclick = () => {
+            video.play();
+            playBtn.remove();
+          };
+          wrapper.appendChild(playBtn);
+        });
+        
+        video.onerror = function(e) {
+          console.error('Video error:', e);
           showError();
         };
       }
@@ -621,8 +683,7 @@
       // Update active state
       document.querySelectorAll('.channel-item').forEach(item => {
         item.classList.remove('active');
-        const itemText = item.querySelector('span');
-        if (itemText && itemText.textContent === name) {
+        if (item.textContent.trim().startsWith(name)) {
           item.classList.add('active');
         }
       });

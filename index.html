@@ -3,665 +3,1036 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XOM TV - Alla iranska TV-kanaler</title>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <title>Biologi 1 – Labbguide (Svenska/Engelska)</title>
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: #fff;
-      min-height: 100vh;
-    }
-
-    .header {
-      background: rgba(0,0,0,0.3);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f7f0;
       padding: 20px;
-      text-align: center;
-    }
-
-    .header h1 {
-      font-size: 2.5em;
-      color: #4ecca3;
-      margin-bottom: 10px;
-    }
-
-    .header p {
-      opacity: 0.9;
-    }
-
-    .nav-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding: 15px;
-    }
-
-    .nav-btn {
-      background: #4ecca3;
-      color: #1e3c72;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s;
-    }
-
-    .nav-btn:hover, .nav-btn.active {
-      background: #45b393;
-      transform: scale(1.05);
-    }
-
-    .server-info {
-      text-align: center;
-      padding: 10px;
-      color: #ffd700;
-      font-size: 0.9em;
+      color: #1e293b;
+      line-height: 1.6;
+      transition: background 0.3s, color 0.3s;
     }
 
     .container {
-      display: flex;
-      height: calc(100vh - 250px);
-      padding: 0 20px 20px 20px;
-      gap: 20px;
+      max-width: 950px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: background 0.3s;
     }
 
-    .channel-list {
-      width: 280px;
-      background: rgba(0,0,0,0.4);
-      overflow-y: auto;
-      border-radius: 10px;
-      padding: 10px;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        height: auto;
-      }
-      
-      .channel-list {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1000;
-        border-radius: 0;
-        padding: 20px;
-      }
-      
-      .channel-list.hidden {
-        display: none;
-      }
-    }
-
-    .video-container {
-      flex: 1;
-      background: #000;
-      border-radius: 10px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .video-header {
-      background: rgba(0,0,0,0.8);
-      padding: 15px;
+    .header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
+      border-bottom: 4px solid #86c9a8;
+      padding-bottom: 12px;
+      margin-bottom: 8px;
     }
 
-    .video-title {
-      font-size: 1.3em;
-      color: #4ecca3;
+    h1 {
+      color: #0a5c36;
+      font-size: 2rem;
+      margin: 0;
     }
 
-    .video-controls {
+    .lang-toggle {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 6px;
+      background: #e6f7ee;
+      border-radius: 30px;
+      padding: 4px;
+      border: 1px solid #86c9a8;
     }
 
-    .btn {
-      background: #4ecca3;
-      color: #1e3c72;
+    .lang-btn {
       border: none;
-      padding: 8px 15px;
-      border-radius: 5px;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
       cursor: pointer;
-      font-size: 0.9em;
-      font-weight: bold;
-      transition: all 0.3s;
+      transition: 0.3s;
+      background: transparent;
+      color: #0a5c36;
     }
 
-    .btn:hover {
-      background: #45b393;
-    }
-
-    .ua-selector {
-      padding: 5px 0;
-    }
-
-    .ua-selector select {
-      background: rgba(255,255,255,0.2);
+    .lang-btn.active {
+      background: #0a5c36;
       color: white;
-      border: 1px solid #4ecca3;
-      padding: 5px 10px;
-      border-radius: 3px;
+      box-shadow: 0 2px 8px rgba(10, 92, 54, 0.3);
+    }
+
+    .lang-btn:hover:not(.active) {
+      background: #d0e6d8;
+    }
+
+    .intro {
+      background: #e6f7ee;
+      padding: 18px;
+      border-radius: 14px;
+      margin: 20px 0;
+      border-left: 6px solid #0a5c36;
+    }
+
+    .intro strong {
+      color: #0a5c36;
+    }
+
+    .lab-card {
+      background: #fafdfa;
+      border: 1px solid #d0e6d8;
+      border-radius: 16px;
+      margin: 24px 0;
+      overflow: hidden;
+    }
+
+    .lab-header {
+      background: #0a5c36;
+      color: white;
+      padding: 16px 20px;
       cursor: pointer;
-    }
-
-    .video-wrapper {
-      flex: 1;
-      position: relative;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    video, iframe {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      border: none;
-    }
-
-    .error-message {
-      text-align: center;
-      padding: 40px;
-    }
-
-    .category-title {
-      font-weight: bold;
-      font-size: 1.1em;
-      padding: 10px;
-      color: #4ecca3;
-      border-bottom: 2px solid #4ecca3;
-      margin: 10px 0;
-    }
-
-    .channel-item {
-      padding: 10px;
-      margin: 5px 0;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: all 0.2s;
-      font-size: 0.95em;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-weight: 600;
+      font-size: 1.2rem;
     }
 
-    .channel-item.green {
-      background: #28a745;
+    .lab-header:hover {
+      background: #0d7546;
     }
 
-    .channel-item.red {
-      background: #dc3545;
+    .lab-content {
+      display: none;
+      padding: 20px;
     }
 
-    .channel-item.orange {
-      background: #fd7e14;
+    .lab-content.open {
+      display: block;
     }
 
-    .channel-item.cyan {
-      background: #17a2b8;
+    .arrow {
+      transition: transform 0.3s;
+      font-size: 1.3rem;
     }
 
-    .channel-item.purple {
-      background: #6f42c1;
+    .arrow.open {
+      transform: rotate(180deg);
     }
 
-    .channel-item:hover {
-      opacity: 0.8;
-      transform: translateX(5px);
+    .why-box {
+      background: #dbeafe;
+      border-left: 5px solid #2563eb;
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin: 14px 0;
+      font-size: 0.95rem;
     }
 
-    .channel-item.active {
-      box-shadow: 0 0 15px rgba(78, 204, 163, 0.8);
-      font-weight: bold;
+    .why-box strong {
+      color: #1e40af;
     }
 
-    .favorite-btn {
-      background: none;
-      border: none;
-      color: #ffd700;
-      cursor: pointer;
-      font-size: 1.2em;
+    .step-list {
+      list-style: none;
       padding: 0;
     }
 
-    ::-webkit-scrollbar {
-      width: 8px;
+    .step-list li {
+      background: #f8fafc;
+      margin: 8px 0;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border-left: 4px solid #86c9a8;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
     }
 
-    ::-webkit-scrollbar-track {
-      background: rgba(0,0,0,0.2);
+    .step-num {
+      background: #0a5c36;
+      color: white;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      margin-top: 2px;
     }
 
-    ::-webkit-scrollbar-thumb {
-      background: #4ecca3;
-      border-radius: 4px;
+    .step-text strong {
+      color: #0a5c36;
     }
 
-    .close-btn {
+    .step-text .en {
       display: none;
+      color: #2563eb;
+      font-size: 0.92rem;
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px dashed #d0e6d8;
+    }
+
+    .step-text .sv {
+      display: block;
+    }
+
+    body.lang-en .step-text .sv {
+      display: none;
+    }
+
+    body.lang-en .step-text .en {
+      display: block;
+    }
+
+    body.lang-en .why-box .sv,
+    body.lang-en .intro .sv,
+    body.lang-en .tip-box .sv,
+    body.lang-en .mall-box .sv {
+      display: none;
+    }
+
+    body.lang-en .why-box .en,
+    body.lang-en .intro .en,
+    body.lang-en .tip-box .en,
+    body.lang-en .mall-box .en {
+      display: block;
+    }
+
+    .why-box .en,
+    .intro .en,
+    .tip-box .en,
+    .mall-box .en {
+      display: none;
+    }
+
+    .tip-box {
+      background: #fef9e7;
+      border-left: 5px solid #f59e0b;
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin: 16px 0;
+    }
+
+    .mall-box {
+      background: #f1f5f9;
+      border: 2px dashed #64748b;
+      border-radius: 14px;
+      padding: 18px;
+      margin: 20px 0;
+      font-size: 0.95rem;
+    }
+
+    .mall-box p {
+      margin: 6px 0;
+      padding: 4px 0;
+      border-bottom: 1px dashed #cbd5e1;
+    }
+
+    .mall-box .label {
+      font-weight: 600;
+      color: #0a5c36;
+    }
+
+    .footer {
+      text-align: center;
+      color: #64748b;
+      margin-top: 30px;
+      font-size: 0.9rem;
+      border-top: 1px solid #d0e6d8;
+      padding-top: 20px;
+    }
+
+    .dark-toggle {
       position: fixed;
-      top: 20px;
+      bottom: 20px;
       right: 20px;
-      z-index: 1001;
-      background: #dc3545;
+      background: #0a5c36;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-size: 1.2em;
+      border-radius: 50%;
+      width: 52px;
+      height: 52px;
+      font-size: 1.4rem;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: 0.3s;
+      z-index: 100;
     }
 
-    @media (max-width: 768px) {
-      .close-btn {
-        display: block;
+    .dark-toggle:hover {
+      background: #0d7546;
+      transform: scale(1.05);
+    }
+
+    body.dark {
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    body.dark .container {
+      background: #1e293b;
+    }
+
+    body.dark .lab-card {
+      background: #2d3748;
+      border-color: #475569;
+    }
+
+    body.dark .lab-header {
+      background: #1b4d3e;
+    }
+
+    body.dark .step-list li {
+      background: #334155;
+      border-left-color: #5aa68a;
+    }
+
+    body.dark .why-box {
+      background: #1e3a5f;
+      border-left-color: #3b82f6;
+    }
+
+    body.dark .why-box strong {
+      color: #93c5fd;
+    }
+
+    body.dark .intro {
+      background: #1a3a2a;
+      border-left-color: #5aa68a;
+    }
+
+    body.dark .tip-box {
+      background: #3d2e1a;
+      border-left-color: #f59e0b;
+    }
+
+    body.dark .mall-box {
+      background: #2d3748;
+      border-color: #64748b;
+    }
+
+    body.dark .mall-box .label {
+      color: #86c9a8;
+    }
+
+    body.dark .dark-toggle {
+      background: #fbbf24;
+      color: #0f172a;
+    }
+
+    body.dark .dark-toggle:hover {
+      background: #f59e0b;
+    }
+
+    body.dark .lang-toggle {
+      background: #1a3a2a;
+      border-color: #5aa68a;
+    }
+
+    body.dark .lang-btn {
+      color: #86c9a8;
+    }
+
+    body.dark .lang-btn.active {
+      background: #5aa68a;
+      color: #0f172a;
+    }
+
+    body.dark .lang-btn:hover:not(.active) {
+      background: #2d4a3a;
+    }
+
+    body.dark .header-row {
+      border-bottom-color: #5aa68a;
+    }
+
+    body.dark h1 {
+      color: #86c9a8;
+    }
+
+    @media (max-width: 600px) {
+      .header-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .lang-toggle {
+        justify-content: center;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        text-align: center;
       }
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>XOM TV</h1>
-    <p>Alla iranska TV-kanaler – fungerar perfekt</p>
-  </div>
-
-  <div class="nav-buttons">
-    <button class="nav-btn" onclick="showAllChannels()">Alla kanaler</button>
-    <button class="nav-btn" onclick="filterCategory('national')">1. Nationella</button>
-    <button class="nav-btn" onclick="filterCategory('regional')">2. Regionala</button>
-    <button class="nav-btn" onclick="filterCategory('kurdish')">3. Kurdiska</button>
-    <button class="nav-btn" onclick="filterCategory('karwan')">4. Karwan TV</button>
-    <button class="nav-btn" onclick="filterCategory('websites')">5. Webbplatser</button>
-  </div>
-
-  <div class="server-info">
-    Kör via lokal server → python -m http.server
-  </div>
-
   <div class="container">
-    <aside class="channel-list" id="channel-list">
-      <button class="close-btn" onclick="toggleChannelList()">✕ Stäng</button>
-      <div id="channels-container"></div>
-    </aside>
+    <div class="header-row">
+      <h1>🧬 Biologi 1 – Labbguiden</h1>
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-lang="sv" onclick="setLanguage('sv')">🇸🇪 Svenska</button>
+        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">🇬🇧 English</button>
+      </div>
+    </div>
 
-    <main class="video-container">
-      <div class="video-header">
-        <div>
-          <div class="video-title" id="current-channel">TV1</div>
-          <div class="ua-selector">
-            📱 UA: 
-            <select id="ua-select" onchange="reloadStream()">
-              <option value="">Auto</option>
-              <option value="Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)">iPhone</option>
-              <option value="Mozilla/5.0 (iPad; CPU OS 14_0 like Mac OS X)">iPad</option>
-              <option value="Mozilla/5.0 (Linux; Android 10)">Android</option>
-            </select>
-          </div>
+    <div class="intro">
+      <div class="sv">
+        <p><strong>👋 Hej! Här är din superenkla guide till labbrapporter.</strong></p>
+        <p>Alla laborationer följer <strong>SAMMA 10-stegs-mall</strong>. När du kan mallen kan du skriva vilken labbrapport som helst!</p>
+        <p>💡 <strong>Tänk så här:</strong> En labbrapport är som ett <strong>recept</strong> – du berättar vad du gjorde, vad som hände och <strong>varför</strong> det hände.</p>
+      </div>
+      <div class="en">
+        <p><strong>👋 Hi! Here's your super simple guide to lab reports.</strong></p>
+        <p>All lab exercises follow the <strong>SAME 10-step template</strong>. Once you know the template, you can write any lab report!</p>
+        <p>💡 <strong>Think of it like this:</strong> A lab report is like a <strong>recipe</strong> – you explain what you did, what happened, and <strong>why</strong> it happened.</p>
+      </div>
+    </div>
+
+    <!-- ===== ALGORITM – 10 STEG ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('algoritm')">
+        <span>📋 De 10 stegen – lär dig dem!</span>
+        <span class="arrow" id="arrow-algoritm">▼</span>
+      </div>
+      <div class="lab-content" id="lab-algoritm">
+        <div class="why-box">
+          <div class="sv"><strong>🧠 Varför just dessa steg?</strong> Det här är vad din lärare tittar efter. Varje steg ger poäng. Hoppa inte över något!</div>
+          <div class="en"><strong>🧠 Why these exact steps?</strong> This is what your teacher looks for. Each step gives points. Don't skip anything!</div>
         </div>
-        <div class="video-controls">
-          <button class="btn" onclick="toggleChannelList()">📺 Kanaler</button>
-          <button class="btn" onclick="togglePiP()">📺 PiP</button>
-          <button class="btn" onclick="toggleFullscreen()">⛶ Fullskärm</button>
-          <button class="btn" onclick="reloadStream()">↻ Ladda om</button>
+        <ol class="step-list" style="list-style:none; padding:0;">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte</strong> – Varför gör du labben? (1 mening) <span style="color:#64748b;font-size:0.9rem;">Ex: "Att undersöka hur salt påverkar potatis."</span></div>
+            <div class="en"><strong>Purpose</strong> – Why are you doing the lab? (1 sentence) <span style="color:#64748b;font-size:0.9rem;">Ex: "To investigate how salt affects potatoes."</span></div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning</strong> – Din exakta fråga. <span style="color:#64748b;font-size:0.9rem;">Ex: "Hur påverkar olika salthalter massan hos potatis?"</span></div>
+            <div class="en"><strong>Research question</strong> – Your exact question. <span style="color:#64748b;font-size:0.9rem;">Ex: "How do different salt concentrations affect the mass of potatoes?"</span></div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes</strong> – Din gissning + <strong>varför</strong> du tror det. <span style="color:#64748b;font-size:0.9rem;">Ex: "Jag tror att saltvatten gör potatisen mindre, för att vatten rör sig ut ur cellerna."</span></div>
+            <div class="en"><strong>Hypothesis</strong> – Your guess + <strong>why</strong> you think so. <span style="color:#64748b;font-size:0.9rem;">Ex: "I think saltwater will make the potato smaller, because water moves out of the cells."</span></div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material</strong> – Lista allt du använder. <span style="color:#64748b;font-size:0.9rem;">Ex: Potatis, salt, våg, bägare, vatten.</span></div>
+            <div class="en"><strong>Materials</strong> – List everything you use. <span style="color:#64748b;font-size:0.9rem;">Ex: Potato, salt, scale, beaker, water.</span></div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod</strong> – Steg-för-steg, som ett recept. <span style="color:#64748b;font-size:0.9rem;">Ex: 1. Skär potatis. 2. Väg. 3. Lägg i salt. 4. Väg igen.</span></div>
+            <div class="en"><strong>Method</strong> – Step-by-step, like a recipe. <span style="color:#64748b;font-size:0.9rem;">Ex: 1. Cut potato. 2. Weigh. 3. Put in salt. 4. Weigh again.</span></div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Riskbedömning</strong> – Vad kan gå fel? <span style="color:#64748b;font-size:0.9rem;">Ex: Risk: skära sig. Åtgärd: använd skärbräda.</span></div>
+            <div class="en"><strong>Risk assessment</strong> – What could go wrong? <span style="color:#64748b;font-size:0.9rem;">Ex: Risk: cutting yourself. Action: use a cutting board.</span></div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat</strong> – Siffror och fakta. Tabell + diagram. <span style="color:#64748b;font-size:0.9rem;">OBS! Enheter på allt (g, cm, °C).</span></div>
+            <div class="en"><strong>Results</strong> – Numbers and facts. Table + graph. <span style="color:#64748b;font-size:0.9rem;">NOTE! Units on everything (g, cm, °C).</span></div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats</strong> – Svar på din fråga. Stämde hypotesen? <span style="color:#64748b;font-size:0.9rem;">Ex: "Ja, saltvatten minskade potatisens massa."</span></div>
+            <div class="en"><strong>Conclusion</strong> – Answer to your question. Was the hypothesis correct? <span style="color:#64748b;font-size:0.9rem;">Ex: "Yes, saltwater decreased the potato's mass."</span></div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor</strong> – Vad kan ha blivit fel? <span style="color:#64748b;font-size:0.9rem;">Ex: "Jag torkade potatisen olika mycket, vilket påverkade vikten."</span></div>
+            <div class="en"><strong>Sources of error</strong> – What could have gone wrong? <span style="color:#64748b;font-size:0.9rem;">Ex: "I dried the potatoes differently, which affected the weight."</span></div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring</strong> – Koppla till teorin. <span style="color:#64748b;font-size:0.9rem;">Ex: "Vatten rör sig genom osmos från hög till låg koncentration."</span></div>
+            <div class="en"><strong>Biological explanation</strong> – Connect to theory. <span style="color:#64748b;font-size:0.9rem;">Ex: "Water moves through osmosis from high to low concentration."</span></div>
+          </div></li>
+        </ol>
+        <div class="tip-box">
+          <div class="sv"><strong>💡 Kom ihåg:</strong> Steg 3 (hypotes) och steg 10 (biologisk förklaring) är där du visar att du kan <strong>biologi</strong> – använd begrepp som <em>osmos, diffusion, enzym, fotosyntes, cellandning, homeostas</em>.</div>
+          <div class="en"><strong>💡 Remember:</strong> Step 3 (hypothesis) and step 10 (biological explanation) are where you show you know <strong>biology</strong> – use terms like <em>osmosis, diffusion, enzyme, photosynthesis, cellular respiration, homeostasis</em>.</div>
         </div>
       </div>
+    </div>
 
-      <div class="video-wrapper" id="video-wrapper">
-        <video id="video-player" controls></video>
+    <!-- ===== LAB 1: OSMOS ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('osmos')">
+        <span>🥔 Osmos – potatis i salt</span>
+        <span class="arrow" id="arrow-osmos">▼</span>
       </div>
-    </main>
+      <div class="lab-content" id="lab-osmos">
+        <div class="why-box">
+          <div class="sv"><strong>🧪 Varför gör vi detta?</strong> För att förstå <strong>osmos</strong> – hur vatten rör sig in och ut ur celler. Växter använder osmos för att suga upp vatten. När du saltar en gurka blir den sladdrig – samma princip!</div>
+          <div class="en"><strong>🧪 Why do we do this?</strong> To understand <strong>osmosis</strong> – how water moves in and out of cells. Plants use osmosis to absorb water. When you salt a cucumber, it becomes limp – same principle!</div>
+        </div>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte:</strong> Undersöka hur salt påverkar potatisbitars vikt.</div>
+            <div class="en"><strong>Purpose:</strong> Investigate how salt affects the weight of potato pieces.</div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning:</strong> Hur förändras potatisens massa i saltvatten jämfört med rent vatten?</div>
+            <div class="en"><strong>Question:</strong> How does the mass of potato change in saltwater compared to pure water?</div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes:</strong> Jag tror att potatis i saltvatten <strong>minskar</strong> i vikt, för att vatten rör sig <strong>ut</strong> ur cellerna till saltvattnet (osmos). I rent vatten ökar vikten, för att vatten rör sig <strong>in</strong>.</div>
+            <div class="en"><strong>Hypothesis:</strong> I think potato in saltwater will <strong>decrease</strong> in weight, because water moves <strong>out</strong> of the cells to the saltwater (osmosis). In pure water, the weight increases because water moves <strong>in</strong>.</div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material:</strong> Potatis, salt, 3 bägare, våg, kniv, linjal, vatten.</div>
+            <div class="en"><strong>Materials:</strong> Potato, salt, 3 beakers, scale, knife, ruler, water.</div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod:</strong><br>1. Skär 6 lika stora potatisbitar.<br>2. Väg alla och skriv ner startvikten.<br>3. Lägg 2 bitar i rent vatten, 2 i 5% salt, 2 i 10% salt.<br>4. Vänta 30 min.<br>5. Ta upp, torka av och väg igen.<br>6. Räkna ut viktförändring i procent.</div>
+            <div class="en"><strong>Method:</strong><br>1. Cut 6 equal-sized potato pieces.<br>2. Weigh all and record start weight.<br>3. Put 2 pieces in pure water, 2 in 5% salt, 2 in 10% salt.<br>4. Wait 30 min.<br>5. Remove, pat dry, and weigh again.<br>6. Calculate weight change in percent.</div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Riskbedömning:</strong> Risk att skära sig – använd skärbräda och skär från kroppen. Salt i ögonen – skölj med vatten om det händer.</div>
+            <div class="en"><strong>Risk assessment:</strong> Risk of cutting yourself – use a cutting board and cut away from your body. Salt in eyes – rinse with water if it happens.</div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat (exempel):</strong><br>Rent vatten: +15% vikt<br>5% salt: -5% vikt<br>10% salt: -12% vikt</div>
+            <div class="en"><strong>Results (example):</strong><br>Pure water: +15% weight<br>5% salt: -5% weight<br>10% salt: -12% weight</div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats:</strong> Ja, hypotesen stämde. Saltvatten fick potatisen att tappa vikt. Ju mer salt, desto mer viktminskning.</div>
+            <div class="en"><strong>Conclusion:</strong> Yes, the hypothesis was correct. Saltwater caused the potato to lose weight. The more salt, the more weight loss.</div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor:</strong> Potatisbitarna var inte exakt lika stora. Jag torkade av dem olika mycket före vägning.</div>
+            <div class="en"><strong>Sources of error:</strong> The potato pieces were not exactly the same size. I dried them differently before weighing.</div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring:</strong> Detta beror på <strong>osmos</strong>. Vatten rör sig genom cellmembranet från hög vattenkoncentration till låg. Saltvatten har lägre vattenkoncentration än potatiscellen, så vatten rör sig ut – potatisen krymper.</div>
+            <div class="en"><strong>Biological explanation:</strong> This is due to <strong>osmosis</strong>. Water moves through the cell membrane from high water concentration to low. Saltwater has lower water concentration than the potato cell, so water moves out – the potato shrinks.</div>
+          </div></li>
+        </ul>
+        <div class="tip-box">
+          <div class="sv"><strong>🎯 Aha! Det viktigaste:</strong> Kom ihåg orden <strong>hypoton</strong> (mindre salt, vatten går in), <strong>isoton</strong> (lika, ingen förändring) och <strong>hyperton</strong> (mer salt, vatten går ut).</div>
+          <div class="en"><strong>🎯 Aha! The key takeaway:</strong> Remember the terms <strong>hypotonic</strong> (less salt, water goes in), <strong>isotonic</strong> (equal, no change), and <strong>hypertonic</strong> (more salt, water goes out).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LAB 2: FOTOSYNTES ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('fotosyntes')">
+        <span>🌿 Fotosyntes – ljusets betydelse</span>
+        <span class="arrow" id="arrow-fotosyntes">▼</span>
+      </div>
+      <div class="lab-content" id="lab-fotosyntes">
+        <div class="why-box">
+          <div class="sv"><strong>🌞 Varför?</strong> Fotosyntes är hur växter gör sin egen mat (socker) med hjälp av ljus. Utan fotosyntes – inget syre, ingen mat! Här ser vi hur <strong>ljusmängd</strong> påverkar hastigheten.</div>
+          <div class="en"><strong>🌞 Why?</strong> Photosynthesis is how plants make their own food (sugar) using light. Without photosynthesis – no oxygen, no food! Here we see how <strong>light amount</strong> affects the rate.</div>
+        </div>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte:</strong> Undersöka hur ljusintensitet påverkar fotosynteshastigheten.</div>
+            <div class="en"><strong>Purpose:</strong> Investigate how light intensity affects the rate of photosynthesis.</div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning:</strong> Hur påverkas syreproduktionen hos vattenpest av avståndet till lampan?</div>
+            <div class="en"><strong>Question:</strong> How is oxygen production in pondweed affected by the distance to the lamp?</div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes:</strong> Ju närmare lampan, desto fler syrebubblor. För att ljus är <strong>energikälla</strong> för fotosyntesen.</div>
+            <div class="en"><strong>Hypothesis:</strong> The closer the lamp, the more oxygen bubbles. Because light is the <strong>energy source</strong> for photosynthesis.</div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material:</strong> Vattenpest, lampa, linjal, vatten, bikarbonat (CO₂), provrör, tidtagarur.</div>
+            <div class="en"><strong>Materials:</strong> Pondweed, lamp, ruler, water, bicarbonate (CO₂), test tube, stopwatch.</div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod:</strong><br>1. Lägg vattenpest i vatten med bikarbonat.<br>2. Ställ lampan på 10 cm avstånd.<br>3. Räkna bubblor i 1 minut.<br>4. Upprepa på 20, 30 och 40 cm.<br>5. Gör 3 försök på varje avstånd och räkna medel.</div>
+            <div class="en"><strong>Method:</strong><br>1. Place pondweed in water with bicarbonate.<br>2. Place the lamp at 10 cm distance.<br>3. Count bubbles for 1 minute.<br>4. Repeat at 20, 30, and 40 cm.<br>5. Do 3 trials at each distance and calculate the average.</div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Risk:</strong> Lampan blir varm – bränn dig inte. Vatten och el – håll sladdar torra.</div>
+            <div class="en"><strong>Risk:</strong> The lamp gets hot – don't burn yourself. Water and electricity – keep cords dry.</div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat (exempel):</strong><br>10 cm → 45 bubblor/min<br>20 cm → 28 bubblor/min<br>40 cm → 10 bubblor/min</div>
+            <div class="en"><strong>Results (example):</strong><br>10 cm → 45 bubbles/min<br>20 cm → 28 bubbles/min<br>40 cm → 10 bubbles/min</div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats:</strong> Ja, mer ljus ger mer fotosyntes. Nära lampan = flest bubblor.</div>
+            <div class="en"><strong>Conclusion:</strong> Yes, more light gives more photosynthesis. Close to the lamp = most bubbles.</div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor:</strong> Svårt att räkna bubblor exakt. Temperaturen kan ha ökat nära lampan.</div>
+            <div class="en"><strong>Sources of error:</strong> Difficult to count bubbles precisely. Temperature may have increased near the lamp.</div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring:</strong> Ljusenergi används för att klyva vatten (H₂O) till syre (O₂) i <strong>kloroplasterna</strong>. Formeln: 6CO₂ + 6H₂O + ljus → C₆H₁₂O₆ + 6O₂.</div>
+            <div class="en"><strong>Biological explanation:</strong> Light energy is used to split water (H₂O) into oxygen (O₂) in the <strong>chloroplasts</strong>. Equation: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂.</div>
+          </div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== LAB 3: ENZYMER (TEMPERATUR) ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('enzym')">
+        <span>🔥 Enzymer – hur temperatur påverkar</span>
+        <span class="arrow" id="arrow-enzym">▼</span>
+      </div>
+      <div class="lab-content" id="lab-enzym">
+        <div class="why-box">
+          <div class="sv"><strong>⚡ Varför?</strong> Enzymer är kroppens <strong>maskiner</strong> – de snabbar upp reaktioner. Utan enzymer skulle vi inte kunna smälta mat. De fungerar bara vid <strong>rätt temperatur</strong>, därför blir vi sjuka vid feber!</div>
+          <div class="en"><strong>⚡ Why?</strong> Enzymes are the body's <strong>machines</strong> – they speed up reactions. Without enzymes, we couldn't digest food. They only work at the <strong>right temperature</strong>, which is why we get sick with a fever!</div>
+        </div>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte:</strong> Ta reda på vilken temperatur enzymet katalas fungerar bäst i.</div>
+            <div class="en"><strong>Purpose:</strong> Find out which temperature the enzyme catalase works best at.</div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning:</strong> Hur påverkas katalas-aktiviteten av temperaturen?</div>
+            <div class="en"><strong>Question:</strong> How is catalase activity affected by temperature?</div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes:</strong> Katalas fungerar bäst runt 37°C (kroppstemperatur). För varmt eller för kallt = sämre funktion.</div>
+            <div class="en"><strong>Hypothesis:</strong> Catalase works best around 37°C (body temperature). Too hot or too cold = worse function.</div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material:</strong> Potatis, väteperoxid (H₂O₂), provrör, vattenbad, termometer, linjal.</div>
+            <div class="en"><strong>Materials:</strong> Potato, hydrogen peroxide (H₂O₂), test tubes, water bath, thermometer, ruler.</div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod:</strong><br>1. Riv potatis och lägg i 5 provrör.<br>2. Värm rören till 0, 20, 37, 60 och 100°C.<br>3. Tillsätt H₂O₂ i varje rör.<br>4. Mät hur mycket skum som bildas (skum = syrgas).</div>
+            <div class="en"><strong>Method:</strong><br>1. Grate potato and put into 5 test tubes.<br>2. Heat tubes to 0, 20, 37, 60, and 100°C.<br>3. Add H₂O₂ to each tube.<br>4. Measure how much foam forms (foam = oxygen gas).</div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Risk:</strong> Väteperoxid är frätande – använd handskar. Kokande vatten – hantera försiktigt.</div>
+            <div class="en"><strong>Risk:</strong> Hydrogen peroxide is corrosive – use gloves. Boiling water – handle carefully.</div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat (exempel):</strong><br>0°C → 2 mm skum<br>20°C → 12 mm skum<br>37°C → 38 mm skum (bäst!)<br>60°C → 5 mm skum<br>100°C → 0 mm skum</div>
+            <div class="en"><strong>Results (example):</strong><br>0°C → 2 mm foam<br>20°C → 12 mm foam<br>37°C → 38 mm foam (best!)<br>60°C → 5 mm foam<br>100°C → 0 mm foam</div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats:</strong> Ja, 37°C är bäst. Över 60°C förstörs enzymet.</div>
+            <div class="en"><strong>Conclusion:</strong> Yes, 37°C is best. Above 60°C the enzyme is destroyed.</div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor:</strong> Svårt att mäta skum exakt. Temperaturen kan ha varierat.</div>
+            <div class="en"><strong>Sources of error:</strong> Difficult to measure foam precisely. Temperature may have varied.</div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring:</strong> Enzymer är <strong>proteiner</strong>. Vid för hög temperatur <strong>denatureras</strong> de (förstörs) – formen förändras och de slutar fungera. Katalas bryter ner giftig H₂O₂ till vatten och syrgas.</div>
+            <div class="en"><strong>Biological explanation:</strong> Enzymes are <strong>proteins</strong>. At too high a temperature, they <strong>denature</strong> (are destroyed) – the shape changes and they stop working. Catalase breaks down toxic H₂O₂ into water and oxygen gas.</div>
+          </div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== LAB 4: JÄST ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('jast')">
+        <span>🍞 Jäst – cellandning utan syre</span>
+        <span class="arrow" id="arrow-jast">▼</span>
+      </div>
+      <div class="lab-content" id="lab-jast">
+        <div class="why-box">
+          <div class="sv"><strong>🍞 Varför?</strong> Jäst används till bröd och öl. Den gör <strong>CO₂</strong> (får bröd att jäsa) och <strong>alkohol</strong> (öl) – utan syre! Här ser vi att jäst <strong>behöver socker</strong> för att fungera.</div>
+          <div class="en"><strong>🍞 Why?</strong> Yeast is used for bread and beer. It produces <strong>CO₂</strong> (makes bread rise) and <strong>alcohol</strong> (beer) – without oxygen! Here we see that yeast <strong>needs sugar</strong> to work.</div>
+        </div>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte:</strong> Visa att jäst behöver socker för att producera CO₂.</div>
+            <div class="en"><strong>Purpose:</strong> Show that yeast needs sugar to produce CO₂.</div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning:</strong> Producerar jäst mer CO₂ med socker än utan?</div>
+            <div class="en"><strong>Question:</strong> Does yeast produce more CO₂ with sugar than without?</div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes:</strong> Jäst + socker → massor av CO₂. Utan socker → knappt något.</div>
+            <div class="en"><strong>Hypothesis:</strong> Yeast + sugar → lots of CO₂. Without sugar → almost nothing.</div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material:</strong> Jäst, socker, ljummet vatten, ballonger, flaskor.</div>
+            <div class="en"><strong>Materials:</strong> Yeast, sugar, lukewarm water, balloons, bottles.</div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod:</strong><br>1. Blanda jäst + vatten i två flaskor.<br>2. Tillsätt socker i ena flaskan (den andra är kontroll).<br>3. Sätt en ballong över varje flaska.<br>4. Vänta 20 min och se vad som händer.</div>
+            <div class="en"><strong>Method:</strong><br>1. Mix yeast + water in two bottles.<br>2. Add sugar to one bottle (the other is the control).<br>3. Put a balloon over each bottle.<br>4. Wait 20 min and see what happens.</div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Risk:</strong> Inga större risker – tvätta händerna efter.</div>
+            <div class="en"><strong>Risk:</strong> No major risks – wash your hands afterwards.</div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat:</strong> Ballongen med socker blev stor (CO₂). Utan socker – ingen förändring.</div>
+            <div class="en"><strong>Result:</strong> The balloon with sugar got big (CO₂). Without sugar – no change.</div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats:</strong> Ja, socker behövs för att jäst ska producera CO₂.</div>
+            <div class="en"><strong>Conclusion:</strong> Yes, sugar is needed for yeast to produce CO₂.</div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor:</strong> Temperaturen kan ha varit olika. Jästen kanske var gammal.</div>
+            <div class="en"><strong>Sources of error:</strong> The temperature may have been different. The yeast may have been old.</div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring:</strong> Jäst utför <strong>alkoholjäsning</strong>: C₆H₁₂O₆ → 2 C₂H₅OH + 2 CO₂. Utan syre gör jäst om socker till etanol och CO₂ för att få energi.</div>
+            <div class="en"><strong>Biological explanation:</strong> Yeast performs <strong>alcoholic fermentation</strong>: C₆H₁₂O₆ → 2 C₂H₅OH + 2 CO₂. Without oxygen, yeast converts sugar into ethanol and CO₂ to get energy.</div>
+          </div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== LAB 5: DIFFUSION I AGAR ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('diffusion')">
+        <span>🌀 Diffusion – kaliumpermanganat i gelé</span>
+        <span class="arrow" id="arrow-diffusion">▼</span>
+      </div>
+      <div class="lab-content" id="lab-diffusion">
+        <div class="why-box">
+          <div class="sv"><strong>🧪 Varför?</strong> Diffusion är hur partiklar sprider sig från hög till låg koncentration. Det är grunden för hur syre och näring når celler. Här ser vi diffusion i <strong>fast form</strong>.</div>
+          <div class="en"><strong>🧪 Why?</strong> Diffusion is how particles spread from high to low concentration. It is the basis for how oxygen and nutrients reach cells. Here we see diffusion in <strong>solid form</strong>.</div>
+        </div>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte:</strong> Undersöka hur snabbt kaliumpermanganat diffunderar i agargelé vid olika temperaturer.</div>
+            <div class="en"><strong>Purpose:</strong> Investigate how quickly potassium permanganate diffuses in agar gel at different temperatures.</div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning:</strong> Hur påverkas diffusionshastigheten av temperaturen?</div>
+            <div class="en"><strong>Question:</strong> How is the rate of diffusion affected by temperature?</div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes:</strong> Högre temperatur → snabbare diffusion, för att partiklarna rör sig snabbare.</div>
+            <div class="en"><strong>Hypothesis:</strong> Higher temperature → faster diffusion, because particles move faster.</div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material:</strong> Agargelé, kaliumpermanganat-kristaller, petriskålar, termometer, linjal.</div>
+            <div class="en"><strong>Materials:</strong> Agar gel, potassium permanganate crystals, petri dishes, thermometer, ruler.</div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod:</strong><br>1. Häll agargelé i tre petriskålar.<br>2. Låt dem stå i rumstemperatur, kylskåp (4°C) och värmeskåp (37°C).<br>3. Placera en kristall av kaliumpermanganat i mitten av varje.<br>4. Mät radien för den färgade cirkeln var 10:e minut i 40 minuter.</div>
+            <div class="en"><strong>Method:</strong><br>1. Pour agar gel into three petri dishes.<br>2. Leave them at room temperature, fridge (4°C), and incubator (37°C).<br>3. Place one crystal of potassium permanganate in the centre of each.<br>4. Measure the radius of the coloured circle every 10 minutes for 40 minutes.</div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Risk:</strong> Kaliumpermanganat är irriterande – använd handskar och undvik att andas in damm.</div>
+            <div class="en"><strong>Risk:</strong> Potassium permanganate is an irritant – wear gloves and avoid inhaling dust.</div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat (exempel):</strong><br>4°C → 2 mm på 40 min<br>20°C → 6 mm på 40 min<br>37°C → 11 mm på 40 min</div>
+            <div class="en"><strong>Results (example):</strong><br>4°C → 2 mm in 40 min<br>20°C → 6 mm in 40 min<br>37°C → 11 mm in 40 min</div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats:</strong> Högre temperatur ger snabbare diffusion, precis som hypotesen.</div>
+            <div class="en"><strong>Conclusion:</strong> Higher temperature gives faster diffusion, just as hypothesised.</div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor:</strong> Svårt att mäta radien exakt. Olika stora kristaller.</div>
+            <div class="en"><strong>Sources of error:</strong> Difficult to measure the radius precisely. Crystals of different sizes.</div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring:</strong> Diffusion drivs av <strong>kinetisk energi</strong>. Högre temperatur → högre rörelseenergi → partiklar rör sig snabbare → högre diffusionshastighet. Detta är viktigt för transport av ämnen i kroppen.</div>
+            <div class="en"><strong>Biological explanation:</strong> Diffusion is driven by <strong>kinetic energy</strong>. Higher temperature → higher kinetic energy → particles move faster → faster diffusion. This is important for transport of substances in the body.</div>
+          </div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== LAB 6: CELLER – LÖKSKAL ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('celler')">
+        <span>🔬 Celler – lökskal under mikroskop</span>
+        <span class="arrow" id="arrow-celler">▼</span>
+      </div>
+      <div class="lab-content" id="lab-celler">
+        <div class="why-box">
+          <div class="sv"><strong>🔬 Varför?</strong> För att se levande celler med egna ögon! Lökskal är perfekt – ett tunt, genomskinligt lager med tydliga cellväggar. Du ser cellkärnor och cellplasma.</div>
+          <div class="en"><strong>🔬 Why?</strong> To see living cells with your own eyes! Onion skin is perfect – a thin, translucent layer with distinct cell walls. You see cell nuclei and cytoplasm.</div>
+        </div>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte:</strong> Observera växtcellers struktur i mikroskop.</div>
+            <div class="en"><strong>Purpose:</strong> Observe the structure of plant cells under a microscope.</div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning:</strong> Hur ser en typisk växtcell ut? Kan vi se cellvägg, cellkärna och chloroplast?</div>
+            <div class="en"><strong>Question:</strong> What does a typical plant cell look like? Can we see the cell wall, nucleus and chloroplast?</div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes:</strong> Vi kommer att se rektangulära celler med tydliga cellväggar och en mörk punkt (kärna).</div>
+            <div class="en"><strong>Hypothesis:</strong> We will see rectangular cells with distinct cell walls and a dark dot (nucleus).</div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material:</strong> Lök, skalpell, preparatglas, täckglas, droppglas, vatten, mikroskop.</div>
+            <div class="en"><strong>Materials:</strong> Onion, scalpel, slide, coverslip, dropper, water, microscope.</div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod:</strong><br>1. Skär ett litet snitt i löken och dra loss ett tunt genomskinligt lager.<br>2. Lägg det på ett preparatglas med en droppe vatten.<br>3. Lägg på ett täckglas.<br>4. Betrakta i mikroskop i 40×, 100× och 400× förstoring.<br>5. Rita av det du ser och märk ut cellvägg, cellkärna, cytoplasma.</div>
+            <div class="en"><strong>Method:</strong><br>1. Cut a small slit in the onion and peel off a thin transparent layer.<br>2. Place it on a slide with a drop of water.<br>3. Put on a coverslip.<br>4. Observe under the microscope at 40×, 100× and 400× magnification.<br>5. Draw what you see and label the cell wall, nucleus and cytoplasm.</div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Risk:</strong> Skär dig – använd skalpell försiktigt. Tvätta händerna.</div>
+            <div class="en"><strong>Risk:</strong> Cut yourself – use the scalpel carefully. Wash your hands.</div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat:</strong> Rektangulära celler i rader. Cellväggarna tydligt markerade. En mörk punkt i mitten av många celler = cellkärnan.</div>
+            <div class="en"><strong>Results:</strong> Rectangular cells in rows. Cell walls clearly marked. A dark dot in the centre of many cells = the nucleus.</div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats:</strong> Ja, vi kunde se cellvägg och cellkärna. Lökceller är typiska växtceller.</div>
+            <div class="en"><strong>Conclusion:</strong> Yes, we could see the cell wall and nucleus. Onion cells are typical plant cells.</div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor:</strong> Färgningen var svag. Några celler överlappade varandra.</div>
+            <div class="en"><strong>Sources of error:</strong> The staining was weak. Some cells overlapped each other.</div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring:</strong> Växtceller har en <strong>cellulosavägg</strong> som ger stöd, samt en central vakuol och kloroplaster (i gröna delar). Cellkärnan innehåller cellens DNA. Lökceller är från en lagrande del och har därför inga kloroplaster.</div>
+            <div class="en"><strong>Biological explanation:</strong> Plant cells have a <strong>cellulose wall</strong> that provides support, as well as a central vacuole and chloroplasts (in green parts). The nucleus contains the cell's DNA. Onion cells are from a storage organ and therefore have no chloroplasts.</div>
+          </div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== LAB 7: ÄRFTLIGHET (PUNNETT) ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('punett')">
+        <span>🧬 Ärftlighet – Punnett-square (simulering)</span>
+        <span class="arrow" id="arrow-punett">▼</span>
+      </div>
+      <div class="lab-content" id="lab-punett">
+        <div class="why-box">
+          <div class="sv"><strong>🧬 Varför?</strong> Förstå hur gener ärvs från föräldrar till avkomma. Punnett-squarer visar sannolikheter för vilka egenskaper som hamnar hos nästa generation.</div>
+          <div class="en"><strong>🧬 Why?</strong> Understand how genes are inherited from parents to offspring. Punnett squares show the probabilities of which traits end up in the next generation.</div>
+        </div>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte:</strong> Undersöka hur alleler för en egenskap ärvs från föräldrar till avkomma.</div>
+            <div class="en"><strong>Purpose:</strong> Investigate how alleles for a trait are inherited from parents to offspring.</div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning:</strong> Vilken fenotyp-fördelning får vi hos avkomman när båda föräldrar är bärare av en recessiv sjukdom?</div>
+            <div class="en"><strong>Question:</strong> What phenotype distribution do we get in the offspring when both parents are carriers of a recessive disease?</div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes:</strong> 25% får sjukdomen, 50% blir friska bärare, 25% blir helt friska.</div>
+            <div class="en"><strong>Hypothesis:</strong> 25% get the disease, 50% become healthy carriers, 25% become completely healthy.</div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material:</strong> Papper, penna, böcker, eventuellt dator för simulering.</div>
+            <div class="en"><strong>Materials:</strong> Paper, pen, books, possibly computer for simulation.</div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod:</strong><br>1. Välj en egenskap (t.ex. cystisk fibros, recessiv).<br>2. Sätt upp båda föräldrarna som heterozygoter (Aa × Aa).<br>3. Gör en Punnett-square med 4 rutor.<br>4. Räkna ut genotyper och fenotyper.<br>5. Upprepa med andra kombinationer (AA × Aa, AA × aa, etc.).</div>
+            <div class="en"><strong>Method:</strong><br>1. Choose a trait (e.g. cystic fibrosis, recessive).<br>2. Set up both parents as heterozygotes (Aa × Aa).<br>3. Make a Punnett square with 4 squares.<br>4. Calculate genotypes and phenotypes.<br>5. Repeat with other combinations (AA × Aa, AA × aa, etc.).</div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Risk:</strong> Inga direkta risker.</div>
+            <div class="en"><strong>Risk:</strong> No direct risks.</div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat (exempel):</strong><br>Aa × Aa → 25% AA, 50% Aa, 25% aa.<br>Fenotyp: 75% friska (AA + Aa), 25% sjuka (aa).</div>
+            <div class="en"><strong>Results (example):</strong><br>Aa × Aa → 25% AA, 50% Aa, 25% aa.<br>Phenotype: 75% healthy (AA + Aa), 25% sick (aa).</div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats:</strong> Ja, hypotesen stämde – 25% sjuka, 50% bärare, 25% helt friska.</div>
+            <div class="en"><strong>Conclusion:</strong> Yes, the hypothesis was correct – 25% sick, 50% carriers, 25% completely healthy.</div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor:</strong> Simuleringar visar sannolikheter – i verkligheten kan utfallet variera (slumpen).</div>
+            <div class="en"><strong>Sources of error:</strong> Simulations show probabilities – in reality, the outcome can vary (chance).</div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring:</strong> Gener förekommer i varianter som kallas <strong>alleler</strong>. En dominant allel (A) maskerar en recessiv (a). Recessiva sjukdomar som cystisk fibros kräver två recessiva alleler (aa) för att bryta ut. Detta är grunden i <strong>Mendels ärftlighetslagar</strong>.</div>
+            <div class="en"><strong>Biological explanation:</strong> Genes occur in variants called <strong>alleles</strong>. A dominant allele (A) masks a recessive one (a). Recessive diseases like cystic fibrosis require two recessive alleles (aa) to manifest. This is the basis of <strong>Mendel's laws of inheritance</strong>.</div>
+          </div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== LAB 8: FETTANALYS ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('fett')">
+        <span>🧈 Makromolekyler – fettanalys med papper</span>
+        <span class="arrow" id="arrow-fett">▼</span>
+      </div>
+      <div class="lab-content" id="lab-fett">
+        <div class="why-box">
+          <div class="sv"><strong>🧈 Varför?</strong> Mat innehåller olika näringsämnen: kolhydrater, proteiner och fetter. Här testar vi om något innehåller fett – fetter lämnar en <strong>genomskinlig fläck</strong> på papper.</div>
+          <div class="en"><strong>🧈 Why?</strong> Food contains various nutrients: carbohydrates, proteins and fats. Here we test whether something contains fat – fats leave a <strong>translucent spot</strong> on paper.</div>
+        </div>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte:</strong> Identifiera vilka livsmedel som innehåller fett.</div>
+            <div class="en"><strong>Purpose:</strong> Identify which foods contain fat.</div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning:</strong> Vilka av våra testade livsmedel innehåller fett?</div>
+            <div class="en"><strong>Question:</strong> Which of our tested foods contain fat?</div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes:</strong> Smör, ost och nötter innehåller mycket fett. Äpple och bröd innehåller inte fett.</div>
+            <div class="en"><strong>Hypothesis:</strong> Butter, cheese and nuts contain a lot of fat. Apple and bread do not contain fat.</div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material:</strong> Små bitar av olika livsmedel, smörpapper, hushållspapper, kaffefilter (bra!), vatten.</div>
+            <div class="en"><strong>Materials:</strong> Small pieces of different foods, greaseproof paper, kitchen paper, coffee filters (good!), water.</div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod:</strong><br>1. Gnugga varje matbit mot papperet.<br>2. Låt papperet torka.<br>3. Håll upp mot ljus – en genomskinlig fläck = fett.<br>4. Jämför med en kontroll (vatten – ingen fläck).</div>
+            <div class="en"><strong>Method:</strong><br>1. Rub each food piece against the paper.<br>2. Let the paper dry.<br>3. Hold up to the light – a translucent spot = fat.<br>4. Compare with a control (water – no spot).</div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Risk:</strong> Inga större risker. Tvätta händerna.</div>
+            <div class="en"><strong>Risk:</strong> No major risks. Wash your hands.</div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat (exempel):</strong><br>Smör → klar fläck<br>Ost → klar fläck<br>Nötter → klar fläck<br>Äpple → ingen fläck<br>Bröd → ingen fläck</div>
+            <div class="en"><strong>Results (example):</strong><br>Butter → clear spot<br>Cheese → clear spot<br>Nuts → clear spot<br>Apple → no spot<br>Bread → no spot</div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats:</strong> Hypotesen stämde – smör, ost och nötter innehåller fett.</div>
+            <div class="en"><strong>Conclusion:</strong> The hypothesis was correct – butter, cheese and nuts contain fat.</div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor:</strong> Olika mängd prov på papperet. Fläckarna kan överlappa.</div>
+            <div class="en"><strong>Sources of error:</strong> Different amounts of sample on the paper. The spots may overlap.</div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring:</strong> Fetter är <strong>hydrofoba</strong> – de blandar sig inte med vatten. De lämnar en genomskinlig fläck eftersom de <strong>fyller igen porerna</strong> i papperet och gör det mer genomskinligt. Fetter är viktiga som energikälla, cellmembranbyggstenar och för upptag av fettlösliga vitaminer.</div>
+            <div class="en"><strong>Biological explanation:</strong> Fats are <strong>hydrophobic</strong> – they do not mix with water. They leave a translucent spot because they <strong>fill the pores</strong> of the paper and make it more transparent. Fats are important as an energy source, building blocks for cell membranes and for the uptake of fat-soluble vitamins.</div>
+          </div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== LAB 9: ENZYMER OCH pH ===== -->
+    <div class="lab-card">
+      <div class="lab-header" onclick="toggleLab('enzympH')">
+        <span>🧪 Enzymer – pH-påverkan på katalas</span>
+        <span class="arrow" id="arrow-enzympH">▼</span>
+      </div>
+      <div class="lab-content" id="lab-enzympH">
+        <div class="why-box">
+          <div class="sv"><strong>🧪 Varför?</strong> Enzymer är känsliga för pH. Magsäcken har pH 2 (sur) medan blodet har pH 7,4. Varje enzym har ett <strong>optimum-pH</strong> där det fungerar bäst.</div>
+          <div class="en"><strong>🧪 Why?</strong> Enzymes are sensitive to pH. The stomach has pH 2 (acid) while blood has pH 7.4. Each enzyme has an <strong>optimum pH</strong> where it works best.</div>
+        </div>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><div class="step-text">
+            <div class="sv"><strong>Syfte:</strong> Undersöka hur pH påverkar aktiviteten hos enzymet katalas.</div>
+            <div class="en"><strong>Purpose:</strong> Investigate how pH affects the activity of the enzyme catalase.</div>
+          </div></li>
+          <li><span class="step-num">2</span><div class="step-text">
+            <div class="sv"><strong>Frågeställning:</strong> Vilket pH-värde ger högst katalasaktivitet?</div>
+            <div class="en"><strong>Question:</strong> Which pH gives the highest catalase activity?</div>
+          </div></li>
+          <li><span class="step-num">3</span><div class="step-text">
+            <div class="sv"><strong>Hypotes:</strong> Katalas fungerar bäst vid neutralt pH (7). Mycket surt eller basiskt förstör enzymet.</div>
+            <div class="en"><strong>Hypothesis:</strong> Catalase works best at neutral pH (7). Very acidic or basic destroys the enzyme.</div>
+          </div></li>
+          <li><span class="step-num">4</span><div class="step-text">
+            <div class="sv"><strong>Material:</strong> Potatis, väteperoxid, bufferlösningar med olika pH (2, 4, 7, 9, 11), provrör, linjal.</div>
+            <div class="en"><strong>Materials:</strong> Potato, hydrogen peroxide, buffer solutions of different pH (2, 4, 7, 9, 11), test tubes, ruler.</div>
+          </div></li>
+          <li><span class="step-num">5</span><div class="step-text">
+            <div class="sv"><strong>Metod:</strong><br>1. Riv potatis och lägg i 5 provrör.<br>2. Tillsätt en buffer till varje rör (olika pH).<br>3. Tillsätt H₂O₂.<br>4. Mät skumhöjden (syre) efter 1 minut.</div>
+            <div class="en"><strong>Method:</strong><br>1. Grate potato and put into 5 test tubes.<br>2. Add a buffer to each tube (different pH).<br>3. Add H₂O₂.<br>4. Measure the foam height (oxygen) after 1 minute.</div>
+          </div></li>
+          <li><span class="step-num">6</span><div class="step-text">
+            <div class="sv"><strong>Risk:</strong> Väteperoxid är frätande – använd handskar. Buffrar kan vara irriterande.</div>
+            <div class="en"><strong>Risk:</strong> Hydrogen peroxide is corrosive – wear gloves. Buffers can be irritating.</div>
+          </div></li>
+          <li><span class="step-num">7</span><div class="step-text">
+            <div class="sv"><strong>Resultat (exempel):</strong><br>pH 2 → 1 mm skum<br>pH 4 → 5 mm skum<br>pH 7 → 35 mm skum (bäst!)<br>pH 9 → 20 mm skum<br>pH 11 → 0 mm skum</div>
+            <div class="en"><strong>Results (example):</strong><br>pH 2 → 1 mm foam<br>pH 4 → 5 mm foam<br>pH 7 → 35 mm foam (best!)<br>pH 9 → 20 mm foam<br>pH 11 → 0 mm foam</div>
+          </div></li>
+          <li><span class="step-num">8</span><div class="step-text">
+            <div class="sv"><strong>Slutsats:</strong> Ja, pH 7 är bäst. Extremt pH (2 och 11) förstör enzymet.</div>
+            <div class="en"><strong>Conclusion:</strong> Yes, pH 7 is best. Extreme pH (2 and 11) destroys the enzyme.</div>
+          </div></li>
+          <li><span class="step-num">9</span><div class="step-text">
+            <div class="sv"><strong>Felkällor:</strong> Svårt att mäta skum exakt. pH-buffrarna kan ha varit felaktiga.</div>
+            <div class="en"><strong>Sources of error:</strong> Difficult to measure foam precisely. The pH buffers may have been incorrect.</div>
+          </div></li>
+          <li><span class="step-num">10</span><div class="step-text">
+            <div class="sv"><strong>Biologisk förklaring:</strong> Enzymer har en specifik <strong>tredimensionell struktur</strong> som styrs av vätebindningar. Ändrar man pH förändras laddningarna på aminosyrorna – enzymet <strong>denatureras</strong> och förlorar sin form och funktion. Katalas finns i celler och skyddar mot väteperoxid.</div>
+            <div class="en"><strong>Biological explanation:</strong> Enzymes have a specific <strong>three-dimensional structure</strong> that is held together by hydrogen bonds. Changing pH changes the charges on the amino acids – the enzyme <strong>denatures</strong> and loses its shape and function. Catalase is found in cells and protects against hydrogen peroxide.</div>
+          </div></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== SNABBMALL ===== -->
+    <div class="mall-box">
+      <h3 style="color:#0a5c36; margin-bottom:12px;">
+        <span class="sv">📝 Färdig mall att använda på provet</span>
+        <span class="en">📝 Ready-to-use template for the exam</span>
+      </h3>
+      <p><span class="label"><span class="sv">1. Syfte:</span><span class="en">1. Purpose:</span></span> ________________________________________</p>
+      <p><span class="label"><span class="sv">2. Frågeställning:</span><span class="en">2. Question:</span></span> ________________________________</p>
+      <p><span class="label"><span class="sv">3. Hypotes:</span><span class="en">3. Hypothesis:</span></span> ______________________________________</p>
+      <p><span class="label"><span class="sv">4. Material:</span><span class="en">4. Materials:</span></span> ______________________________________</p>
+      <p><span class="label"><span class="sv">5. Metod:</span><span class="en">5. Method:</span></span> ________________________________________</p>
+      <p><span class="label"><span class="sv">6. Riskbedömning:</span><span class="en">6. Risk assessment:</span></span> ________________________________</p>
+      <p><span class="label"><span class="sv">7. Resultat:</span><span class="en">7. Results:</span></span> ______________________________________</p>
+      <p><span class="label"><span class="sv">8. Slutsats:</span><span class="en">8. Conclusion:</span></span> ______________________________________</p>
+      <p><span class="label"><span class="sv">9. Felkällor:</span><span class="en">9. Sources of error:</span></span> ______________________________________</p>
+      <p><span class="label"><span class="sv">10. Biologisk förklaring:</span><span class="en">10. Biological explanation:</span></span> ___________________________</p>
+    </div>
+
+    <div class="footer">
+      <span class="sv">✨ Lycka till med labben! Kom ihåg – förstå varför, inte bara vad.</span>
+      <span class="en">✨ Good luck with your lab! Remember – understand why, not just what.</span>
+    </div>
   </div>
+
+  <button class="dark-toggle" id="darkToggle">🌙</button>
 
   <script>
-    const channels = {
-      national: [
-        // Alla Telewebion-kanaler från den tredje filen
-        { name: 'TV1', url: 'https://m.telewebion.com/embed/live/tv1?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'TV2', url: 'https://m.telewebion.com/embed/live/tv2?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'TV3', url: 'https://m.telewebion.com/embed/live/tv3?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'TV4', url: 'https://m.telewebion.com/embed/live/tv4?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'Tehran', url: 'https://m.telewebion.com/embed/live/Tehran?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'NASIM', url: 'https://m.telewebion.com/embed/live/nasim?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'VARZESH (Sport)', url: 'https://m.telewebion.com/embed/live/varzesh?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'IRINN / KHABAR', url: 'https://m.telewebion.com/embed/live/irinn?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'KHABAR2', url: 'https://m.telewebion.com/embed/live/irinn2?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'IFILM Farsi', url: 'https://m.telewebion.com/embed/live/ifilm?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'IFILM Farsi (Alt 2)', url: 'https://live.presstv.ir/hls/ifilmfa_4_482/index.m3u8', color: 'green' },
-        { name: 'IFILM Dari (HLS)', url: 'https://live.presstv.ir/hls/ifilm2.m3u8', color: 'green' },
-        { name: 'IFILM English (HLS)', url: 'https://live.presstv.ir/hls/ifilmen.m3u8', color: 'green' },
-        { name: 'IFILM Arabic (HLS)', url: 'https://live.presstv.ir/hls/ifilmar.m3u8', color: 'green' },
-        { name: 'TV1PLUS', url: 'https://m.telewebion.com/embed/live/tv1plus?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'OMID', url: 'https://m.telewebion.com/embed/live/omid?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'NAMAYESH', url: 'https://m.telewebion.com/embed/live/namayesh?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'MOSTANAD', url: 'https://m.telewebion.com/embed/live/mostanad?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'TAMASHA', url: 'https://m.telewebion.com/embed/live/hdtest?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'AMOOZESH', url: 'https://m.telewebion.com/embed/live/amouzesh?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'SALAMAT', url: 'https://m.telewebion.com/embed/live/salamat?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'OFOGH', url: 'https://m.telewebion.com/embed/live/ofogh?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'QURAN TV', url: 'https://m.telewebion.com/embed/live/quran?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'POOYA & JAVANAN', url: 'https://m.telewebion.com/embed/live/pooya?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'JAVANEH / KOODAK+', url: 'https://m.telewebion.com/embed/live/javaneh?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'SEPEHR', url: 'https://m.telewebion.com/embed/live/sepehr?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'FARATAR', url: 'https://m.telewebion.com/embed/live/faratar?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'NAVA', url: 'https://m.telewebion.com/embed/live/nava?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'NAMA', url: 'https://m.telewebion.com/embed/live/nama?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ROYA', url: 'https://m.telewebion.com/embed/live/iribu?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ARA', url: 'https://m.telewebion.com/embed/live/ara?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'IRANEMAN', url: 'https://m.telewebion.com/embed/live/iraneman?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'GOLKHANE', url: 'https://m.telewebion.com/embed/live/golkhane?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'NEGARESTAN', url: 'https://m.telewebion.com/embed/live/negarestan?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'KAROON', url: 'https://m.telewebion.com/embed/live/karoon?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'TELEWEBION', url: 'https://m.telewebion.com/embed/live/sport3?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'TELEWEBION1', url: 'https://m.telewebion.com/embed/live/sport1?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'TELEWEBION2', url: 'https://m.telewebion.com/embed/live/sport3?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'PARSEH', url: 'https://m.telewebion.com/embed/live/parseh?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'NESFEJAHAN', url: 'https://m.telewebion.com/embed/live/nesfejahan?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'SARBEDARAN', url: 'https://m.telewebion.com/embed/live/sarbedaran?autoplay=1&mute=0', color: 'cyan', method: 'iframe' }
-      ],
-      regional: [
-        // Alla regionala kanaler från Telewebion
-        { name: 'MAHABAD', url: 'https://m.telewebion.com/embed/live/mahabad?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'KORDESTAN', url: 'https://m.telewebion.com/embed/live/kordestan?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'KERMANSHAH', url: 'https://m.telewebion.com/embed/live/zagros?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ILAM', url: 'https://m.telewebion.com/embed/live/ilam?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'BOOSHEHR', url: 'https://m.telewebion.com/embed/live/bushehr?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ABADAN', url: 'https://m.telewebion.com/embed/live/abadan?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'BANDARABBAS', url: 'https://m.telewebion.com/embed/live/khalijefars?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'AHVAZ', url: 'https://m.telewebion.com/embed/live/khoozestan?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'KISH', url: 'https://m.telewebion.com/embed/live/kish?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ZAHEDAN', url: 'https://m.telewebion.com/embed/live/hamoon?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ALBORZ', url: 'https://m.telewebion.com/embed/live/alborz?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ARAK', url: 'https://m.telewebion.com/embed/live/aftab?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'SEMNAN', url: 'https://m.telewebion.com/embed/live/semnan?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'QOM', url: 'https://m.telewebion.com/embed/live/noor?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'QAZVIN', url: 'https://m.telewebion.com/embed/live/qazvin?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: '4Mahalebakhtiari', url: 'https://m.telewebion.com/embed/live/jahanbin?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'HAMADAN', url: 'https://m.telewebion.com/embed/live/sina?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'LORESTAN', url: 'https://m.telewebion.com/embed/live/aflak?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'KERMAN', url: 'https://m.telewebion.com/embed/live/kerman?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ESFEHAN', url: 'https://m.telewebion.com/embed/live/esfahan?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'FARS', url: 'https://m.telewebion.com/embed/live/fars?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'YAZD', url: 'https://m.telewebion.com/embed/live/taban?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'YASOOJ', url: 'https://m.telewebion.com/embed/live/dena?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'KH.JONOBI', url: 'https://m.telewebion.com/embed/live/khavaran?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'KH.SHOMALI', url: 'https://m.telewebion.com/embed/live/atrak?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'KH.RAZAVI', url: 'https://m.telewebion.com/embed/live/khorasanrazavi?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'GORGAN', url: 'https://m.telewebion.com/embed/live/sabz?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'MAZANDARAN', url: 'https://m.telewebion.com/embed/live/tabarestan?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'GILAN', url: 'https://m.telewebion.com/embed/live/baran?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ARDABIL', url: 'https://m.telewebion.com/embed/live/sabalan?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'TABRIZ', url: 'https://m.telewebion.com/embed/live/sahand?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'URMIA', url: 'https://m.telewebion.com/embed/live/azarbayjangharbi?autoplay=1&mute=0', color: 'cyan', method: 'iframe' },
-        { name: 'ZANJAN', url: 'https://m.telewebion.com/embed/live/eshragh?autoplay=1&mute=0', color: 'cyan', method: 'iframe' }
-      ],
-      kurdish: [
-        { name: 'Zagros (HLS)', url: 'https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8', color: 'green' },
-        { name: 'Kanal8 (HLS)', url: 'https://live.channel8.com/Channel8-Kurdish/index.fmp4.m3u8', color: 'green' },
-        { name: 'Rudaw (HLS)', url: 'https://svs.itworkscdn.net/rudawlive/rudawlive.smil/playlist.m3u8', color: 'green' },
-        { name: 'Kurdsat News (HLS)', url: 'https://hlspackager.akamaized.net/live/DB/KURDSAT_NEWS/HLS/KURDSAT_NEWS.m3u8', color: 'green' },
-        { name: 'Sterk (HLS)', url: 'https://5dab1db4b25fe.streamlock.net/sterk/sterktv/chunklist_w1084077249.m3u8', color: 'green' },
-        { name: 'NRT News (HLS)', url: 'https://media.streambrothers.com:1936/8226/8226/playlist.m3u8', color: 'green' },
-        { name: '4 Kurd (HLS)', url: 'https://4kuhls.persiana.live/hls/stream.m3u8', color: 'green' },
-        { name: 'Med Music (HLS)', url: 'https://zindu.tv/intern-play.php?url=http://54.36.110.140/live3/live3.m3u8', color: 'green' },
-        { name: 'Aryen (HLS)', url: 'https://stream.aryen.tv/live/tv/chunklist_w189856026.m3u8', color: 'green' },
-        { name: 'Cira (HLS)', url: 'https://vsd74.okcdn.ru/hls/9890583349861.m3u8/sig/ROHq5W_UeRQ/expires/1768216719038/srcIp/2.248.201.77/urls/185.226.53.83/clientType/0/srcAg/CHROME_MAC/mid/10267254464101/9890583349861_high/index.m3u8', color: 'green' },
-        { name: 'Waar (HLS)', url: 'https://live.kwikmotion.com/waarmedialive/waarmedia.smil/waarmediapublish/waarmedia_source/chunks.m3u8', color: 'green' },
-        { name: 'Rojava (HLS)', url: 'https://hlspackager.akamaized.net/live/DB/ROJAVA_HD/HLS/ROJAVA_HD.m3u8?hdnea=exp=1768140786~acl=/~hmac=5cfa0f22b508e7ced937081a07cfdc6a1c8666c75a27d75d53cdc3bf53163ef3', color: 'green' },
-        { name: 'Kurdsat HD (HLS)', url: 'https://hlspackager.akamaized.net/live/DB/KURDSAT_HD/HLS/KURDSAT_HD.m3u8', color: 'green' },
-        { name: 'Kurdistan TV (HLS)', url: 'https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/playlist.m3u8', color: 'green' },
-        { name: 'PDKI (HLS)', url: 'https://cdn.northtelecom.org/KurdChannel.m3u8', color: 'green' },
-        { name: 'Komala (HLS)', url: 'https://live.tvkomala.com/live/komala/playlist.m3u8', color: 'green' },
-        { name: 'GK (HLS)', url: 'https://live.host247.net/gk/gksat/chunklist_w624411416.m3u8', color: 'green' },
-        { name: 'IRIB Kurdistan (HLS)', url: 'https://live.irib.ir/Channel-Live/smil:Channel5/playlist.m3u8', color: 'green' },
-        { name: 'Ava TV (Web)', url: 'https://www.ava.news/livewatch', method: 'external', color: 'orange' },
-        { name: 'Sahar TV (Web)', url: 'https://kurdish.sahartv.ir/live', method: 'external', color: 'orange' },
-        { name: 'UTV Hawler (Web)', url: 'https://utvhawler.net/index.htm', method: 'external', color: 'orange' },
-        { name: 'Baxche (HLS)', url: 'https://5dcabf026b188.streamlock.net/afarinTV/livestream/playlist.m3u8', color: 'green' },
-        { name: 'Afarin Kids (HLS)', url: 'https://65f16f0fdfc51.streamlock.net/afarinTV/livestream/playlist.m3u8', color: 'green' },
-        { name: 'Zarok Kurmanci (HLS)', url: 'https://zindikurmanci.zaroktv.com.tr/hls/0/stream.m3u8', color: 'green' },
-        { name: 'Zarok Sorani (HLS)', url: 'https://zindisorani.zaroktv.com.tr/hls/stream.m3u8', color: 'green' },
-        { name: 'Payam TV (HLS)', url: 'https://media2.streambrothers.com:1936/8218/8218/chunklist_w1239498607.m3u8', color: 'green' },
-        { name: 'TRT Kurdî (HLS)', url: 'https://tv-trtkurdi.medya.trt.com.tr/master_1440.m3u8', color: 'green' }
-      ],
-      karwan: [
-        { name: 'Karwan Mmn News', url: 'https://karwan.tv/mmn-news.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Shams TV', url: 'https://karwan.tv/shams-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Rudaw TV', url: 'https://karwan.tv/rudaw-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Channel 8', url: 'https://karwan.tv/channel-8.html', method: 'external', color: 'purple' },
-        { name: 'Karwan CPI TV', url: 'https://karwan.tv/cpi-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Duhok TV', url: 'https://karwan.tv/duhok-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Geli Kurdistan TV', url: 'https://karwan.tv/geli-kurdistan-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Kurdistan24 TV', url: 'https://karwan.tv/kurdistan24-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Nalia TV', url: 'https://karwan.tv/nalia-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Rojhelat TV', url: 'https://karwan.tv/rojhelat-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Slemani TV', url: 'https://karwan.tv/slemani-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Xabir TV', url: 'https://karwan.tv/xabir-tv.html', method: 'external', color: 'purple' },
-        { name: 'Karwan Kurdistan TV', url: 'https://karwan.tv/kurdistan-tv.html', method: 'external', color: 'purple' }
-      ],
-      websites: [
-        { name: 'IMVBox', url: 'https://www.imvbox.com/en', method: 'external', color: 'orange' },
-        { name: 'Persianity', url: 'https://persianity.com', method: 'external', color: 'orange' },
-        { name: 'Parsa TV', url: 'https://parsatv.com', method: 'external', color: 'orange' },
-        { name: 'MDB Max', url: 'https://mdbmax.com/', method: 'external', color: 'orange' },
-        { name: 'FarsiPlex', url: 'https://farsiplex.com', method: 'external', color: 'orange' },
-        { name: 'Flnd Buzz', url: 'https://flnd.buzz/', method: 'external', color: 'orange' },
-        { name: 'Farsiland Movies', url: 'https://farsiland.com/movies', method: 'external', color: 'orange' },
-        { name: 'Persian Hive', url: 'https://persianhive.com', method: 'external', color: 'orange' },
-        { name: 'Namakade', url: 'https://namakade.com', method: 'external', color: 'orange' },
-        { name: 'Telewebion', url: 'https://telewebion.com/', method: 'external', color: 'orange' },
-        { name: 'Sepehr TV', url: 'https://beta.sepehrtv.ir/', method: 'external', color: 'orange' },
-        { name: 'Sassan TV', url: 'https://sassantv.com/', method: 'external', color: 'orange' },
-        { name: 'Giniko TV', url: 'https://giniko.com/watch.php?id=iran', method: 'external', color: 'orange' }
-      ]
-    };
-
-    let hls;
-    let currentChannel = { name: 'TV1', url: 'https://m.telewebion.com/embed/live/tv1?autoplay=1&mute=0', method: 'iframe' };
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-
-    function renderChannels(filter = null) {
-      const container = document.getElementById('channels-container');
-      let html = '';
-
-      Object.keys(channels).forEach(category => {
-        if (filter && filter !== category) return;
-        
-        const categoryNames = {
-          national: 'Nationella Kanaler',
-          regional: 'Regionala Kanaler',
-          kurdish: 'Kurdiska Kanaler',
-          karwan: 'Karwan TV',
-          websites: 'Webbplatser'
-        };
-
-        html += `<div class="category-title">${categoryNames[category]}</div>`;
-        
-        channels[category].forEach(ch => {
-          const isFav = favorites.some(f => f.name === ch.name);
-          html += `
-            <div class="channel-item ${ch.color}" onclick="loadChannel('${ch.url}', '${ch.name}', '${ch.method || 'hls'}')">
-              <span>${ch.name}</span>
-              <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite('${ch.name}', '${ch.url}', '${ch.method || 'hls'}')">
-                ${isFav ? '⭐' : '☆'}
-              </button>
-            </div>
-          `;
-        });
+    function setLanguage(lang) {
+      document.body.classList.remove('lang-sv', 'lang-en');
+      document.body.classList.add('lang-' + lang);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
       });
-
-      container.innerHTML = html;
-      updateActiveChannel();
+      localStorage.setItem('lab-language', lang);
     }
 
-    function updateActiveChannel() {
-      document.querySelectorAll('.channel-item').forEach(item => {
-        // Ta bort 'active' klassen från alla
-        item.classList.remove('active');
-        
-        // Ta bort 'red' klassen från alla
-        item.classList.remove('red');
-        
-        // Kontrollera om detta är den aktiva kanalen
-        const channelName = item.querySelector('span').textContent;
-        if (channelName === currentChannel.name) {
-          // Lägg till båda klasserna för röd färg
-          item.classList.add('active');
-          item.classList.add('red');
-        }
-      });
-    }
+    const savedLang = localStorage.getItem('lab-language') || 'sv';
+    setLanguage(savedLang);
 
-    function toggleFavorite(name, url, method) {
-      const index = favorites.findIndex(f => f.name === name);
-      if (index > -1) {
-        favorites.splice(index, 1);
-      } else {
-        favorites.push({ name, url, method });
-      }
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-      renderChannels();
-    }
+    const darkToggle = document.getElementById('darkToggle');
+    darkToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      darkToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
 
-    function showAllChannels() {
-      renderChannels();
-    }
-
-    function filterCategory(category) {
-      renderChannels(category);
-    }
-
-    function toggleChannelList() {
-      document.getElementById('channel-list').classList.toggle('hidden');
-    }
-
-    function loadChannel(url, name, method = 'hls') {
-      if (window.innerWidth <= 768) {
-        document.getElementById('channel-list').classList.add('hidden');
-      }
-      
-      currentChannel = { name, url, method };
-      document.getElementById('current-channel').textContent = name;
-      
-      const wrapper = document.getElementById('video-wrapper');
-      
-      if (hls) {
-        hls.destroy();
-        hls = null;
-      }
-      
-      if (method === 'external') {
-        window.open(url, '_blank');
-        return;
-      }
-      
-      if (method === 'iframe') {
-        wrapper.innerHTML = `<iframe src="${url}" allowfullscreen allow="autoplay" style="width:100%;height:100%;border:none;"></iframe>`;
-        updateActiveChannel();
-        return;
-      }
-
-      wrapper.innerHTML = '<video id="video-player" controls crossorigin="anonymous"></video>';
-      const video = document.getElementById('video-player');
-
-      if (url.includes('.m3u8')) {
-        if (Hls.isSupported()) {
-          hls = new Hls({
-            debug: false,
-            enableWorker: true,
-            lowLatencyMode: false,
-            xhrSetup: function(xhr) {
-              const ua = document.getElementById('ua-select').value;
-              if (ua) xhr.setRequestHeader('User-Agent', ua);
-            }
-          });
-          
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play().catch(() => {});
-          });
-          
-          hls.on(Hls.Events.ERROR, (event, data) => {
-            if (data.fatal) {
-              if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                setTimeout(() => hls.startLoad(), 1000);
-              } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-                hls.recoverMediaError();
-              } else {
-                showError();
-              }
-            }
-          });
-          
-          hls.loadSource(url);
-          hls.attachMedia(video);
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = url;
-          video.play().catch(() => {});
-        } else {
-          showError();
-        }
-      } else {
-        video.src = url;
-        video.play().catch(() => {});
-      }
-
-      updateActiveChannel();
-    }
-
-    function showError() {
-      document.getElementById('video-wrapper').innerHTML = `
-        <div class="error-message">
-          <h3>⚠️ Kunde inte ladda stream</h3>
-          <button class="btn" onclick="reloadStream()">Försök igen</button>
-        </div>
-      `;
-    }
-
-    function reloadStream() {
-      loadChannel(currentChannel.url, currentChannel.name, currentChannel.method);
-    }
-
-    function togglePiP() {
-      const video = document.getElementById('video-player');
-      if (video && document.pictureInPictureEnabled) {
-        if (document.pictureInPictureElement) {
-          document.exitPictureInPicture();
-        } else {
-          video.requestPictureInPicture().catch(() => {});
-        }
+    function toggleLab(id) {
+      const content = document.getElementById('lab-' + id);
+      const arrow = document.getElementById('arrow-' + id);
+      if (content) {
+        content.classList.toggle('open');
+        if (arrow) arrow.classList.toggle('open');
       }
     }
 
-    function toggleFullscreen() {
-      const wrapper = document.getElementById('video-wrapper');
-      if (!document.fullscreenElement) {
-        wrapper.requestFullscreen().catch(() => {});
-      } else {
-        document.exitFullscreen();
-      }
-    }
-
-    // Initialize
-    renderChannels();
-    loadChannel(currentChannel.url, currentChannel.name, currentChannel.method);
+    document.addEventListener('DOMContentLoaded', () => {
+      toggleLab('algoritm');
+      toggleLab('osmos');
+    });
   </script>
 </body>
 </html>
